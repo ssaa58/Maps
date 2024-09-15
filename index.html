@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Магазины Балаково</title>
+    <title>Балаково</title>
     <script src="https://api-maps.yandex.ru/2.1/?apikey=d4559291-08de-4b01-9b66-c70a56b8e133&lang=ru_RU" type="text/javascript"></script>
     <style>
         body, html {
@@ -75,7 +75,7 @@
     <script type="text/javascript">
     function init() {
         var myMap = new ymaps.Map("map", {
-            center: [53.0150, 45.0000],
+            center: [52.01843, 47.819676],
             zoom: 10,
             controls: []
         });
@@ -119,30 +119,60 @@
             }
         }
 
-        document.querySelectorAll('#buttons button').forEach(function (button) {
-            button.addEventListener('click', function () {
-                var color = button.dataset.color;
-                activeColors[color] = !activeColors[color];
-                button.classList.toggle('inactive');
-                addPlacemarks();
-            });
+        addPlacemarks();
+
+        var bounds = myMap.geoObjects.getBounds();
+        if (bounds) {
+            myMap.setBounds(bounds, { checkZoomRange: true, zoomMargin: 10 });
+        }
+
+        function togglePlacemarks(color) {
+            activeColors[color] = !activeColors[color];
+            addPlacemarks();
+            var bounds = myMap.geoObjects.getBounds();
+            if (bounds) {
+                myMap.setBounds(bounds, { checkZoomRange: true, zoomMargin: 10 });
+            }
+        }
+
+        document.querySelector('#red_button').addEventListener('click', function () {
+            this.classList.toggle('inactive');
+            togglePlacemarks('red');
         });
 
-        addPlacemarks();
-    }
+        document.querySelector('#yellow_button').addEventListener('click', function () {
+            this.classList.toggle('inactive');
+            togglePlacemarks('yellow');
+        });
 
+        document.querySelector('#blue_button').addEventListener('click', function () {
+            this.classList.toggle('inactive');
+            togglePlacemarks('blue');
+        });
+
+        document.querySelector('#all_button').addEventListener('click', function () {
+            document.querySelectorAll('button').forEach(function (btn) {
+                if (btn.id !== 'all_button') {
+                    btn.classList.remove('inactive');
+                }
+            });
+            activeColors = { 'red': true, 'yellow': true, 'blue': true };
+            addPlacemarks();
+        });
+    }
     ymaps.ready(init);
     </script>
 </head>
 <body>
     <div id="map"></div>
     <div id="buttons">
-        <button data-color="red">Красные</button>
-        <button data-color="yellow">Желтые</button>
-        <button data-color="blue">Синие</button>
+        <button id="red_button">Красные</button>
+        <button id="yellow_button">Желтые</button>
+        <button id="blue_button">Синие</button>
+        <button id="all_button">Все</button>
     </div>
-    <div id="title_button">Магазины Балаково</div>
-    <div id="report_datetime">15-09-2024 20:27:07</div>
+    <div id="report_datetime">Дата и время отчета: 15-09-2024 20:46:49</div>
+    <div id="title_button">Балаково</div>
 </body>
 </html>
     
