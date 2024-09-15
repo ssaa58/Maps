@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Карта с заявками</title>
+    <title>Интерактивная карта Балаково</title>
     <script src="https://api-maps.yandex.ru/2.1/?apikey=d4559291-08de-4b01-9b66-c70a56b8e133&lang=ru_RU" type="text/javascript"></script>
     <style>
         body, html {
@@ -73,8 +73,8 @@
         }
         #fullscreen_button {
             position: absolute;
-            top: 50px;
-            right: 10px;
+            top: 10px;
+            right: 120px;
             z-index: 1000;
             background-color: rgba(255, 255, 255, 0.8);
             padding: 5px 10px;
@@ -88,7 +88,7 @@
     <script type="text/javascript">
     function init() {
         var myMap = new ymaps.Map("map", {
-            center: [53.0243, 45.0396],
+            center: [53.1833, 50.1000],
             zoom: 10,
             controls: []
         });
@@ -132,53 +132,59 @@
             }
         }
 
-        addPlacemarks();
-
-        document.getElementById('filter_red').addEventListener('click', function () {
+        document.getElementById('btn_red').onclick = function () {
             activeColors['red'] = !activeColors['red'];
             this.classList.toggle('inactive');
             addPlacemarks();
-        });
-
-        document.getElementById('filter_yellow').addEventListener('click', function () {
+        };
+        document.getElementById('btn_yellow').onclick = function () {
             activeColors['yellow'] = !activeColors['yellow'];
             this.classList.toggle('inactive');
             addPlacemarks();
-        });
-
-        document.getElementById('filter_blue').addEventListener('click', function () {
+        };
+        document.getElementById('btn_blue').onclick = function () {
             activeColors['blue'] = !activeColors['blue'];
             this.classList.toggle('inactive');
             addPlacemarks();
-        });
+        };
+        document.getElementById('btn_all').onclick = function () {
+            activeColors['red'] = true;
+            activeColors['yellow'] = true;
+            activeColors['blue'] = true;
+            document.getElementById('btn_red').classList.remove('inactive');
+            document.getElementById('btn_yellow').classList.remove('inactive');
+            document.getElementById('btn_blue').classList.remove('inactive');
+            addPlacemarks();
+        };
 
-        document.getElementById('fullscreen_button').addEventListener('click', function () {
-            if (myMap.container.isFullscreen()) {
-                myMap.container.exitFullscreen();
+        addPlacemarks();
+
+        document.getElementById('fullscreen_button').onclick = function () {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+                this.textContent = 'Свернуть';
             } else {
-                myMap.container.requestFullscreen();
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+                this.textContent = 'Развернуть';
             }
-        });
-
-        document.getElementById('title_button').addEventListener('click', function () {
-            alert("This is the title of the map.");
-        });
+        };
     }
+    ymaps.ready(init);
     </script>
 </head>
 <body>
     <div id="map"></div>
     <div id="buttons">
-        <button id="filter_red">Красные</button>
-        <button id="filter_yellow">Желтые</button>
-        <button id="filter_blue">Синие</button>
-        <button id="fullscreen_button">Fullscreen</button>
-        <div id="title_button">Балаково</div>
+        <button id="btn_red">Красные</button>
+        <button id="btn_yellow">Желтые</button>
+        <button id="btn_blue">Синие</button>
+        <button id="btn_all">Все</button>
     </div>
-    <div id="report_datetime">15-09-2024 21:34:12</div>
-    <script type="text/javascript">
-    ymaps.ready(init);
-    </script>
+    <div id="fullscreen_button">Развернуть</div>
+    <div id="title_button">Интерактивная карта Балаково</div>
+    <div id="report_datetime">Дата отчета: 15-09-2024 21:36:23</div>
 </body>
 </html>
     
