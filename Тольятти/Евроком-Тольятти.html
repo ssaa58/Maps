@@ -134,17 +134,27 @@
         var allPlacemarks = [];
         var placemarksByColor = { 'red': [], 'yellow': [], 'blue': [] };
 
-        // Создаем метки и группируем их по цветам
+        // Создаем метки с разными zIndex для правильного порядка отображения
         placemarks.forEach(function (placemark) {
+            // Определяем zIndex в зависимости от цвета
+            var zIndex = 1; // по умолчанию для синих
+            if (placemark.color === 'yellow') {
+                zIndex = 2; // желтые поверх синих
+            } else if (placemark.color === 'red') {
+                zIndex = 3; // красные поверх всех
+            }
+            
             var newPlacemark = new ymaps.Placemark(placemark.coords, {
                 balloonContent: placemark.balloonContent,
                 iconCaption: placemark.days_left
             }, {
                 preset: 'islands#dotIcon',
-                iconColor: placemark.color
+                iconColor: placemark.color,
+                zIndex: zIndex  // Устанавливаем приоритет отображения
             });
             
             newPlacemark.properties.set('color', placemark.color);
+            newPlacemark.properties.set('zIndex', zIndex);
             
             allPlacemarks.push(newPlacemark);
             
@@ -157,7 +167,12 @@
         function addPlacemarks() {
             myMap.geoObjects.removeAll();
 
-            allPlacemarks.forEach(function (placemark) {
+            // Сортируем метки по zIndex (от большего к меньшему)
+            var sortedPlacemarks = allPlacemarks.slice().sort(function(a, b) {
+                return b.properties.get('zIndex') - a.properties.get('zIndex');
+            });
+
+            sortedPlacemarks.forEach(function (placemark) {
                 var color = placemark.properties.get('color');
                 
                 if (activeColors[color]) {
@@ -264,7 +279,7 @@
         </div>
         <button id="all_button" class="active">Показать все</button>
     </div>
-    <div id="report_datetime">Дата и время отчета: 04-11-2025 23:16:26</div>
+    <div id="report_datetime">Дата и время отчета: 04-11-2025 23:34:23</div>
     <div id="title_button">Евроком-Тольятти</div>
     <a href="index.html" class="back-link">← Назад к списку филиалов</a>
 </body>
