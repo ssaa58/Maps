@@ -1,0 +1,272 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Евроком-Волгоград Восток</title>
+    <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            font-family: Arial, sans-serif;
+        }
+        #map {
+            width: 100%;
+            height: 600px;
+            position: relative;
+        }
+        @media (max-width: 768px) {
+            #map {
+                height: 400px;
+            }
+        }
+        #controls {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 1000;
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            max-width: 300px;
+        }
+        .control-group {
+            margin-bottom: 15px;
+        }
+        .control-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        .color-buttons {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+        button {
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            background-color: #f0f0f0;
+            color: #333;
+            cursor: pointer;
+            font-size: 12px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        button.active {
+            background-color: #4CAF50;
+            color: white;
+            border-color: #45a049;
+        }
+        button.color-red.active { background-color: #ff4444; color: white; }
+        button.color-yellow.active { background-color: #ffcc00; color: black; }
+        button.color-blue.active { background-color: #4444ff; color: white; }
+        
+        #all_button {
+            background-color: #2196F3;
+            color: white;
+            font-weight: bold;
+            margin-top: 10px;
+            width: 100%;
+        }
+        #all_button.active {
+            background-color: #4CAF50;
+        }
+        
+        #report_datetime {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            z-index: 1000;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-size: 12px;
+            color: #333;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        #title_button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 10px 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .back-link {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            z-index: 1000;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-size: 12px;
+            color: #333;
+            text-decoration: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .back-link:hover {
+            background-color: #f8f8f8;
+        }
+    </style>
+    <script type="text/javascript">
+    function init() {
+        var myMap = new ymaps.Map("map", {
+            center: [48.708, 44.5133],
+            zoom: 10,
+            controls: []
+        });
+
+        var placemarks = [{"balloonContent": "\u003cb\u003e\u041f\u043e\u0434\u0440\u0430\u0437\u0434\u0435\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u041a\u0430\u043c\u044b\u0448\u0438\u043d 1 5 \u043c\u0438\u043a\u0440\u043e\u0440\u0430\u0439\u043e\u043d\u003cbr\u003e\u003cb\u003e\u0424\u0438\u043b\u0438\u0430\u043b:\u003c/b\u003e \u0412\u043e\u043b\u0433\u043e\u0433\u0440\u0430\u0434 \u0412\u043e\u0441\u0442\u043e\u043a\u003cbr\u003e\u003cb\u003e\u041d\u043e\u043c\u0435\u0440 \u0437\u0430\u044f\u0432\u043a\u0438:\u003c/b\u003e SMT-\u043200007942051\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u044b\u0439:\u003c/b\u003e \u0422\u0440\u0443\u0434\u043e\u0432 \u0410\u043b\u0435\u043a\u0441\u0435\u0439 \u0412\u043b\u0430\u0434\u0438\u043c\u0438\u0440\u043e\u0432\u0438\u0447\u003cbr\u003e\u003cb\u003e\u0412\u044b\u043f\u043e\u043b\u043d\u0438\u0442\u044c \u0434\u043e:\u003c/b\u003e 05.11.2025 19:38:47\u003cbr\u003e\u003cb\u003e\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435:\u003c/b\u003e \u0422\u0435\u043c\u0430: \u0425\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0435 \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u0435 \n\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435: \u0414\u043e\u0431\u0440\u044b\u0439 \u0434\u0435\u043d\u044c. \u041d\u0435\u043e\u0431\u0445\u043e\u0434\u0438\u043c\u043e \u0432\u044b\u043f\u043e\u043b\u043d\u0438\u0442\u044c \u0437\u0430\u043f\u0440\u043e\u0441, \u0440\u0443\u043a\u043e\u0432\u043e\u0434\u0441\u0442\u0432\u0443\u044f\u0441\u044c \u0441\u043b\u0435\u0434\u0443\u044e\u0449\u0438\u043c\u0438 \u0434\u0430\u043d\u043d\u044b\u043c\u0438:\n\u041e\u0431\u044a\u0435\u043a\u0442 \u0440\u0435\u043c\u043e\u043d\u0442\u0430, \u0441 \u043a\u043e\u0442\u043e\u0440\u044b\u043c \u0432\u043e\u0437\u043d\u0438\u043a\u043b\u0438 \u043f\u0440\u043e\u0431\u043b\u0435\u043c\u044b: \u0411\u043e\u043d\u043d\u0435\u0442\u0430\n\u041f\u0440\u043e\u0431\u043b\u0435\u043c\u0430: \u041d\u0435 \u0441\u043e\u0431\u043b\u044e\u0434\u0430\u0435\u0442\u0441\u044f \u0442\u0435\u043c\u043f\u0435\u0440\u0430\u0442\u0443\u0440\u043d\u044b\u0439 \u0440\u0435\u0436\u0438\u043c\n\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435 \u043f\u0440\u043e\u0431\u043b\u0435\u043c\u044b: \u0432\u044b\u0441\u043e\u043a\u0430\u044f \u0442\u0435\u043c\u043f\u0435\u0440\u0430\u0442\u0443\u0440\u0430 \u0432 \u0431\u043e\u043d\u0435\u0442\u0442\u0435 \u0441 \u043c\u043e\u0440\u043e\u0436\u0435\u043d\u044b\u043c \n\u0421\u043e\u0442\u0440\u0443\u0434\u043d\u0438\u043a \u043c\u0430\u0433\u0430\u0437\u0438\u043d\u0430: \u0414\u0430\n\u0424\u0438\u043b\u0438\u0430\u043b: \u0410\u041e \u0422\u0430\u043d\u0434\u0435\u0440 \u041a\u0430\u043c\u044b\u0448\u0438\u043d 5 \u043c\u0438\u043a\u0440\u043e\u0440\u0430\u0439\u043e\u043d \u0413\u041c\n\u041e\u0431\u044a\u0435\u043a\u0442: \u0427\u0435\u0440\u043d\u043e\u0432\u0430 \u0415\u043b\u0435\u043d\u0430 \u0412\u043b\u0430\u0434\u0438\u043c\u0438\u0440\u043e\u0432\u043d\u0430\n\u0424\u0418\u041e: \u041b\u043e\u043f\u0430\u0442\u0438\u043d \u0414.\u041d.\n\u041d\u043e\u043c\u0435\u0440 \u0442\u0435\u043b\u0435\u0444\u043e\u043d\u0430: 89272523784\u003cbr\u003e\u003cb\u003e\u041d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u0425\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0435 \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u0435\u003cbr\u003e\u003cb\u003e\u041e\u0441\u0442\u0430\u043b\u043e\u0441\u044c \u0434\u043d\u0435\u0439:\u003c/b\u003e 0\u003cbr\u003e\u003chr\u003e\u003cb\u003e\u041f\u043e\u0434\u0440\u0430\u0437\u0434\u0435\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u041a\u0430\u043c\u044b\u0448\u0438\u043d 1 5 \u043c\u0438\u043a\u0440\u043e\u0440\u0430\u0439\u043e\u043d\u003cbr\u003e\u003cb\u003e\u0424\u0438\u043b\u0438\u0430\u043b:\u003c/b\u003e \u0412\u043e\u043b\u0433\u043e\u0433\u0440\u0430\u0434 \u0412\u043e\u0441\u0442\u043e\u043a\u003cbr\u003e\u003cb\u003e\u041d\u043e\u043c\u0435\u0440 \u0437\u0430\u044f\u0432\u043a\u0438:\u003c/b\u003e SMT-\u043200007942002\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u044b\u0439:\u003c/b\u003e \u0422\u0440\u0443\u0434\u043e\u0432 \u0410\u043b\u0435\u043a\u0441\u0435\u0439 \u0412\u043b\u0430\u0434\u0438\u043c\u0438\u0440\u043e\u0432\u0438\u0447\u003cbr\u003e\u003cb\u003e\u0412\u044b\u043f\u043e\u043b\u043d\u0438\u0442\u044c \u0434\u043e:\u003c/b\u003e 07.11.2025 19:24:28\u003cbr\u003e\u003cb\u003e\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435:\u003c/b\u003e \u0422\u0435\u043c\u0430: \u041a\u043e\u043d\u0434\u0438\u0446\u0438\u043e\u043d\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 \n\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435: \u0414\u043e\u0431\u0440\u044b\u0439 \u0434\u0435\u043d\u044c. \u041d\u0435\u043e\u0431\u0445\u043e\u0434\u0438\u043c\u043e \u0432\u044b\u043f\u043e\u043b\u043d\u0438\u0442\u044c \u0437\u0430\u043f\u0440\u043e\u0441, \u0440\u0443\u043a\u043e\u0432\u043e\u0434\u0441\u0442\u0432\u0443\u044f\u0441\u044c \u0441\u043b\u0435\u0434\u0443\u044e\u0449\u0438\u043c\u0438 \u0434\u0430\u043d\u043d\u044b\u043c\u0438:\n\u041e\u0431\u044a\u0435\u043a\u0442 \u0440\u0435\u043c\u043e\u043d\u0442\u0430, \u0441 \u043a\u043e\u0442\u043e\u0440\u044b\u043c \u0432\u043e\u0437\u043d\u0438\u043a\u043b\u0438 \u043f\u0440\u043e\u0431\u043b\u0435\u043c\u044b: \u0421\u043f\u043b\u0438\u0442-\u0441\u0438\u0441\u0442\u0435\u043c\u0430\n\u041f\u0440\u043e\u0431\u043b\u0435\u043c\u0430: \u041d\u0435 \u0440\u0430\u0431\u043e\u0442\u0430\u0435\u0442\n\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435 \u043f\u0440\u043e\u0431\u043b\u0435\u043c\u044b: \u043d\u0435\u043e\u0431\u0445\u043e\u0434\u0438\u043c\u0430 \u043a\u043e\u043d\u0441\u0435\u0440\u0432\u0430\u0446\u0438\u044f \u0447\u0438\u043b\u0435\u0440\u0430 \n\u0421\u043e\u0442\u0440\u0443\u0434\u043d\u0438\u043a \u043c\u0430\u0433\u0430\u0437\u0438\u043d\u0430: \u0414\u0430\n\u0424\u0438\u043b\u0438\u0430\u043b: \u0410\u041e \u0422\u0430\u043d\u0434\u0435\u0440 \u041a\u0430\u043c\u044b\u0448\u0438\u043d 5 \u043c\u0438\u043a\u0440\u043e\u0440\u0430\u0439\u043e\u043d \u0413\u041c\n\u041e\u0431\u044a\u0435\u043a\u0442: \u0427\u0435\u0440\u043d\u043e\u0432\u0430 \u0415\u043b\u0435\u043d\u0430 \u0412\u043b\u0430\u0434\u0438\u043c\u0438\u0440\u043e\u0432\u043d\u0430\n\u0424\u0418\u041e: \u041b\u043e\u043f\u0430\u0442\u0438\u043d \u0414.\u041d.\n\u041d\u043e\u043c\u0435\u0440 \u0442\u0435\u043b\u0435\u0444\u043e\u043d\u0430: 89272523784\u003cbr\u003e\u003cb\u003e\u041d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u0421\u0438\u0441\u0442\u0435\u043c\u0430 \u043a\u043e\u043d\u0434\u0438\u0446\u0438\u043e\u043d\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u044f\u003cbr\u003e\u003cb\u003e\u041e\u0441\u0442\u0430\u043b\u043e\u0441\u044c \u0434\u043d\u0435\u0439:\u003c/b\u003e 2\u003cbr\u003e\u003chr\u003e", "color": "yellow", "coords": [50.091, 45.3568], "days_left": 0}, {"balloonContent": "\u003cb\u003e\u041f\u043e\u0434\u0440\u0430\u0437\u0434\u0435\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u041c\u0438\u0445\u0430\u0439\u043b\u043e\u0432\u043a\u0430 1 \u041f\u043e\u043f\u0435\u0440\u0435\u0447\u043d\u0430\u044f\u003cbr\u003e\u003cb\u003e\u0424\u0438\u043b\u0438\u0430\u043b:\u003c/b\u003e \u0412\u043e\u043b\u0433\u043e\u0433\u0440\u0430\u0434 \u0412\u043e\u0441\u0442\u043e\u043a\u003cbr\u003e\u003cb\u003e\u041d\u043e\u043c\u0435\u0440 \u0437\u0430\u044f\u0432\u043a\u0438:\u003c/b\u003e SMT-\u043200007941243\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u044b\u0439:\u003c/b\u003e \u0414\u0440\u043e\u043d\u043e\u0432 \u0414\u0430\u043d\u0438\u043b\u0430 \u0415\u0432\u0433\u0435\u043d\u044c\u0435\u0432\u0438\u0447\u003cbr\u003e\u003cb\u003e\u0412\u044b\u043f\u043e\u043b\u043d\u0438\u0442\u044c \u0434\u043e:\u003c/b\u003e 07.11.2025 15:41:30\u003cbr\u003e\u003cb\u003e\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435:\u003c/b\u003e \u0422\u0435\u043c\u0430: \u041e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u0435 \u0441\u043e\u0431\u0441\u0442\u0432\u0435\u043d\u043d\u043e\u0433\u043e \u043f\u0440\u043e\u0438\u0437\u0432\u043e\u0434\u0441\u0442\u0432\u0430 \n\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435: \u0414\u043e\u0431\u0440\u044b\u0439 \u0434\u0435\u043d\u044c. \u041d\u0435\u043e\u0431\u0445\u043e\u0434\u0438\u043c\u043e \u0432\u044b\u043f\u043e\u043b\u043d\u0438\u0442\u044c \u0437\u0430\u043f\u0440\u043e\u0441, \u0440\u0443\u043a\u043e\u0432\u043e\u0434\u0441\u0442\u0432\u0443\u044f\u0441\u044c \u0441\u043b\u0435\u0434\u0443\u044e\u0449\u0438\u043c\u0438 \u0434\u0430\u043d\u043d\u044b\u043c\u0438:\n\u041e\u0431\u044a\u0435\u043a\u0442 \u0440\u0435\u043c\u043e\u043d\u0442\u0430, \u0441 \u043a\u043e\u0442\u043e\u0440\u044b\u043c \u0432\u043e\u0437\u043d\u0438\u043a\u043b\u0438 \u043f\u0440\u043e\u0431\u043b\u0435\u043c\u044b: \u0425\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0435 \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u0435\n\u041f\u0440\u043e\u0431\u043b\u0435\u043c\u0430: \u041c\u0435\u0445\u0430\u043d\u0438\u0447\u0435\u0441\u043a\u043e\u0435 \u043f\u043e\u0432\u0440\u0435\u0436\u0434\u0435\u043d\u0438\u0435\n\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435 \u043f\u0440\u043e\u0431\u043b\u0435\u043c\u044b: \u041d\u0430 \u043f\u0440\u0438\u043b\u0430\u0432\u043a\u0435 \u043c\u044f\u0441\u043d\u043e\u0439 \u0432\u0438\u0442\u0440\u0438\u043d\u044b ,\u043f\u043e\u043b\u043e\u043c\u043a\u0430 \u0441\u0442\u0435\u043a\u043b\u044f\u043d\u043d\u043e\u0439 \u0434\u0432\u0435\u0440\u043a\u0438.\n\u0421\u043e\u0442\u0440\u0443\u0434\u043d\u0438\u043a \u043c\u0430\u0433\u0430\u0437\u0438\u043d\u0430: \u0414\u0430\n\u0424\u0438\u043b\u0438\u0430\u043b: \u0410\u041e \u0422\u0430\u043d\u0434\u0435\u0440 \u041c\u0438\u0445\u0430\u0439\u043b\u043e\u0432\u043a\u0430 \u041f\u043e\u043f\u0435\u0440\u0435\u0447\u043d\u0430\u044f \u0413\u041c\n\u041e\u0431\u044a\u0435\u043a\u0442: \u0410\u043d\u0442\u043e\u043d\u043e\u0432\u0430 \u0418\u0440\u0438\u043d\u0430 \u041a\u043e\u043d\u0441\u0442\u0430\u043d\u0442\u0438\u043d\u043e\u0432\u043d\u0430\n\u0424\u0418\u041e: \u0410\u043d\u0442\u043e\u043d\u043e\u0432\u0430 \u0418\u041a\n\u041d\u043e\u043c\u0435\u0440 \u0442\u0435\u043b\u0435\u0444\u043e\u043d\u0430: 89275296424\u003cbr\u003e\u003cb\u003e\u041d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u0425\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0435 \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u0435\u003cbr\u003e\u003cb\u003e\u041e\u0441\u0442\u0430\u043b\u043e\u0441\u044c \u0434\u043d\u0435\u0439:\u003c/b\u003e 2\u003cbr\u003e\u003chr\u003e", "color": "yellow", "coords": [50.070299, 43.215768], "days_left": 2}, {"balloonContent": "\u003cb\u003e\u041f\u043e\u0434\u0440\u0430\u0437\u0434\u0435\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u041f\u043e\u0434\u043f\u0435\u0441\u043e\u0447\u043d\u044b\u0439\u003cbr\u003e\u003cb\u003e\u0424\u0438\u043b\u0438\u0430\u043b:\u003c/b\u003e \u0412\u043e\u043b\u0433\u043e\u0433\u0440\u0430\u0434 \u0412\u043e\u0441\u0442\u043e\u043a\u003cbr\u003e\u003cb\u003e\u041d\u043e\u043c\u0435\u0440 \u0437\u0430\u044f\u0432\u043a\u0438:\u003c/b\u003e SMT-\u043200007940495\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u044b\u0439:\u003c/b\u003e \u0414\u0440\u043e\u043d\u043e\u0432 \u0414\u0430\u043d\u0438\u043b\u0430 \u0415\u0432\u0433\u0435\u043d\u044c\u0435\u0432\u0438\u0447\u003cbr\u003e\u003cb\u003e\u0412\u044b\u043f\u043e\u043b\u043d\u0438\u0442\u044c \u0434\u043e:\u003c/b\u003e 05.11.2025 13:09:44\u003cbr\u003e\u003cb\u003e\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435:\u003c/b\u003e \u0422\u0435\u043c\u0430: \u0425\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0435 \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u0435 \n\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435: \u0414\u043e\u0431\u0440\u044b\u0439 \u0434\u0435\u043d\u044c. \u041d\u0435\u043e\u0431\u0445\u043e\u0434\u0438\u043c\u043e \u0432\u044b\u043f\u043e\u043b\u043d\u0438\u0442\u044c \u0437\u0430\u043f\u0440\u043e\u0441, \u0440\u0443\u043a\u043e\u0432\u043e\u0434\u0441\u0442\u0432\u0443\u044f\u0441\u044c \u0441\u043b\u0435\u0434\u0443\u044e\u0449\u0438\u043c\u0438 \u0434\u0430\u043d\u043d\u044b\u043c\u0438:\n\u041e\u0431\u044a\u0435\u043a\u0442 \u0440\u0435\u043c\u043e\u043d\u0442\u0430, \u0441 \u043a\u043e\u0442\u043e\u0440\u044b\u043c \u0432\u043e\u0437\u043d\u0438\u043a\u043b\u0438 \u043f\u0440\u043e\u0431\u043b\u0435\u043c\u044b: \u0413\u043e\u0440\u043a\u0430 \u0445\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u0430\u044f\n\u041f\u0440\u043e\u0431\u043b\u0435\u043c\u0430: \u041d\u0435 \u0441\u043e\u0431\u043b\u044e\u0434\u0430\u0435\u0442\u0441\u044f \u0442\u0435\u043c\u043f\u0435\u0440\u0430\u0442\u0443\u0440\u043d\u044b\u0439 \u0440\u0435\u0436\u0438\u043c\n\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435 \u043f\u0440\u043e\u0431\u043b\u0435\u043c\u044b: \u0411\u043e\u043b\u044c\u0448\u0430\u044f \u043f\u043b\u044e\u0441\u043e\u0432\u0430\u044f \u0442\u0435\u043c\u043f\u0435\u0440\u0430\u0442\u0443\u0440\u0430\n\u0421\u043e\u0442\u0440\u0443\u0434\u043d\u0438\u043a \u043c\u0430\u0433\u0430\u0437\u0438\u043d\u0430: \u0414\u0430\n\u0424\u0438\u043b\u0438\u0430\u043b: \u0410\u041e \u0422\u0430\u043d\u0434\u0435\u0440 \u0412\u043e\u043b\u0433\u043e\u0433\u0440\u0430\u0434\u0441\u043a\u0438\u0439 \u0444\u0438\u043b\u0438\u0430\u043b\n\u041e\u0431\u044a\u0435\u043a\u0442: \u041f\u043e\u0434\u043f\u0435\u0441\u043e\u0447\u043d\u044b\u0439 \u041c\u0414 \u0412\u043b\u0424\n\u0424\u0418\u041e: \u041b\u0443\u0433\u043e\u0432\u0430\u044f \u0415\u043b\u0435\u043d\u0430 \u0412\u0430\u043b\u0435\u0440\u044c\u0435\u0432\u043d\u0430\n\u041d\u043e\u043c\u0435\u0440 \u0442\u0435\u043b\u0435\u0444\u043e\u043d\u0430: 89053952080\u003cbr\u003e\u003cb\u003e\u041d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u0425\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0435 \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u0435\u003cbr\u003e\u003cb\u003e\u041e\u0441\u0442\u0430\u043b\u043e\u0441\u044c \u0434\u043d\u0435\u0439:\u003c/b\u003e 0\u003cbr\u003e\u003chr\u003e", "color": "yellow", "coords": [50.081236, 43.225125], "days_left": 0}];
+        var allPlacemarks = [];
+        var placemarksByColor = { 'red': [], 'yellow': [], 'blue': [] };
+
+        // Создаем метки и группируем их по цветам
+        placemarks.forEach(function (placemark) {
+            var newPlacemark = new ymaps.Placemark(placemark.coords, {
+                balloonContent: placemark.balloonContent,
+                iconCaption: placemark.days_left
+            }, {
+                preset: 'islands#dotIcon',
+                iconColor: placemark.color
+            });
+            
+            newPlacemark.properties.set('color', placemark.color);
+            
+            allPlacemarks.push(newPlacemark);
+            
+            // Группировка по цвету
+            placemarksByColor[placemark.color].push(newPlacemark);
+        });
+
+        var activeColors = { 'red': true, 'yellow': true, 'blue': true };
+
+        function addPlacemarks() {
+            myMap.geoObjects.removeAll();
+
+            allPlacemarks.forEach(function (placemark) {
+                var color = placemark.properties.get('color');
+                
+                if (activeColors[color]) {
+                    myMap.geoObjects.add(placemark);
+                }
+            });
+
+            // Автоматическое подстраивание границ карты
+            var bounds = myMap.geoObjects.getBounds();
+            if (bounds) {
+                myMap.setBounds(bounds, { checkZoomRange: true, zoomMargin: 20 });
+            }
+        }
+
+        addPlacemarks();
+
+        function toggleColor(color) {
+            activeColors[color] = !activeColors[color];
+            updateAllButtonState();
+            addPlacemarks();
+        }
+
+        function updateAllButtonState() {
+            var allActive = true;
+            
+            // Проверяем цвета
+            Object.keys(activeColors).forEach(function(color) {
+                if (!activeColors[color]) {
+                    allActive = false;
+                }
+            });
+            
+            var allButton = document.querySelector('#all_button');
+            if (allActive) {
+                allButton.classList.add('active');
+            } else {
+                allButton.classList.remove('active');
+            }
+        }
+
+        function toggleAll() {
+            var allButton = document.querySelector('#all_button');
+            var isActive = allButton.classList.contains('active');
+            
+            if (isActive) {
+                // Выключаем все
+                Object.keys(activeColors).forEach(function(color) {
+                    activeColors[color] = false;
+                    var button = document.querySelector('#' + color + '_button');
+                    if (button) button.classList.remove('active');
+                });
+                
+                allButton.classList.remove('active');
+            } else {
+                // Включаем все
+                Object.keys(activeColors).forEach(function(color) {
+                    activeColors[color] = true;
+                    var button = document.querySelector('#' + color + '_button');
+                    if (button) button.classList.add('active');
+                });
+                
+                allButton.classList.add('active');
+            }
+            
+            addPlacemarks();
+        }
+
+        // Добавляем обработчики для кнопок цветов
+        document.querySelector('#red_button').addEventListener('click', function () {
+            this.classList.toggle('active');
+            toggleColor('red');
+        });
+
+        document.querySelector('#yellow_button').addEventListener('click', function () {
+            this.classList.toggle('active');
+            toggleColor('yellow');
+        });
+
+        document.querySelector('#blue_button').addEventListener('click', function () {
+            this.classList.toggle('active');
+            toggleColor('blue');
+        });
+
+        document.querySelector('#all_button').addEventListener('click', function () {
+            toggleAll();
+        });
+
+        // Инициализация состояния кнопок
+        updateAllButtonState();
+    }
+    ymaps.ready(init);
+    </script>
+</head>
+<body>
+    <div id="map"></div>
+    <div id="controls">
+        <div class="control-group">
+            <label>Фильтр по статусу заявок:</label>
+            <div class="color-buttons">
+                <button id="red_button" class="color-red active">Красные</button>
+                <button id="yellow_button" class="color-yellow active">Желтые</button>
+                <button id="blue_button" class="color-blue active">Синие</button>
+            </div>
+        </div>
+        <button id="all_button" class="active">Показать все</button>
+    </div>
+    <div id="report_datetime">Дата и время отчета: 04-11-2025 23:16:30</div>
+    <div id="title_button">Евроком-Волгоград Восток</div>
+    <a href="index.html" class="back-link">← Назад к списку филиалов</a>
+</body>
+</html>
+    
