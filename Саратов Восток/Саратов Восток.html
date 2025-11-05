@@ -30,48 +30,66 @@
             left: 10px;
             z-index: 1000;
             background-color: rgba(255, 255, 255, 0.95);
-            padding: 8px;
+            padding: 6px;
             border-radius: 6px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-            max-width: 60px;
+            max-width: 50px;
         }
         .color-buttons {
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 3px;
         }
         button {
-            padding: 8px;
+            padding: 0;
             border: 1px solid #ccc;
             background-color: #f0f0f0;
-            color: #333;
+            color: white;
             cursor: pointer;
-            font-size: 10px;
-            border-radius: 3px;
+            font-size: 8px;
+            font-weight: bold;
+            border-radius: 2px;
             transition: all 0.3s ease;
-            width: 40px;
-            height: 40px;
+            width: 30px;
+            height: 30px;
             text-align: center;
             display: flex;
             align-items: center;
             justify-content: center;
+            position: relative;
         }
         button.active {
             border: 2px solid #333;
+            box-shadow: 0 0 5px rgba(0,0,0,0.5);
         }
         button.color-red { background-color: #ff4444; }
         button.color-orange { background-color: #ff7700; }
         button.color-blue { background-color: #4444ff; }
         
+        .count-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            border-radius: 50%;
+            width: 12px;
+            height: 12px;
+            font-size: 7px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid white;
+        }
+        
         #all_button {
             background-color: #2196F3;
             color: white;
             font-weight: bold;
-            font-size: 10px;
-            padding: 6px 8px;
+            font-size: 8px;
             margin-top: 2px;
-            width: 40px;
-            height: 40px;
+            width: 30px;
+            height: 30px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -79,6 +97,7 @@
         #all_button.active {
             background-color: #4CAF50;
             border: 2px solid #333;
+            box-shadow: 0 0 5px rgba(0,0,0,0.5);
         }
         
         #report_datetime {
@@ -273,15 +292,21 @@
     <div id="map"></div>
     <div id="controls">
         <div class="color-buttons">
-            <button id="red_button" class="color-red active" title="Красные метки"></button>
-            <button id="orange_button" class="color-orange active" title="Оранжевые метки"></button>
-            <button id="blue_button" class="color-blue active" title="Синие метки"></button>
+            <button id="red_button" class="color-red active" title="Красные метки (просроченные)">
+                <span class="count-badge">0</span>
+            </button>
+            <button id="orange_button" class="color-orange active" title="Оранжевые метки (срочные)">
+                <span class="count-badge">23</span>
+            </button>
+            <button id="blue_button" class="color-blue active" title="Синие метки (обычные)">
+                <span class="count-badge">84</span>
+            </button>
             <button id="all_button" class="active" title="Все метки">ВСЕ</button>
         </div>
     </div>
-    <div id="report_datetime">Дата и время отчета: 05-11-2025 22:33:30</div>
+    <div id="report_datetime">Дата и время отчета: 05-11-2025 22:50:43</div>
     <div id="title_button">Саратов Восток</div>
-    <a href="../index.html" class="back-link">← Назад к списку филиалов</a>
+    <a href="index.html" class="back-link">← Назад к списку филиалов</a>
 </body>
 </html>
     
