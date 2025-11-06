@@ -1,0 +1,211 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сводный отчет по филиалам</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        .summary-table th,
+        .summary-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        .summary-table th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+            color: #333;
+        }
+        .summary-table tr:hover {
+            background-color: #f5f5f5;
+        }
+        .overdue {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        .high-count {
+            background-color: #fff3cd;
+        }
+        .nav-links {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .nav-links a {
+            display: inline-block;
+            margin: 0 10px;
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .nav-links a:hover {
+            background: #0056b3;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        .stat-item {
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff;
+        }
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Сводный отчет по филиалам</h1>
+        
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-value">8</div>
+                <div class="stat-label">Филиалов</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">1126</div>
+                <div class="stat-label">Всего заявок</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">45</div>
+                <div class="stat-label">Просрочено</div>
+            </div>
+        </div>
+        
+        <table class="summary-table">
+            <thead>
+                <tr>
+                    <th>Филиал</th>
+                    <th>Всего заявок</th>
+                    <th>Заявок ВМС</th>
+                    <th>Задач ГК</th>
+                    <th>ТОИР</th>
+                    <th>Просрочено</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                <tr class="high-count">
+                    <td><a href="Пятигорск.html">Пятигорск</a></td>
+                    <td>494</td>
+                    <td>0</td>
+                    <td>411</td>
+                    <td>20</td>
+                    <td class="overdue">14</td>
+                </tr>
+                
+                <tr class="high-count">
+                    <td><a href="Саратов Восток.html">Саратов Восток</a></td>
+                    <td>170</td>
+                    <td>0</td>
+                    <td>89</td>
+                    <td>1</td>
+                    <td class="overdue">10</td>
+                </tr>
+                
+                <tr class="high-count">
+                    <td><a href="Саратов Запад.html">Саратов Запад</a></td>
+                    <td>164</td>
+                    <td>0</td>
+                    <td>105</td>
+                    <td>1</td>
+                    <td class="overdue">2</td>
+                </tr>
+                
+                <tr class="high-count">
+                    <td><a href="Пенза.html">Пенза</a></td>
+                    <td>139</td>
+                    <td>0</td>
+                    <td>92</td>
+                    <td>9</td>
+                    <td class="overdue">6</td>
+                </tr>
+                
+                <tr class="high-count">
+                    <td><a href="Самара Запад.html">Самара Запад</a></td>
+                    <td>89</td>
+                    <td>0</td>
+                    <td>14</td>
+                    <td>3</td>
+                    <td class="overdue">6</td>
+                </tr>
+                
+                <tr class="high-count">
+                    <td><a href="Тольятти.html">Тольятти</a></td>
+                    <td>50</td>
+                    <td>0</td>
+                    <td>14</td>
+                    <td>0</td>
+                    <td class="overdue">5</td>
+                </tr>
+                
+                <tr class="high-count">
+                    <td><a href="Владикавказ.html">Владикавказ</a></td>
+                    <td>16</td>
+                    <td>0</td>
+                    <td>7</td>
+                    <td>0</td>
+                    <td class="overdue">0</td>
+                </tr>
+                
+                <tr >
+                    <td><a href="Волгоград Восток.html">Волгоград Восток</a></td>
+                    <td>4</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td class="overdue">2</td>
+                </tr>
+                
+            </tbody>
+        </table>
+        
+        <div class="nav-links">
+            <a href="index.html">← Назад к списку филиалов</a>
+            <a href="Сводный_отчет_по_филиалам.xlsx">📥 Скачать Excel отчет</a>
+        </div>
+        
+        <div style="text-align: center; margin-top: 20px; color: #666; font-size: 12px;">
+            Отчет сгенерирован: 06.11.2025 21:48
+        </div>
+    </div>
+</body>
+</html>
+    
