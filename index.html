@@ -26,6 +26,22 @@
             margin-bottom: 30px;
             font-size: 24px;
         }
+        .summary-link {
+            display: block;
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: transform 0.3s;
+        }
+        .summary-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
         .filial-list {
             list-style: none;
             padding: 0;
@@ -75,8 +91,12 @@
     <div class="container">
         <div class="header-info">
             <h1>Заявки ТОИР - Все филиалы</h1>
-            <p>Дата генерации: 06.11.2025 21:07</p>
+            <p>Дата генерации: 06.11.2025 21:48</p>
         </div>
+        
+        <a href="summary_report.html" class="summary-link">
+            📊 Смотреть сводный отчет по всем филиалам
+        </a>
         
         <ul class="filial-list">
             
