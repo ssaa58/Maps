@@ -231,7 +231,7 @@
                 // Выключаем все
                 Object.keys(activeColors).forEach(function(color) {
                     activeColors[color] = false;
-                    var button = document.querySelector('#' + color + '_button);
+                    var button = document.querySelector('#' + color + '_button');
                     if (button) button.classList.remove('active');
                 });
                 
@@ -240,7 +240,7 @@
                 // Включаем все
                 Object.keys(activeColors).forEach(function(color) {
                     activeColors[color] = true;
-                    var button = document.querySelector('#' + color + '_button);
+                    var button = document.querySelector('#' + color + '_button');
                     if (button) button.classList.add('active');
                 });
                 
@@ -295,7 +295,7 @@
             </button>
         </div>
     </div>
-    <div id="report_datetime">Дата и время отчета: 07-11-2025 13:35:44</div>
+    <div id="report_datetime">Дата и время отчета: 07-11-2025 13:43:01</div>
     <div id="title_button">Саратов Восток</div>
     <a href="index.html" class="back-link">← Назад к списку филиалов</a>
 </body>
