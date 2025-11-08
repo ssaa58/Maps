@@ -72,22 +72,6 @@
             color: #dc3545;
             font-weight: bold;
         }
-        .sla-good {
-            color: #28a745;
-            font-weight: bold;
-        }
-        .sla-medium {
-            color: #ffc107;
-            font-weight: bold;
-        }
-        .sla-bad {
-            color: #dc3545;
-            font-weight: bold;
-        }
-        .sla-na {
-            color: #6c757d;
-            font-style: italic;
-        }
         .high-count {
             background-color: #fff3cd;
         }
@@ -120,6 +104,18 @@
             background-color: #e8f4fd;
             font-weight: bold;
         }
+        .sla-good {
+            color: #28a745;
+            font-weight: bold;
+        }
+        .sla-bad {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        .sla-unknown {
+            color: #6c757d;
+            font-style: italic;
+        }
     </style>
 </head>
 <body>
@@ -149,12 +145,12 @@
                 <div class="summary-header-label">Заявок ТОИР</div>
             </div>
             <div class="summary-header-item">
-                <div class="summary-header-value">102</div>
+                <div class="summary-header-value">103</div>
                 <div class="summary-header-label">Просрочено</div>
             </div>
             <div class="summary-header-item">
-                <div class="summary-header-value">Н/Д</div>
-                <div class="summary-header-label">Средний SLA</div>
+                <div class="summary-header-value">8/8</div>
+                <div class="summary-header-label">SLA указано</div>
             </div>
         </div>
         
@@ -182,11 +178,8 @@
                     <td>411</td>
                     <td>87</td>
                     <td>25</td>
-                    <td class="overdue">35</td>
-                    <td class="
-                        sla-bad
-                        
-                    ">
+                    <td class="overdue">36</td>
+                    <td class="sla-good">
                         100,00%
                     </td>
                 </tr>
@@ -202,11 +195,8 @@
                     <td>66</td>
                     <td>5</td>
                     <td class="overdue">16</td>
-                    <td class="
-                        sla-bad
-                        
-                    ">
-                        96,72%
+                    <td class="sla-good">
+                        100,00%
                     </td>
                 </tr>
                 
@@ -221,10 +211,7 @@
                     <td>38</td>
                     <td>10</td>
                     <td class="overdue">7</td>
-                    <td class="
-                        sla-bad
-                        
-                    ">
+                    <td class="sla-good">
                         96,72%
                     </td>
                 </tr>
@@ -240,11 +227,8 @@
                     <td>45</td>
                     <td>0</td>
                     <td class="overdue">6</td>
-                    <td class="
-                        sla-bad
-                        
-                    ">
-                        96,72%
+                    <td class="sla-good">
+                        98,77%
                     </td>
                 </tr>
                 
@@ -259,11 +243,8 @@
                     <td>67</td>
                     <td>2</td>
                     <td class="overdue">20</td>
-                    <td class="
-                        sla-bad
-                        
-                    ">
-                        96,72%
+                    <td class="sla-good">
+                        98,73%
                     </td>
                 </tr>
                 
@@ -278,11 +259,8 @@
                     <td>30</td>
                     <td>1</td>
                     <td class="overdue">7</td>
-                    <td class="
-                        sla-bad
-                        
-                    ">
-                        96,72%
+                    <td class="sla-good">
+                        100,00%
                     </td>
                 </tr>
                 
@@ -297,10 +275,7 @@
                     <td>11</td>
                     <td>1</td>
                     <td class="overdue">7</td>
-                    <td class="
-                        sla-bad
-                        
-                    ">
+                    <td class="sla-good">
                         100,00%
                     </td>
                 </tr>
@@ -316,10 +291,7 @@
                     <td>3</td>
                     <td>1</td>
                     <td class="overdue">4</td>
-                    <td class="
-                        sla-bad
-                        
-                    ">
+                    <td class="sla-good">
                         100,00%
                     </td>
                 </tr>
@@ -333,8 +305,8 @@
         </div>
         
         <div style="text-align: center; margin-top: 20px; color: #666; font-size: 12px;">
-            Отчет сгенерирован: 08.11.2025 20:43<br>
-            <small>Данные SLA загружены из файлов: SLA_Волжский.xlsx, SLA_Кавказский.xlsx</small>
+            Отчет сгенерирован: 08.11.2025 21:41<br>
+            <small>SLA данные загружены из файлов: SLA_Волжский.xlsx и SLA_Кавказский.xlsx</small>
         </div>
     </div>
 </body>
