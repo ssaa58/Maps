@@ -13,7 +13,7 @@
             background-color: #f5f5f5;
         }
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             background: white;
             padding: 30px;
@@ -27,7 +27,7 @@
         }
         .summary-header {
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
             gap: 10px;
             margin-bottom: 20px;
             padding: 15px;
@@ -69,6 +69,14 @@
             background-color: #f5f5f5;
         }
         .overdue {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        .sla-good {
+            color: #28a745;
+            font-weight: bold;
+        }
+        .sla-bad {
             color: #dc3545;
             font-weight: bold;
         }
@@ -133,8 +141,12 @@
                 <div class="summary-header-label">Заявок ТОИР</div>
             </div>
             <div class="summary-header-item">
-                <div class="summary-header-value">98</div>
+                <div class="summary-header-value">102</div>
                 <div class="summary-header-label">Просрочено</div>
+            </div>
+            <div class="summary-header-item">
+                <div class="summary-header-value">7</div>
+                <div class="summary-header-label">SLA данных</div>
             </div>
         </div>
         
@@ -147,6 +159,7 @@
                     <th>BMC</th>
                     <th>ТОИР</th>
                     <th>Просрочено</th>
+                    <th>SLA</th>
                 </tr>
             </thead>
             <tbody>
@@ -161,7 +174,10 @@
                     <td>411</td>
                     <td>87</td>
                     <td>25</td>
-                    <td class="overdue">32</td>
+                    <td class="overdue">35</td>
+                    <td class="sla-good">
+                        100,00%
+                    </td>
                 </tr>
                 
                 <tr class="high-count">
@@ -175,6 +191,9 @@
                     <td>66</td>
                     <td>5</td>
                     <td class="overdue">16</td>
+                    <td class="sla-good">
+                        100,00%
+                    </td>
                 </tr>
                 
                 <tr class="high-count">
@@ -187,7 +206,10 @@
                     <td>87</td>
                     <td>38</td>
                     <td>10</td>
-                    <td class="overdue">6</td>
+                    <td class="overdue">7</td>
+                    <td class="sla-good">
+                        96,72%
+                    </td>
                 </tr>
                 
                 <tr class="high-count">
@@ -201,6 +223,9 @@
                     <td>45</td>
                     <td>0</td>
                     <td class="overdue">6</td>
+                    <td class="sla-good">
+                        98,77%
+                    </td>
                 </tr>
                 
                 <tr class="high-count">
@@ -214,6 +239,9 @@
                     <td>67</td>
                     <td>2</td>
                     <td class="overdue">20</td>
+                    <td class="sla-good">
+                        98,73%
+                    </td>
                 </tr>
                 
                 <tr class="high-count">
@@ -227,6 +255,9 @@
                     <td>30</td>
                     <td>1</td>
                     <td class="overdue">7</td>
+                    <td class="sla-good">
+                        100,00%
+                    </td>
                 </tr>
                 
                 <tr class="high-count">
@@ -240,6 +271,9 @@
                     <td>11</td>
                     <td>1</td>
                     <td class="overdue">7</td>
+                    <td class="sla-good">
+                        100,00%
+                    </td>
                 </tr>
                 
                 <tr >
@@ -253,6 +287,9 @@
                     <td>3</td>
                     <td>1</td>
                     <td class="overdue">4</td>
+                    <td class="sla-bad">
+                        Н/Д
+                    </td>
                 </tr>
                 
             </tbody>
@@ -264,7 +301,7 @@
         </div>
         
         <div style="text-align: center; margin-top: 20px; color: #666; font-size: 12px;">
-            Отчет сгенерирован: 08.11.2025 16:39
+            Отчет сгенерирован: 08.11.2025 20:08
         </div>
     </div>
 </body>
