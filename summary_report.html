@@ -27,7 +27,7 @@
         }
         .summary-header {
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
             gap: 10px;
             margin-bottom: 20px;
             padding: 15px;
@@ -70,6 +70,10 @@
         }
         .overdue {
             color: #dc3545;
+            font-weight: bold;
+        }
+        .no-coords {
+            color: #ffc107;
             font-weight: bold;
         }
         .high-count {
@@ -149,6 +153,10 @@
                 <div class="summary-header-label">Просрочено</div>
             </div>
             <div class="summary-header-item">
+                <div class="summary-header-value">0</div>
+                <div class="summary-header-label">Без координат</div>
+            </div>
+            <div class="summary-header-item">
                 <div class="summary-header-value">8/8</div>
                 <div class="summary-header-label">SLA указано</div>
             </div>
@@ -163,6 +171,7 @@
                     <th>BMC</th>
                     <th>ТОИР</th>
                     <th>Просрочено</th>
+                    <th>Без координат</th>
                     <th>SLA</th>
                 </tr>
             </thead>
@@ -179,6 +188,7 @@
                     <td>87</td>
                     <td>25</td>
                     <td class="overdue">36</td>
+                    <td class="no-coords">0</td>
                     <td class="sla-good">
                         100,00%
                     </td>
@@ -195,6 +205,7 @@
                     <td>66</td>
                     <td>5</td>
                     <td class="overdue">16</td>
+                    <td class="no-coords">0</td>
                     <td class="sla-good">
                         100,00%
                     </td>
@@ -211,6 +222,7 @@
                     <td>38</td>
                     <td>10</td>
                     <td class="overdue">7</td>
+                    <td class="no-coords">0</td>
                     <td class="sla-good">
                         96,72%
                     </td>
@@ -227,6 +239,7 @@
                     <td>45</td>
                     <td>0</td>
                     <td class="overdue">6</td>
+                    <td class="no-coords">0</td>
                     <td class="sla-good">
                         98,77%
                     </td>
@@ -243,6 +256,7 @@
                     <td>67</td>
                     <td>2</td>
                     <td class="overdue">20</td>
+                    <td class="no-coords">0</td>
                     <td class="sla-good">
                         98,73%
                     </td>
@@ -259,6 +273,7 @@
                     <td>30</td>
                     <td>1</td>
                     <td class="overdue">7</td>
+                    <td class="no-coords">0</td>
                     <td class="sla-good">
                         100,00%
                     </td>
@@ -275,6 +290,7 @@
                     <td>11</td>
                     <td>1</td>
                     <td class="overdue">7</td>
+                    <td class="no-coords">0</td>
                     <td class="sla-good">
                         100,00%
                     </td>
@@ -291,6 +307,7 @@
                     <td>3</td>
                     <td>1</td>
                     <td class="overdue">4</td>
+                    <td class="no-coords">0</td>
                     <td class="sla-good">
                         100,00%
                     </td>
@@ -305,7 +322,7 @@
         </div>
         
         <div style="text-align: center; margin-top: 20px; color: #666; font-size: 12px;">
-            Отчет сгенерирован: 08.11.2025 21:41<br>
+            Отчет сгенерирован: 08.11.2025 22:06<br>
             <small>SLA данные загружены из файлов: SLA_Волжский.xlsx и SLA_Кавказский.xlsx</small>
         </div>
     </div>
