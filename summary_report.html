@@ -27,7 +27,7 @@
         }
         .summary-header {
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
             gap: 10px;
             margin-bottom: 20px;
             padding: 15px;
@@ -70,10 +70,6 @@
         }
         .overdue {
             color: #dc3545;
-            font-weight: bold;
-        }
-        .no-coords {
-            color: #ffc107;
             font-weight: bold;
         }
         .high-count {
@@ -133,28 +129,24 @@
                 <div class="summary-header-label">Филиалов</div>
             </div>
             <div class="summary-header-item">
-                <div class="summary-header-value">1087</div>
+                <div class="summary-header-value">1011</div>
                 <div class="summary-header-label">Всего заявок</div>
             </div>
             <div class="summary-header-item">
-                <div class="summary-header-value">695</div>
+                <div class="summary-header-value">650</div>
                 <div class="summary-header-label">Задач ГК</div>
             </div>
             <div class="summary-header-item">
-                <div class="summary-header-value">347</div>
+                <div class="summary-header-value">324</div>
                 <div class="summary-header-label">Заявок BMC</div>
             </div>
             <div class="summary-header-item">
-                <div class="summary-header-value">45</div>
+                <div class="summary-header-value">37</div>
                 <div class="summary-header-label">Заявок ТОИР</div>
             </div>
             <div class="summary-header-item">
-                <div class="summary-header-value">103</div>
+                <div class="summary-header-value">19</div>
                 <div class="summary-header-label">Просрочено</div>
-            </div>
-            <div class="summary-header-item">
-                <div class="summary-header-value">0</div>
-                <div class="summary-header-label">Без координат</div>
             </div>
             <div class="summary-header-item">
                 <div class="summary-header-value">8/8</div>
@@ -171,7 +163,6 @@
                     <th>BMC</th>
                     <th>ТОИР</th>
                     <th>Просрочено</th>
-                    <th>Без координат</th>
                     <th>SLA</th>
                 </tr>
             </thead>
@@ -183,29 +174,11 @@
                         <a href="Пятигорск.html" class="filial-link">Пятигорск</a>
                         
                     </td>
-                    <td>523</td>
-                    <td>411</td>
-                    <td>87</td>
-                    <td>25</td>
-                    <td class="overdue">36</td>
-                    <td class="no-coords">0</td>
-                    <td class="sla-good">
-                        100,00%
-                    </td>
-                </tr>
-                
-                <tr class="high-count">
-                    <td>
-                        
-                        <a href="Саратов Восток.html" class="filial-link">Саратов Восток</a>
-                        
-                    </td>
-                    <td>156</td>
-                    <td>85</td>
-                    <td>66</td>
-                    <td>5</td>
-                    <td class="overdue">16</td>
-                    <td class="no-coords">0</td>
+                    <td>479</td>
+                    <td>390</td>
+                    <td>68</td>
+                    <td>21</td>
+                    <td class="overdue">14</td>
                     <td class="sla-good">
                         100,00%
                     </td>
@@ -217,14 +190,29 @@
                         <a href="Пенза.html" class="filial-link">Пенза</a>
                         
                     </td>
-                    <td>135</td>
-                    <td>87</td>
-                    <td>38</td>
+                    <td>138</td>
+                    <td>84</td>
+                    <td>44</td>
                     <td>10</td>
-                    <td class="overdue">7</td>
-                    <td class="no-coords">0</td>
+                    <td class="overdue">1</td>
                     <td class="sla-good">
                         96,72%
+                    </td>
+                </tr>
+                
+                <tr class="high-count">
+                    <td>
+                        
+                        <a href="Саратов Восток.html" class="filial-link">Саратов Восток</a>
+                        
+                    </td>
+                    <td>136</td>
+                    <td>80</td>
+                    <td>54</td>
+                    <td>2</td>
+                    <td class="overdue">0</td>
+                    <td class="sla-good">
+                        100,00%
                     </td>
                 </tr>
                 
@@ -234,12 +222,11 @@
                         <a href="Саратов Запад.html" class="filial-link">Саратов Запад</a>
                         
                     </td>
-                    <td>133</td>
-                    <td>88</td>
-                    <td>45</td>
-                    <td>0</td>
-                    <td class="overdue">6</td>
-                    <td class="no-coords">0</td>
+                    <td>124</td>
+                    <td>71</td>
+                    <td>51</td>
+                    <td>2</td>
+                    <td class="overdue">2</td>
                     <td class="sla-good">
                         98,77%
                     </td>
@@ -251,12 +238,11 @@
                         <a href="Самара Запад.html" class="filial-link">Самара Запад</a>
                         
                     </td>
-                    <td>83</td>
+                    <td>85</td>
                     <td>14</td>
-                    <td>67</td>
+                    <td>69</td>
                     <td>2</td>
-                    <td class="overdue">20</td>
-                    <td class="no-coords">0</td>
+                    <td class="overdue">2</td>
                     <td class="sla-good">
                         98,73%
                     </td>
@@ -268,12 +254,11 @@
                         <a href="Тольятти.html" class="filial-link">Тольятти</a>
                         
                     </td>
-                    <td>34</td>
-                    <td>3</td>
-                    <td>30</td>
-                    <td>1</td>
-                    <td class="overdue">7</td>
-                    <td class="no-coords">0</td>
+                    <td>35</td>
+                    <td>6</td>
+                    <td>29</td>
+                    <td>0</td>
+                    <td class="overdue">0</td>
                     <td class="sla-good">
                         100,00%
                     </td>
@@ -285,12 +270,11 @@
                         <a href="Владикавказ.html" class="filial-link">Владикавказ</a>
                         
                     </td>
-                    <td>19</td>
+                    <td>12</td>
+                    <td>5</td>
                     <td>7</td>
-                    <td>11</td>
-                    <td>1</td>
-                    <td class="overdue">7</td>
-                    <td class="no-coords">0</td>
+                    <td>0</td>
+                    <td class="overdue">0</td>
                     <td class="sla-good">
                         100,00%
                     </td>
@@ -302,12 +286,11 @@
                         <a href="Волгоград Восток.html" class="filial-link">Волгоград Восток</a>
                         
                     </td>
-                    <td>4</td>
+                    <td>2</td>
                     <td>0</td>
-                    <td>3</td>
-                    <td>1</td>
-                    <td class="overdue">4</td>
-                    <td class="no-coords">0</td>
+                    <td>2</td>
+                    <td>0</td>
+                    <td class="overdue">0</td>
                     <td class="sla-good">
                         100,00%
                     </td>
@@ -322,7 +305,7 @@
         </div>
         
         <div style="text-align: center; margin-top: 20px; color: #666; font-size: 12px;">
-            Отчет сгенерирован: 08.11.2025 22:06<br>
+            Отчет сгенерирован: 08.11.2025 22:33<br>
             <small>SLA данные загружены из файлов: SLA_Волжский.xlsx и SLA_Кавказский.xlsx</small>
         </div>
     </div>
