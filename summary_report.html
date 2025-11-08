@@ -13,7 +13,7 @@
             background-color: #f5f5f5;
         }
         .container {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
             background: white;
             padding: 30px;
@@ -24,6 +24,29 @@
             color: #333;
             text-align: center;
             margin-bottom: 30px;
+        }
+        .summary-header {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+        .summary-header-item {
+            text-align: center;
+            padding: 10px;
+        }
+        .summary-header-value {
+            font-size: 24px;
+            color: #007bff;
+            margin-bottom: 5px;
+        }
+        .summary-header-label {
+            font-size: 14px;
+            color: #666;
         }
         .summary-table {
             width: 100%;
@@ -69,28 +92,6 @@
         .nav-links a:hover {
             background: #0056b3;
         }
-        .stats {
-            display: flex;
-            justify-content: space-around;
-            margin: 20px 0;
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            flex-wrap: wrap;
-        }
-        .stat-item {
-            text-align: center;
-            margin: 10px;
-        }
-        .stat-value {
-            font-size: 24px;
-            font-weight: bold;
-            color: #007bff;
-        }
-        .stat-label {
-            font-size: 14px;
-            color: #666;
-        }
         .filial-link {
             color: #007bff;
             text-decoration: none;
@@ -109,34 +110,31 @@
     <div class="container">
         <h1>📊 Сводный отчет по филиалам</h1>
         
-        <div class="stats">
-            <div class="stat-item">
-                <div class="stat-value">8</div>
-                <div class="stat-label">Филиалов</div>
+        <!-- Строка общих итогов -->
+        <div class="summary-header">
+            <div class="summary-header-item">
+                <div class="summary-header-value">8</div>
+                <div class="summary-header-label">Филиалов</div>
             </div>
-            <div class="stat-item">
-                <div class="stat-value">1087</div>
-                <div class="stat-label">Всего заявок</div>
+            <div class="summary-header-item">
+                <div class="summary-header-value">1087</div>
+                <div class="summary-header-label">Всего заявок</div>
             </div>
-            <div class="stat-item">
-                <div class="stat-value">98</div>
-                <div class="stat-label">Просрочено</div>
+            <div class="summary-header-item">
+                <div class="summary-header-value">695</div>
+                <div class="summary-header-label">Задач ГК</div>
             </div>
-            <div class="stat-item">
-                <div class="stat-value">0</div>
-                <div class="stat-label">Заявок ВМС</div>
+            <div class="summary-header-item">
+                <div class="summary-header-value">347</div>
+                <div class="summary-header-label">Заявок BMC</div>
             </div>
-            <div class="stat-item">
-                <div class="stat-value">695</div>
-                <div class="stat-label">Задач ГК</div>
+            <div class="summary-header-item">
+                <div class="summary-header-value">45</div>
+                <div class="summary-header-label">Заявок ТОИР</div>
             </div>
-            <div class="stat-item">
-                <div class="stat-value">45</div>
-                <div class="stat-label">Заявок ТОИР</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-value">347</div>
-                <div class="stat-label">Заявок BMC</div>
+            <div class="summary-header-item">
+                <div class="summary-header-value">98</div>
+                <div class="summary-header-label">Просрочено</div>
             </div>
         </div>
         
@@ -145,10 +143,9 @@
                 <tr>
                     <th>Филиал</th>
                     <th>Всего заявок</th>
-                    <th>ВМС</th>
                     <th>Задача ГК</th>
-                    <th>ТОИР</th>
                     <th>BMC</th>
+                    <th>ТОИР</th>
                     <th>Просрочено</th>
                 </tr>
             </thead>
@@ -161,10 +158,9 @@
                         
                     </td>
                     <td>523</td>
-                    <td>0</td>
                     <td>411</td>
-                    <td>25</td>
                     <td>87</td>
+                    <td>25</td>
                     <td class="overdue">32</td>
                 </tr>
                 
@@ -175,10 +171,9 @@
                         
                     </td>
                     <td>156</td>
-                    <td>0</td>
                     <td>85</td>
-                    <td>5</td>
                     <td>66</td>
+                    <td>5</td>
                     <td class="overdue">16</td>
                 </tr>
                 
@@ -189,10 +184,9 @@
                         
                     </td>
                     <td>135</td>
-                    <td>0</td>
                     <td>87</td>
-                    <td>10</td>
                     <td>38</td>
+                    <td>10</td>
                     <td class="overdue">6</td>
                 </tr>
                 
@@ -203,10 +197,9 @@
                         
                     </td>
                     <td>133</td>
-                    <td>0</td>
                     <td>88</td>
-                    <td>0</td>
                     <td>45</td>
+                    <td>0</td>
                     <td class="overdue">6</td>
                 </tr>
                 
@@ -217,10 +210,9 @@
                         
                     </td>
                     <td>83</td>
-                    <td>0</td>
                     <td>14</td>
-                    <td>2</td>
                     <td>67</td>
+                    <td>2</td>
                     <td class="overdue">20</td>
                 </tr>
                 
@@ -231,10 +223,9 @@
                         
                     </td>
                     <td>34</td>
-                    <td>0</td>
                     <td>3</td>
-                    <td>1</td>
                     <td>30</td>
+                    <td>1</td>
                     <td class="overdue">7</td>
                 </tr>
                 
@@ -245,10 +236,9 @@
                         
                     </td>
                     <td>19</td>
-                    <td>0</td>
                     <td>7</td>
-                    <td>1</td>
                     <td>11</td>
+                    <td>1</td>
                     <td class="overdue">7</td>
                 </tr>
                 
@@ -260,22 +250,11 @@
                     </td>
                     <td>4</td>
                     <td>0</td>
-                    <td>0</td>
-                    <td>1</td>
                     <td>3</td>
+                    <td>1</td>
                     <td class="overdue">4</td>
                 </tr>
                 
-                <!-- Итоговая строка -->
-                <tr class="total-row">
-                    <td><strong>ИТОГО</strong></td>
-                    <td><strong>1087</strong></td>
-                    <td><strong>0</strong></td>
-                    <td><strong>695</strong></td>
-                    <td><strong>45</strong></td>
-                    <td><strong>347</strong></td>
-                    <td class="overdue"><strong>98</strong></td>
-                </tr>
             </tbody>
         </table>
         
@@ -285,7 +264,7 @@
         </div>
         
         <div style="text-align: center; margin-top: 20px; color: #666; font-size: 12px;">
-            Отчет сгенерирован: 08.11.2025 16:21
+            Отчет сгенерирован: 08.11.2025 16:39
         </div>
     </div>
 </body>
