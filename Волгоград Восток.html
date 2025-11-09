@@ -30,16 +30,32 @@
             left: 10px;
             z-index: 1000;
             background-color: rgba(255, 255, 255, 0.95);
-            padding: 10px;
+            padding: 15px;
             border-radius: 10px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-            max-width: 60px;
+            max-width: 200px;
+        }
+        .filter-section {
+            margin-bottom: 15px;
+        }
+        .filter-title {
+            font-size: 12px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+            text-align: center;
         }
         .color-buttons {
             display: flex;
             flex-direction: column;
             gap: 6px;
             align-items: center;
+            margin-bottom: 10px;
+        }
+        .sector-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
         }
         button {
             padding: 0;
@@ -59,6 +75,16 @@
             justify-content: center;
             position: relative;
         }
+        .sector-button {
+            width: auto;
+            height: auto;
+            border-radius: 15px;
+            padding: 6px 10px;
+            font-size: 11px;
+            background-color: #f8f9fa;
+            color: #333;
+            border: 1px solid #ddd;
+        }
         button.active {
             border: 3px solid #333;
             box-shadow: 0 0 8px rgba(0,0,0,0.5);
@@ -67,15 +93,27 @@
         button.color-yellow.active { background-color: #ffcc00; }
         button.color-blue.active { background-color: #4444ff; }
         button.color-green.active { background-color: #4CAF50; }
+        .sector-button.active { 
+            background-color: #2196F3; 
+            color: white;
+            border-color: #1976D2;
+        }
         
         button.color-red:not(.active) { background-color: #f0f0f0; color: #999; border-color: #999; }
         button.color-yellow:not(.active) { background-color: #f0f0f0; color: #999; border-color: #999; }
         button.color-blue:not(.active) { background-color: #f0f0f0; color: #999; border-color: #999; }
         button.color-green:not(.active) { background-color: #f0f0f0; color: #999; border-color: #999; }
+        .sector-button:not(.active):hover {
+            background-color: #e9ecef;
+        }
         
         .button-text {
             font-size: 16px;
             font-weight: bold;
+            pointer-events: none;
+        }
+        .sector-text {
+            font-size: 10px;
             pointer-events: none;
         }
         
@@ -129,162 +167,287 @@
             color: #333;
             margin-bottom: 4px;
         }
+        .divider {
+            height: 1px;
+            background-color: #ddd;
+            margin: 8px 0;
+        }
     </style>
-    <script type="text/javascript">
-    function init() {
-        var myMap = new ymaps.Map("map", {
-            center: [48.708, 44.5133],
-            zoom: 10,
-            controls: []
-        });
-
-        var placemarks = [{"balloonContent": "\u003cb\u003e\u041f\u043e\u0434\u0440\u0430\u0437\u0434\u0435\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u041a\u0430\u043c\u044b\u0448\u0438\u043d 1 5 \u043c\u0438\u043a\u0440\u043e\u0440\u0430\u0439\u043e\u043d\u003cbr\u003e\u003cb\u003e\u0424\u0438\u043b\u0438\u0430\u043b:\u003c/b\u003e \u0412\u043e\u043b\u0433\u043e\u0433\u0440\u0430\u0434 \u0412\u043e\u0441\u0442\u043e\u043a\u003cbr\u003e\u003cb\u003e\u041d\u043e\u043c\u0435\u0440 \u0437\u0430\u044f\u0432\u043a\u0438:\u003c/b\u003e SMT-\u043200007969843\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u044b\u0439:\u003c/b\u003e \u0422\u0440\u0443\u0434\u043e\u0432 \u0410\u043b\u0435\u043a\u0441\u0435\u0439 \u0412\u043b\u0430\u0434\u0438\u043c\u0438\u0440\u043e\u0432\u0438\u0447\u003cbr\u003e\u003cb\u003e\u0412\u044b\u043f\u043e\u043b\u043d\u0438\u0442\u044c \u0434\u043e:\u003c/b\u003e 09.11.2025 12:18:29\u003cbr\u003e\u003cb\u003e\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435:\u003c/b\u003e \u0422\u0435\u043c\u0430: \u0421\u0413\u0418 \u041a\u0430\u043c\u044b\u0448\u0438\u043d 1 5 \u043c\u0438\u043a\u0440\u043e\u0440\u0430\u0439\u043e\u043d (993401) \u0411\u0428_\u041c\u043e\u0440\u043e\u0436\u0435\u043d\u043e\u0435..4 SCADA-XO \n\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435: \u0421\u0438\u0433\u043d\u0430\u043b: \u0410\u0432\u0430\u0440\u0438\u044f \u0445\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0433\u043e \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u044f: \u0411\u0428_\u041c\u043e\u0440\u043e\u0436\u0435\u043d\u043e\u0435..4; \u041d\u0430\u0438\u043c\u0435\u043d\u043e\u0432\u0430\u043d\u0438\u0435 \u0430\u0432\u0430\u0440\u0438\u0438: A1. \u0412\u044b\u0441\u043e\u043a\u0430\u044f \u0442\u0435\u043c\u043f\u0435\u0440\u0430\u0442\u0443\u0440\u0430; \n\n\u0412\u0440\u0435\u043c\u0435\u043d\u043d\u0430\u044f \u043c\u0435\u0442\u043a\u0430 \u0441\u0438\u0433\u043d\u0430\u043b\u0430: 08.11.25 23:25:34::137; \n\n\u0417\u043d\u0430\u0447\u0435\u043d\u0438\u0435: true (\u0432\u043a\u043b) ; \n\n\u0421\u0440\u0430\u0431\u043e\u0442\u0430\u0432\u0448\u0435\u0435 \u0441\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u0435: \u0414\u0438\u0441\u043a\u0440\u0435\u0442\u043d\u043e\u0435 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435(\u043b\u043e\u0433. 1); \n\n\u041f\u0440\u0435\u0434\u044b\u0434\u0443\u0449\u0435\u0435 \u0441\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u0435: \u041d\u043e\u0440\u043c\u0430(\u043d\u0435 \u0431\u044b\u043b\u043e \u0441\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u043d\u0438\u0439); \n\n\u0417\u0430\u0434\u0435\u0440\u0436\u043a\u0430 \u0441\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u043d\u0438\u044f: 3000 \u0441\u0435\u043a.; \n\n\u0412\u0440\u0435\u043c\u044f \u0441\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u043d\u0438\u044f: 08.11.25 23:25:40::48.\n\u003cbr\u003e\u003cb\u003e\u041d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u0425\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0435 \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u0435\u003cbr\u003e\u003cb\u003e\u041e\u0441\u0442\u0430\u043b\u043e\u0441\u044c \u0434\u043d\u0435\u0439:\u003c/b\u003e -1\u003cbr\u003e\u003chr\u003e\u003cb\u003e\u041f\u043e\u0434\u0440\u0430\u0437\u0434\u0435\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u041a\u0430\u043c\u044b\u0448\u0438\u043d 1 5 \u043c\u0438\u043a\u0440\u043e\u0440\u0430\u0439\u043e\u043d\u003cbr\u003e\u003cb\u003e\u0424\u0438\u043b\u0438\u0430\u043b:\u003c/b\u003e \u0412\u043e\u043b\u0433\u043e\u0433\u0440\u0430\u0434 \u0412\u043e\u0441\u0442\u043e\u043a\u003cbr\u003e\u003cb\u003e\u041d\u043e\u043c\u0435\u0440 \u0437\u0430\u044f\u0432\u043a\u0438:\u003c/b\u003e SMT-\u043200007969234\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u044b\u0439:\u003c/b\u003e \u0422\u0440\u0443\u0434\u043e\u0432 \u0410\u043b\u0435\u043a\u0441\u0435\u0439 \u0412\u043b\u0430\u0434\u0438\u043c\u0438\u0440\u043e\u0432\u0438\u0447\u003cbr\u003e\u003cb\u003e\u0412\u044b\u043f\u043e\u043b\u043d\u0438\u0442\u044c \u0434\u043e:\u003c/b\u003e 09.11.2025 19:15:03\u003cbr\u003e\u003cb\u003e\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435:\u003c/b\u003e \u0422\u0435\u043c\u0430: \u0425\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0435 \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u0435 \n\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435: \u0414\u043e\u0431\u0440\u044b\u0439 \u0434\u0435\u043d\u044c. \u041d\u0435\u043e\u0431\u0445\u043e\u0434\u0438\u043c\u043e \u0432\u044b\u043f\u043e\u043b\u043d\u0438\u0442\u044c \u0437\u0430\u043f\u0440\u043e\u0441, \u0440\u0443\u043a\u043e\u0432\u043e\u0434\u0441\u0442\u0432\u0443\u044f\u0441\u044c \u0441\u043b\u0435\u0434\u0443\u044e\u0449\u0438\u043c\u0438 \u0434\u0430\u043d\u043d\u044b\u043c\u0438:\n\u041e\u0431\u044a\u0435\u043a\u0442 \u0440\u0435\u043c\u043e\u043d\u0442\u0430, \u0441 \u043a\u043e\u0442\u043e\u0440\u044b\u043c \u0432\u043e\u0437\u043d\u0438\u043a\u043b\u0438 \u043f\u0440\u043e\u0431\u043b\u0435\u043c\u044b: \u0411\u043e\u043d\u043d\u0435\u0442\u0430\n\u041f\u0440\u043e\u0431\u043b\u0435\u043c\u0430: \u041d\u0435 \u0441\u043e\u0431\u043b\u044e\u0434\u0430\u0435\u0442\u0441\u044f \u0442\u0435\u043c\u043f\u0435\u0440\u0430\u0442\u0443\u0440\u043d\u044b\u0439 \u0440\u0435\u0436\u0438\u043c\n\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435 \u043f\u0440\u043e\u0431\u043b\u0435\u043c\u044b: \u0432\u044b\u0441\u043e\u043a\u0430\u044f \u0442\u0435\u043c\u043f\u0435\u0440\u0430\u0442\u0443\u0440\u0430 \u0432 \u0431\u0430\u043d\u043d\u0435\u0442\u0435 \u0441 \u043c\u043e\u0440\u043e\u0436\u0435\u043d\u044b\u043c (\u0432\u0435\u0440\u0445)\n\u0421\u043e\u0442\u0440\u0443\u0434\u043d\u0438\u043a \u043c\u0430\u0433\u0430\u0437\u0438\u043d\u0430: \u0414\u0430\n\u0424\u0438\u043b\u0438\u0430\u043b: \u0410\u041e \u0422\u0430\u043d\u0434\u0435\u0440 \u041a\u0430\u043c\u044b\u0448\u0438\u043d 5 \u043c\u0438\u043a\u0440\u043e\u0440\u0430\u0439\u043e\u043d \u0413\u041c\n\u041e\u0431\u044a\u0435\u043a\u0442: \u0427\u0435\u0440\u043d\u043e\u0432\u0430 \u0415\u043b\u0435\u043d\u0430 \u0412\u043b\u0430\u0434\u0438\u043c\u0438\u0440\u043e\u0432\u043d\u0430\n\u0424\u0418\u041e: \u041b\u043e\u043f\u0430\u0442\u0438\u043d \u0414.\u041d.\n\u041d\u043e\u043c\u0435\u0440 \u0442\u0435\u043b\u0435\u0444\u043e\u043d\u0430: 89272523784\u003cbr\u003e\u003cb\u003e\u041d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u0425\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0435 \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u0435\u003cbr\u003e\u003cb\u003e\u041e\u0441\u0442\u0430\u043b\u043e\u0441\u044c \u0434\u043d\u0435\u0439:\u003c/b\u003e 0\u003cbr\u003e\u003chr\u003e\u003cb\u003e\u041f\u043e\u0434\u0440\u0430\u0437\u0434\u0435\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u041a\u0430\u043c\u044b\u0448\u0438\u043d 1 5 \u043c\u0438\u043a\u0440\u043e\u0440\u0430\u0439\u043e\u043d\u003cbr\u003e\u003cb\u003e\u0424\u0438\u043b\u0438\u0430\u043b:\u003c/b\u003e \u0412\u043e\u043b\u0433\u043e\u0433\u0440\u0430\u0434 \u0412\u043e\u0441\u0442\u043e\u043a\u003cbr\u003e\u003cb\u003e\u041d\u043e\u043c\u0435\u0440 \u0437\u0430\u044f\u0432\u043a\u0438:\u003c/b\u003e SMT-\u043200007969442\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u044b\u0439:\u003c/b\u003e \u0422\u0440\u0443\u0434\u043e\u0432 \u0410\u043b\u0435\u043a\u0441\u0435\u0439 \u0412\u043b\u0430\u0434\u0438\u043c\u0438\u0440\u043e\u0432\u0438\u0447\u003cbr\u003e\u003cb\u003e\u0412\u044b\u043f\u043e\u043b\u043d\u0438\u0442\u044c \u0434\u043e:\u003c/b\u003e 09.11.2025 20:28:11\u003cbr\u003e\u003cb\u003e\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435:\u003c/b\u003e \u0422\u0435\u043c\u0430: \u0421\u0413\u0418 \u041a\u0430\u043c\u044b\u0448\u0438\u043d 1 5 \u043c\u0438\u043a\u0440\u043e\u0440\u0430\u0439\u043e\u043d (993401) \u0413_\u0421\u044b\u0440..39 SCADA-XO \n\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435: \u0421\u0438\u0433\u043d\u0430\u043b: \u0410\u0432\u0430\u0440\u0438\u044f \u0445\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0433\u043e \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u044f: \u0413_\u0421\u044b\u0440..39; \u041d\u0430\u0438\u043c\u0435\u043d\u043e\u0432\u0430\u043d\u0438\u0435 \u0430\u0432\u0430\u0440\u0438\u0438: \u041527. \u041d\u0435\u0438\u0441\u043f\u0440\u0430\u0432\u043d\u043e\u0441\u0442\u044c \u0434\u0430\u0442\u0447\u0438\u043a\u0430 \u0442\u0435\u043c\u043f\u0435\u0440\u0430\u0442\u0443\u0440\u044b S5; \n\n\u0412\u0440\u0435\u043c\u0435\u043d\u043d\u0430\u044f \u043c\u0435\u0442\u043a\u0430 \u0441\u0438\u0433\u043d\u0430\u043b\u0430: 08.11.25 20:18:28::722; \n\n\u0417\u043d\u0430\u0447\u0435\u043d\u0438\u0435: true (\u0432\u043a\u043b) ; \n\n\u0421\u0440\u0430\u0431\u043e\u0442\u0430\u0432\u0448\u0435\u0435 \u0441\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u0435: \u0414\u0438\u0441\u043a\u0440\u0435\u0442\u043d\u043e\u0435 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435(\u043b\u043e\u0433. 1); \n\n\u041f\u0440\u0435\u0434\u044b\u0434\u0443\u0449\u0435\u0435 \u0441\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u0435: \u041d\u043e\u0440\u043c\u0430(\u043d\u0435 \u0431\u044b\u043b\u043e \u0441\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u043d\u0438\u0439); \n\n\u0417\u0430\u0434\u0435\u0440\u0436\u043a\u0430 \u0441\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u043d\u0438\u044f: 300 \u0441\u0435\u043a.; \n\n\u0412\u0440\u0435\u043c\u044f \u0441\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u043d\u0438\u044f: 08.11.25 20:18:34::490.\n\u003cbr\u003e\u003cb\u003e\u041d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u0425\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0435 \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u0435\u003cbr\u003e\u003cb\u003e\u041e\u0441\u0442\u0430\u043b\u043e\u0441\u044c \u0434\u043d\u0435\u0439:\u003c/b\u003e 0\u003cbr\u003e\u003chr\u003e\u003cb\u003e\u041f\u043e\u0434\u0440\u0430\u0437\u0434\u0435\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u041a\u0430\u043c\u044b\u0448\u0438\u043d 1 5 \u043c\u0438\u043a\u0440\u043e\u0440\u0430\u0439\u043e\u043d\u003cbr\u003e\u003cb\u003e\u0424\u0438\u043b\u0438\u0430\u043b:\u003c/b\u003e \u0412\u043e\u043b\u0433\u043e\u0433\u0440\u0430\u0434 \u0412\u043e\u0441\u0442\u043e\u043a\u003cbr\u003e\u003cb\u003e\u041d\u043e\u043c\u0435\u0440 \u0437\u0430\u044f\u0432\u043a\u0438:\u003c/b\u003e SMT-\u043200007969596\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u044b\u0439:\u003c/b\u003e \u0422\u0440\u0443\u0434\u043e\u0432 \u0410\u043b\u0435\u043a\u0441\u0435\u0439 \u0412\u043b\u0430\u0434\u0438\u043c\u0438\u0440\u043e\u0432\u0438\u0447\u003cbr\u003e\u003cb\u003e\u0412\u044b\u043f\u043e\u043b\u043d\u0438\u0442\u044c \u0434\u043e:\u003c/b\u003e 11.11.2025 22:26:22\u003cbr\u003e\u003cb\u003e\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435:\u003c/b\u003e \u0422\u0435\u043c\u0430: \u0421\u0413\u0418 \u041a\u0430\u043c\u044b\u0448\u0438\u043d 1 5 \u043c\u0438\u043a\u0440\u043e\u0440\u0430\u0439\u043e\u043d (993401) \u041d\u0422\u0426..112 SCADA-XO \n\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435: \u0421\u0438\u0433\u043d\u0430\u043b: \u0410\u0432\u0430\u0440\u0438\u044f \u0445\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0433\u043e \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u044f: \u041d\u0422\u0426..112; \u041d\u0430\u0438\u043c\u0435\u043d\u043e\u0432\u0430\u043d\u0438\u0435 \u0430\u0432\u0430\u0440\u0438\u0438: Compressor 3A safety cut out; \n\n\u0412\u0440\u0435\u043c\u0435\u043d\u043d\u0430\u044f \u043c\u0435\u0442\u043a\u0430 \u0441\u0438\u0433\u043d\u0430\u043b\u0430: 08.11.25 22:19:36::421; \n\n\u0417\u043d\u0430\u0447\u0435\u043d\u0438\u0435: true (\u0432\u043a\u043b) ; \n\n\u0421\u0440\u0430\u0431\u043e\u0442\u0430\u0432\u0448\u0435\u0435 \u0441\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u0435: \u0414\u0438\u0441\u043a\u0440\u0435\u0442\u043d\u043e\u0435 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435(\u043b\u043e\u0433. 1); \n\n\u041f\u0440\u0435\u0434\u044b\u0434\u0443\u0449\u0435\u0435 \u0441\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u0435: \u041d\u043e\u0440\u043c\u0430(\u043d\u0435 \u0431\u044b\u043b\u043e \u0441\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u043d\u0438\u0439); \n\n\u0417\u0430\u0434\u0435\u0440\u0436\u043a\u0430 \u0441\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u043d\u0438\u044f: 300 \u0441\u0435\u043a.; \n\n\u0412\u0440\u0435\u043c\u044f \u0441\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u043d\u0438\u044f: 08.11.25 22:19:38::862.\n\u003cbr\u003e\u003cb\u003e\u041d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u0425\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0435 \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u0435\u003cbr\u003e\u003cb\u003e\u041e\u0441\u0442\u0430\u043b\u043e\u0441\u044c \u0434\u043d\u0435\u0439:\u003c/b\u003e 2\u003cbr\u003e\u003chr\u003e", "blue_count": 0, "color": "red", "coords": [50.091, 45.3568], "days_left": -1, "red_count": 1, "total_requests": 4, "yellow_count": 3}, {"balloonContent": "\u003cb\u003e\u041f\u043e\u0434\u0440\u0430\u0437\u0434\u0435\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u041c\u0438\u0445\u0430\u0439\u043b\u043e\u0432\u043a\u0430 1 \u041f\u043e\u043f\u0435\u0440\u0435\u0447\u043d\u0430\u044f\u003cbr\u003e\u003cb\u003e\u0424\u0438\u043b\u0438\u0430\u043b:\u003c/b\u003e \u0412\u043e\u043b\u0433\u043e\u0433\u0440\u0430\u0434 \u0412\u043e\u0441\u0442\u043e\u043a\u003cbr\u003e\u003cb\u003e\u041d\u043e\u043c\u0435\u0440 \u0437\u0430\u044f\u0432\u043a\u0438:\u003c/b\u003e SMT-\u043200007969635\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u044b\u0439:\u003c/b\u003e \u0414\u0440\u043e\u043d\u043e\u0432 \u0414\u0430\u043d\u0438\u043b\u0430 \u0415\u0432\u0433\u0435\u043d\u044c\u0435\u0432\u0438\u0447\u003cbr\u003e\u003cb\u003e\u0412\u044b\u043f\u043e\u043b\u043d\u0438\u0442\u044c \u0434\u043e:\u003c/b\u003e 08.11.2025 00:00:00\u003cbr\u003e\u003cb\u003e\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435:\u003c/b\u003e \u0412\u041d\u0418\u041c\u0410\u041d\u0418\u0415! \u041f\u043e\u0432\u0442\u043e\u0440\u043d\u0430\u044f \u0437\u0430\u044f\u0432\u043a\u0430, \u043d\u0438\u0437\u043a\u043e\u0435 \u043a\u0430\u0447\u0435\u0441\u0442\u0432\u043e \u0432\u044b\u043f\u043e\u043b\u043d\u0435\u043d\u0438\u044f \u0440\u0435\u043c\u043e\u043d\u0442\u0430 \u043f\u043e \u043f\u0440\u0435\u0434\u0448\u0435\u0441\u0442\u0432\u0443\u044e\u0449\u0438\u043c \u0437\u0430\u044f\u0432\u043a\u0430\u043c.\n\n\u0422\u0435\u043c\u0430: \u0421\u0413\u0418 \u041c\u0438\u0445\u0430\u0439\u043b\u043e\u0432\u043a\u0430 1 \u041f\u043e\u043f\u0435\u0440\u0435\u0447\u043d\u0430\u044f (993412) \u0411_\u041f\u0424..21 SCADA-XO \n\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435: \u0421\u0438\u0433\u043d\u0430\u043b: \u0410\u0432\u0430\u0440\u0438\u044f \u0445\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0433\u043e \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u044f: \u0411_\u041f\u0424..21; \u041d\u0430\u0438\u043c\u0435\u043d\u043e\u0432\u0430\u043d\u0438\u0435 \u0430\u0432\u0430\u0440\u0438\u0438: A1. \u0412\u044b\u0441\u043e\u043a\u0430\u044f \u0442\u0435\u043c\u043f\u0435\u0440\u0430\u0442\u0443\u0440\u0430; \n\n\u0412\u0440\u0435\u043c\u0435\u043d\u043d\u0430\u044f \u043c\u0435\u0442\u043a\u0430 \u0441\u0438\u0433\u043d\u0430\u043b\u0430: 08.11.25 14:45:12::368; \n\n\u0417\u043d\u0430\u0447\u0435\u043d\u0438\u0435: true (\u0432\u043a\u043b) ; \n\n\u0421\u0440\u0430\u0431\u043e\u0442\u0430\u0432\u0448\u0435\u0435 \u0441\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u0435: \u0414\u0438\u0441\u043a\u0440\u0435\u0442\u043d\u043e\u0435 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435(\u043b\u043e\u0433. 1); \n\n\u041f\u0440\u0435\u0434\u044b\u0434\u0443\u0449\u0435\u0435 \u0441\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u0435: \u041d\u043e\u0440\u043c\u0430(\u043d\u0435 \u0431\u044b\u043b\u043e \u0441\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u043d\u0438\u0439); \n\n\u0417\u0430\u0434\u0435\u0440\u0436\u043a\u0430 \u0441\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u043d\u0438\u044f: 3000 \u0441\u0435\u043a.; \n\n\u0412\u0440\u0435\u043c\u044f \u0441\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u043d\u0438\u044f: 08.11.25 14:45:12::806.\n\u003cbr\u003e\u003cb\u003e\u041d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u0425\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0435 \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u0435\u003cbr\u003e\u003cb\u003e\u041e\u0441\u0442\u0430\u043b\u043e\u0441\u044c \u0434\u043d\u0435\u0439:\u003c/b\u003e -2\u003cbr\u003e\u003chr\u003e", "blue_count": 0, "color": "red", "coords": [50.070299, 43.215768], "days_left": -2, "red_count": 1, "total_requests": 1, "yellow_count": 0}];
-        var allPlacemarks = [];
-        var placemarksByColor = { 'red': [], 'yellow': [], 'blue': [] };
-
-        placemarks.forEach(function (placemark) {
-            var zIndex = 1;
-            if (placemark.color === 'yellow') {
-                zIndex = 2;
-            } else if (placemark.color === 'red') {
-                zIndex = 3;
-            }
-            
-            var newPlacemark = new ymaps.Placemark(placemark.coords, {
-                balloonContent: placemark.balloonContent,
-                iconCaption: placemark.total_requests.toString()
-            }, {
-                preset: 'islands#dotIcon',
-                iconColor: placemark.color,
-                zIndex: zIndex
-            });
-            
-            newPlacemark.properties.set('color', placemark.color);
-            newPlacemark.properties.set('zIndex', zIndex);
-            
-            allPlacemarks.push(newPlacemark);
-            placemarksByColor[placemark.color].push(newPlacemark);
-        });
-
-        var activeColors = { 'red': true, 'yellow': true, 'blue': true };
-
-        function addPlacemarks() {
-            myMap.geoObjects.removeAll();
-
-            var sortedPlacemarks = allPlacemarks.slice().sort(function(a, b) {
-                return b.properties.get('zIndex') - a.properties.get('zIndex');
-            });
-
-            sortedPlacemarks.forEach(function (placemark) {
-                var color = placemark.properties.get('color');
-                
-                if (activeColors[color]) {
-                    myMap.geoObjects.add(placemark);
-                }
-            });
-
-            var bounds = myMap.geoObjects.getBounds();
-            if (bounds) {
-                myMap.setBounds(bounds, { checkZoomRange: true, zoomMargin: 20 });
-            }
-        }
-
-        addPlacemarks();
-
-        function toggleColor(color) {
-            activeColors[color] = !activeColors[color];
-            updateAllButtonState();
-            addPlacemarks();
-        }
-
-        function updateAllButtonState() {
-            var allActive = true;
-            
-            Object.keys(activeColors).forEach(function(color) {
-                if (!activeColors[color]) {
-                    allActive = false;
-                }
-            });
-            
-            var allButton = document.querySelector('#all_button');
-            if (allActive) {
-                allButton.classList.add('active');
-            } else {
-                allButton.classList.remove('active');
-            }
-        }
-
-        function toggleAll() {
-            var allButton = document.querySelector('#all_button');
-            var isActive = allButton.classList.contains('active');
-            
-            if (isActive) {
-                Object.keys(activeColors).forEach(function(color) {
-                    activeColors[color] = false;
-                    var button = document.querySelector('#' + color + '_button');
-                    if (button) button.classList.remove('active');
-                });
-                
-                allButton.classList.remove('active');
-            } else {
-                Object.keys(activeColors).forEach(function(color) {
-                    activeColors[color] = true;
-                    var button = document.querySelector('#' + color + '_button');
-                    if (button) button.classList.add('active');
-                });
-                
-                allButton.classList.add('active');
-            }
-            
-            addPlacemarks();
-        }
-
-        document.querySelector('#red_button').addEventListener('click', function () {
-            this.classList.toggle('active');
-            toggleColor('red');
-        });
-
-        document.querySelector('#yellow_button').addEventListener('click', function () {
-            this.classList.toggle('active');
-            toggleColor('yellow');
-        });
-
-        document.querySelector('#blue_button').addEventListener('click', function () {
-            this.classList.toggle('active');
-            toggleColor('blue');
-        });
-
-        document.querySelector('#all_button').addEventListener('click', function () {
-            toggleAll();
-        });
-
-        updateAllButtonState();
-    }
-    ymaps.ready(init);
-    </script>
 </head>
 <body>
     <div id="map"></div>
     <div id="controls">
-        <div class="controls-title">ФИЛЬТРЫ</div>
-        <div class="color-buttons">
-            <button id="red_button" class="color-red active" title="Красные метки (просроченные)">
-                <span class="button-text">2</span>
-            </button>
-            <button id="yellow_button" class="color-yellow active" title="Желтые метки (срочные)">
-                <span class="button-text">3</span>
-            </button>
-            <button id="blue_button" class="color-blue active" title="Синие метки (обычные)">
-                <span class="button-text">0</span>
-            </button>
-            <button id="all_button" class="color-green active" title="Все метки">
-                <span class="button-text">5</span>
-            </button>
+        <div class="filter-section">
+            <div class="filter-title">ЗАЯВКИ</div>
+            <div class="color-buttons">
+                <button id="red_button" class="color-red active" title="Просроченные заявки">
+                    <span class="button-text">2</span>
+                </button>
+                <button id="yellow_button" class="color-yellow active" title="Срочные заявки">
+                    <span class="button-text">3</span>
+                </button>
+                <button id="blue_button" class="color-blue active" title="Обычные заявки">
+                    <span class="button-text">0</span>
+                </button>
+                <button id="all_button" class="color-green active" title="Все заявки">
+                    <span class="button-text">5</span>
+                </button>
+            </div>
+        </div>
+        
+        <div class="divider"></div>
+        
+        <div class="filter-section">
+            <div class="filter-title">ОТВ.</div>
+            <div class="sector-buttons">
+                <button id="all_sectors_button" class="sector-button active" title="Все Отв.">
+                    <span class="sector-text">Все Отв.</span>
+                </button>
+                
+                <button id="sector_1_button" class="sector-button active" title="Отв. Не указан">
+                    <span class="sector-text">Не указан</span>
+                </button>
+                
+            </div>
         </div>
     </div>
-    <div id="report_datetime">Дата и время отчета: 09-11-2025 13:33:16</div>
+    <div id="report_datetime">Дата и время отчета: 09-11-2025 13:36:59</div>
     <div id="title_button">Волгоград Восток</div>
     <a href="index.html" class="back-link">← Назад к списку филиалов</a>
 </body>
 </html>
+
+<script type="text/javascript">
+function init() {
+    var myMap = new ymaps.Map("map", {
+        center: [48.708, 44.5133],
+        zoom: 10,
+        controls: []
+    });
+
+    var placemarks = [{"balloonContent": "\u003cb\u003e\u041f\u043e\u0434\u0440\u0430\u0437\u0434\u0435\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u041a\u0430\u043c\u044b\u0448\u0438\u043d 1 5 \u043c\u0438\u043a\u0440\u043e\u0440\u0430\u0439\u043e\u043d\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432.:\u003c/b\u003e \u041d\u0435 \u0443\u043a\u0430\u0437\u0430\u043d\u003cbr\u003e\u003cb\u003e\u0424\u0438\u043b\u0438\u0430\u043b:\u003c/b\u003e \u0412\u043e\u043b\u0433\u043e\u0433\u0440\u0430\u0434 \u0412\u043e\u0441\u0442\u043e\u043a\u003cbr\u003e\u003cb\u003e\u041d\u043e\u043c\u0435\u0440 \u0437\u0430\u044f\u0432\u043a\u0438:\u003c/b\u003e SMT-\u043200007969843\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u044b\u0439:\u003c/b\u003e \u0422\u0440\u0443\u0434\u043e\u0432 \u0410\u043b\u0435\u043a\u0441\u0435\u0439 \u0412\u043b\u0430\u0434\u0438\u043c\u0438\u0440\u043e\u0432\u0438\u0447\u003cbr\u003e\u003cb\u003e\u0412\u044b\u043f\u043e\u043b\u043d\u0438\u0442\u044c \u0434\u043e:\u003c/b\u003e 09.11.2025 12:18:29\u003cbr\u003e\u003cb\u003e\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435:\u003c/b\u003e \u0422\u0435\u043c\u0430: \u0421\u0413\u0418 \u041a\u0430\u043c\u044b\u0448\u0438\u043d 1 5 \u043c\u0438\u043a\u0440\u043e\u0440\u0430\u0439\u043e\u043d (993401) \u0411\u0428_\u041c\u043e\u0440\u043e\u0436\u0435\u043d\u043e\u0435..4 SCADA-XO \n\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435: \u0421\u0438\u0433\u043d\u0430\u043b: \u0410\u0432\u0430\u0440\u0438\u044f \u0445\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0433\u043e \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u044f: \u0411\u0428_\u041c\u043e\u0440\u043e\u0436\u0435\u043d\u043e\u0435..4; \u041d\u0430\u0438\u043c\u0435\u043d\u043e\u0432\u0430\u043d\u0438\u0435 \u0430\u0432\u0430\u0440\u0438\u0438: A1. \u0412\u044b\u0441\u043e\u043a\u0430\u044f \u0442\u0435\u043c\u043f\u0435\u0440\u0430\u0442\u0443\u0440\u0430; \n\n\u0412\u0440\u0435\u043c\u0435\u043d\u043d\u0430\u044f \u043c\u0435\u0442\u043a\u0430 \u0441\u0438\u0433\u043d\u0430\u043b\u0430: 08.11.25 23:25:34::137; \n\n\u0417\u043d\u0430\u0447\u0435\u043d\u0438\u0435: true (\u0432\u043a\u043b) ; \n\n\u0421\u0440\u0430\u0431\u043e\u0442\u0430\u0432\u0448\u0435\u0435 \u0441\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u0435: \u0414\u0438\u0441\u043a\u0440\u0435\u0442\u043d\u043e\u0435 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435(\u043b\u043e\u0433. 1); \n\n\u041f\u0440\u0435\u0434\u044b\u0434\u0443\u0449\u0435\u0435 \u0441\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u0435: \u041d\u043e\u0440\u043c\u0430(\u043d\u0435 \u0431\u044b\u043b\u043e \u0441\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u043d\u0438\u0439); \n\n\u0417\u0430\u0434\u0435\u0440\u0436\u043a\u0430 \u0441\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u043d\u0438\u044f: 3000 \u0441\u0435\u043a.; \n\n\u0412\u0440\u0435\u043c\u044f \u0441\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u043d\u0438\u044f: 08.11.25 23:25:40::48.\n\u003cbr\u003e\u003cb\u003e\u041d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u0425\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0435 \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u0435\u003cbr\u003e\u003cb\u003e\u041e\u0441\u0442\u0430\u043b\u043e\u0441\u044c \u0434\u043d\u0435\u0439:\u003c/b\u003e -1\u003cbr\u003e\u003chr\u003e\u003cb\u003e\u041f\u043e\u0434\u0440\u0430\u0437\u0434\u0435\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u041a\u0430\u043c\u044b\u0448\u0438\u043d 1 5 \u043c\u0438\u043a\u0440\u043e\u0440\u0430\u0439\u043e\u043d\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432.:\u003c/b\u003e \u041d\u0435 \u0443\u043a\u0430\u0437\u0430\u043d\u003cbr\u003e\u003cb\u003e\u0424\u0438\u043b\u0438\u0430\u043b:\u003c/b\u003e \u0412\u043e\u043b\u0433\u043e\u0433\u0440\u0430\u0434 \u0412\u043e\u0441\u0442\u043e\u043a\u003cbr\u003e\u003cb\u003e\u041d\u043e\u043c\u0435\u0440 \u0437\u0430\u044f\u0432\u043a\u0438:\u003c/b\u003e SMT-\u043200007969234\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u044b\u0439:\u003c/b\u003e \u0422\u0440\u0443\u0434\u043e\u0432 \u0410\u043b\u0435\u043a\u0441\u0435\u0439 \u0412\u043b\u0430\u0434\u0438\u043c\u0438\u0440\u043e\u0432\u0438\u0447\u003cbr\u003e\u003cb\u003e\u0412\u044b\u043f\u043e\u043b\u043d\u0438\u0442\u044c \u0434\u043e:\u003c/b\u003e 09.11.2025 19:15:03\u003cbr\u003e\u003cb\u003e\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435:\u003c/b\u003e \u0422\u0435\u043c\u0430: \u0425\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0435 \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u0435 \n\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435: \u0414\u043e\u0431\u0440\u044b\u0439 \u0434\u0435\u043d\u044c. \u041d\u0435\u043e\u0431\u0445\u043e\u0434\u0438\u043c\u043e \u0432\u044b\u043f\u043e\u043b\u043d\u0438\u0442\u044c \u0437\u0430\u043f\u0440\u043e\u0441, \u0440\u0443\u043a\u043e\u0432\u043e\u0434\u0441\u0442\u0432\u0443\u044f\u0441\u044c \u0441\u043b\u0435\u0434\u0443\u044e\u0449\u0438\u043c\u0438 \u0434\u0430\u043d\u043d\u044b\u043c\u0438:\n\u041e\u0431\u044a\u0435\u043a\u0442 \u0440\u0435\u043c\u043e\u043d\u0442\u0430, \u0441 \u043a\u043e\u0442\u043e\u0440\u044b\u043c \u0432\u043e\u0437\u043d\u0438\u043a\u043b\u0438 \u043f\u0440\u043e\u0431\u043b\u0435\u043c\u044b: \u0411\u043e\u043d\u043d\u0435\u0442\u0430\n\u041f\u0440\u043e\u0431\u043b\u0435\u043c\u0430: \u041d\u0435 \u0441\u043e\u0431\u043b\u044e\u0434\u0430\u0435\u0442\u0441\u044f \u0442\u0435\u043c\u043f\u0435\u0440\u0430\u0442\u0443\u0440\u043d\u044b\u0439 \u0440\u0435\u0436\u0438\u043c\n\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435 \u043f\u0440\u043e\u0431\u043b\u0435\u043c\u044b: \u0432\u044b\u0441\u043e\u043a\u0430\u044f \u0442\u0435\u043c\u043f\u0435\u0440\u0430\u0442\u0443\u0440\u0430 \u0432 \u0431\u0430\u043d\u043d\u0435\u0442\u0435 \u0441 \u043c\u043e\u0440\u043e\u0436\u0435\u043d\u044b\u043c (\u0432\u0435\u0440\u0445)\n\u0421\u043e\u0442\u0440\u0443\u0434\u043d\u0438\u043a \u043c\u0430\u0433\u0430\u0437\u0438\u043d\u0430: \u0414\u0430\n\u0424\u0438\u043b\u0438\u0430\u043b: \u0410\u041e \u0422\u0430\u043d\u0434\u0435\u0440 \u041a\u0430\u043c\u044b\u0448\u0438\u043d 5 \u043c\u0438\u043a\u0440\u043e\u0440\u0430\u0439\u043e\u043d \u0413\u041c\n\u041e\u0431\u044a\u0435\u043a\u0442: \u0427\u0435\u0440\u043d\u043e\u0432\u0430 \u0415\u043b\u0435\u043d\u0430 \u0412\u043b\u0430\u0434\u0438\u043c\u0438\u0440\u043e\u0432\u043d\u0430\n\u0424\u0418\u041e: \u041b\u043e\u043f\u0430\u0442\u0438\u043d \u0414.\u041d.\n\u041d\u043e\u043c\u0435\u0440 \u0442\u0435\u043b\u0435\u0444\u043e\u043d\u0430: 89272523784\u003cbr\u003e\u003cb\u003e\u041d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u0425\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0435 \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u0435\u003cbr\u003e\u003cb\u003e\u041e\u0441\u0442\u0430\u043b\u043e\u0441\u044c \u0434\u043d\u0435\u0439:\u003c/b\u003e 0\u003cbr\u003e\u003chr\u003e\u003cb\u003e\u041f\u043e\u0434\u0440\u0430\u0437\u0434\u0435\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u041a\u0430\u043c\u044b\u0448\u0438\u043d 1 5 \u043c\u0438\u043a\u0440\u043e\u0440\u0430\u0439\u043e\u043d\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432.:\u003c/b\u003e \u041d\u0435 \u0443\u043a\u0430\u0437\u0430\u043d\u003cbr\u003e\u003cb\u003e\u0424\u0438\u043b\u0438\u0430\u043b:\u003c/b\u003e \u0412\u043e\u043b\u0433\u043e\u0433\u0440\u0430\u0434 \u0412\u043e\u0441\u0442\u043e\u043a\u003cbr\u003e\u003cb\u003e\u041d\u043e\u043c\u0435\u0440 \u0437\u0430\u044f\u0432\u043a\u0438:\u003c/b\u003e SMT-\u043200007969442\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u044b\u0439:\u003c/b\u003e \u0422\u0440\u0443\u0434\u043e\u0432 \u0410\u043b\u0435\u043a\u0441\u0435\u0439 \u0412\u043b\u0430\u0434\u0438\u043c\u0438\u0440\u043e\u0432\u0438\u0447\u003cbr\u003e\u003cb\u003e\u0412\u044b\u043f\u043e\u043b\u043d\u0438\u0442\u044c \u0434\u043e:\u003c/b\u003e 09.11.2025 20:28:11\u003cbr\u003e\u003cb\u003e\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435:\u003c/b\u003e \u0422\u0435\u043c\u0430: \u0421\u0413\u0418 \u041a\u0430\u043c\u044b\u0448\u0438\u043d 1 5 \u043c\u0438\u043a\u0440\u043e\u0440\u0430\u0439\u043e\u043d (993401) \u0413_\u0421\u044b\u0440..39 SCADA-XO \n\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435: \u0421\u0438\u0433\u043d\u0430\u043b: \u0410\u0432\u0430\u0440\u0438\u044f \u0445\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0433\u043e \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u044f: \u0413_\u0421\u044b\u0440..39; \u041d\u0430\u0438\u043c\u0435\u043d\u043e\u0432\u0430\u043d\u0438\u0435 \u0430\u0432\u0430\u0440\u0438\u0438: \u041527. \u041d\u0435\u0438\u0441\u043f\u0440\u0430\u0432\u043d\u043e\u0441\u0442\u044c \u0434\u0430\u0442\u0447\u0438\u043a\u0430 \u0442\u0435\u043c\u043f\u0435\u0440\u0430\u0442\u0443\u0440\u044b S5; \n\n\u0412\u0440\u0435\u043c\u0435\u043d\u043d\u0430\u044f \u043c\u0435\u0442\u043a\u0430 \u0441\u0438\u0433\u043d\u0430\u043b\u0430: 08.11.25 20:18:28::722; \n\n\u0417\u043d\u0430\u0447\u0435\u043d\u0438\u0435: true (\u0432\u043a\u043b) ; \n\n\u0421\u0440\u0430\u0431\u043e\u0442\u0430\u0432\u0448\u0435\u0435 \u0441\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u0435: \u0414\u0438\u0441\u043a\u0440\u0435\u0442\u043d\u043e\u0435 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435(\u043b\u043e\u0433. 1); \n\n\u041f\u0440\u0435\u0434\u044b\u0434\u0443\u0449\u0435\u0435 \u0441\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u0435: \u041d\u043e\u0440\u043c\u0430(\u043d\u0435 \u0431\u044b\u043b\u043e \u0441\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u043d\u0438\u0439); \n\n\u0417\u0430\u0434\u0435\u0440\u0436\u043a\u0430 \u0441\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u043d\u0438\u044f: 300 \u0441\u0435\u043a.; \n\n\u0412\u0440\u0435\u043c\u044f \u0441\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u043d\u0438\u044f: 08.11.25 20:18:34::490.\n\u003cbr\u003e\u003cb\u003e\u041d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u0425\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0435 \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u0435\u003cbr\u003e\u003cb\u003e\u041e\u0441\u0442\u0430\u043b\u043e\u0441\u044c \u0434\u043d\u0435\u0439:\u003c/b\u003e 0\u003cbr\u003e\u003chr\u003e\u003cb\u003e\u041f\u043e\u0434\u0440\u0430\u0437\u0434\u0435\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u041a\u0430\u043c\u044b\u0448\u0438\u043d 1 5 \u043c\u0438\u043a\u0440\u043e\u0440\u0430\u0439\u043e\u043d\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432.:\u003c/b\u003e \u041d\u0435 \u0443\u043a\u0430\u0437\u0430\u043d\u003cbr\u003e\u003cb\u003e\u0424\u0438\u043b\u0438\u0430\u043b:\u003c/b\u003e \u0412\u043e\u043b\u0433\u043e\u0433\u0440\u0430\u0434 \u0412\u043e\u0441\u0442\u043e\u043a\u003cbr\u003e\u003cb\u003e\u041d\u043e\u043c\u0435\u0440 \u0437\u0430\u044f\u0432\u043a\u0438:\u003c/b\u003e SMT-\u043200007969596\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u044b\u0439:\u003c/b\u003e \u0422\u0440\u0443\u0434\u043e\u0432 \u0410\u043b\u0435\u043a\u0441\u0435\u0439 \u0412\u043b\u0430\u0434\u0438\u043c\u0438\u0440\u043e\u0432\u0438\u0447\u003cbr\u003e\u003cb\u003e\u0412\u044b\u043f\u043e\u043b\u043d\u0438\u0442\u044c \u0434\u043e:\u003c/b\u003e 11.11.2025 22:26:22\u003cbr\u003e\u003cb\u003e\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435:\u003c/b\u003e \u0422\u0435\u043c\u0430: \u0421\u0413\u0418 \u041a\u0430\u043c\u044b\u0448\u0438\u043d 1 5 \u043c\u0438\u043a\u0440\u043e\u0440\u0430\u0439\u043e\u043d (993401) \u041d\u0422\u0426..112 SCADA-XO \n\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435: \u0421\u0438\u0433\u043d\u0430\u043b: \u0410\u0432\u0430\u0440\u0438\u044f \u0445\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0433\u043e \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u044f: \u041d\u0422\u0426..112; \u041d\u0430\u0438\u043c\u0435\u043d\u043e\u0432\u0430\u043d\u0438\u0435 \u0430\u0432\u0430\u0440\u0438\u0438: Compressor 3A safety cut out; \n\n\u0412\u0440\u0435\u043c\u0435\u043d\u043d\u0430\u044f \u043c\u0435\u0442\u043a\u0430 \u0441\u0438\u0433\u043d\u0430\u043b\u0430: 08.11.25 22:19:36::421; \n\n\u0417\u043d\u0430\u0447\u0435\u043d\u0438\u0435: true (\u0432\u043a\u043b) ; \n\n\u0421\u0440\u0430\u0431\u043e\u0442\u0430\u0432\u0448\u0435\u0435 \u0441\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u0435: \u0414\u0438\u0441\u043a\u0440\u0435\u0442\u043d\u043e\u0435 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435(\u043b\u043e\u0433. 1); \n\n\u041f\u0440\u0435\u0434\u044b\u0434\u0443\u0449\u0435\u0435 \u0441\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u0435: \u041d\u043e\u0440\u043c\u0430(\u043d\u0435 \u0431\u044b\u043b\u043e \u0441\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u043d\u0438\u0439); \n\n\u0417\u0430\u0434\u0435\u0440\u0436\u043a\u0430 \u0441\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u043d\u0438\u044f: 300 \u0441\u0435\u043a.; \n\n\u0412\u0440\u0435\u043c\u044f \u0441\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u043d\u0438\u044f: 08.11.25 22:19:38::862.\n\u003cbr\u003e\u003cb\u003e\u041d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u0425\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0435 \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u0435\u003cbr\u003e\u003cb\u003e\u041e\u0441\u0442\u0430\u043b\u043e\u0441\u044c \u0434\u043d\u0435\u0439:\u003c/b\u003e 2\u003cbr\u003e\u003chr\u003e", "blue_count": 0, "color": "red", "coords": [50.091, 45.3568], "days_left": -1, "podrazdelenie": "\u041a\u0430\u043c\u044b\u0448\u0438\u043d 1 5 \u043c\u0438\u043a\u0440\u043e\u0440\u0430\u0439\u043e\u043d", "red_count": 1, "sector": "\u041d\u0435 \u0443\u043a\u0430\u0437\u0430\u043d", "total_requests": 4, "yellow_count": 3}, {"balloonContent": "\u003cb\u003e\u041f\u043e\u0434\u0440\u0430\u0437\u0434\u0435\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u041c\u0438\u0445\u0430\u0439\u043b\u043e\u0432\u043a\u0430 1 \u041f\u043e\u043f\u0435\u0440\u0435\u0447\u043d\u0430\u044f\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432.:\u003c/b\u003e \u041d\u0435 \u0443\u043a\u0430\u0437\u0430\u043d\u003cbr\u003e\u003cb\u003e\u0424\u0438\u043b\u0438\u0430\u043b:\u003c/b\u003e \u0412\u043e\u043b\u0433\u043e\u0433\u0440\u0430\u0434 \u0412\u043e\u0441\u0442\u043e\u043a\u003cbr\u003e\u003cb\u003e\u041d\u043e\u043c\u0435\u0440 \u0437\u0430\u044f\u0432\u043a\u0438:\u003c/b\u003e SMT-\u043200007969635\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u044b\u0439:\u003c/b\u003e \u0414\u0440\u043e\u043d\u043e\u0432 \u0414\u0430\u043d\u0438\u043b\u0430 \u0415\u0432\u0433\u0435\u043d\u044c\u0435\u0432\u0438\u0447\u003cbr\u003e\u003cb\u003e\u0412\u044b\u043f\u043e\u043b\u043d\u0438\u0442\u044c \u0434\u043e:\u003c/b\u003e 08.11.2025 00:00:00\u003cbr\u003e\u003cb\u003e\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435:\u003c/b\u003e \u0412\u041d\u0418\u041c\u0410\u041d\u0418\u0415! \u041f\u043e\u0432\u0442\u043e\u0440\u043d\u0430\u044f \u0437\u0430\u044f\u0432\u043a\u0430, \u043d\u0438\u0437\u043a\u043e\u0435 \u043a\u0430\u0447\u0435\u0441\u0442\u0432\u043e \u0432\u044b\u043f\u043e\u043b\u043d\u0435\u043d\u0438\u044f \u0440\u0435\u043c\u043e\u043d\u0442\u0430 \u043f\u043e \u043f\u0440\u0435\u0434\u0448\u0435\u0441\u0442\u0432\u0443\u044e\u0449\u0438\u043c \u0437\u0430\u044f\u0432\u043a\u0430\u043c.\n\n\u0422\u0435\u043c\u0430: \u0421\u0413\u0418 \u041c\u0438\u0445\u0430\u0439\u043b\u043e\u0432\u043a\u0430 1 \u041f\u043e\u043f\u0435\u0440\u0435\u0447\u043d\u0430\u044f (993412) \u0411_\u041f\u0424..21 SCADA-XO \n\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435: \u0421\u0438\u0433\u043d\u0430\u043b: \u0410\u0432\u0430\u0440\u0438\u044f \u0445\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0433\u043e \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u044f: \u0411_\u041f\u0424..21; \u041d\u0430\u0438\u043c\u0435\u043d\u043e\u0432\u0430\u043d\u0438\u0435 \u0430\u0432\u0430\u0440\u0438\u0438: A1. \u0412\u044b\u0441\u043e\u043a\u0430\u044f \u0442\u0435\u043c\u043f\u0435\u0440\u0430\u0442\u0443\u0440\u0430; \n\n\u0412\u0440\u0435\u043c\u0435\u043d\u043d\u0430\u044f \u043c\u0435\u0442\u043a\u0430 \u0441\u0438\u0433\u043d\u0430\u043b\u0430: 08.11.25 14:45:12::368; \n\n\u0417\u043d\u0430\u0447\u0435\u043d\u0438\u0435: true (\u0432\u043a\u043b) ; \n\n\u0421\u0440\u0430\u0431\u043e\u0442\u0430\u0432\u0448\u0435\u0435 \u0441\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u0435: \u0414\u0438\u0441\u043a\u0440\u0435\u0442\u043d\u043e\u0435 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435(\u043b\u043e\u0433. 1); \n\n\u041f\u0440\u0435\u0434\u044b\u0434\u0443\u0449\u0435\u0435 \u0441\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u0435: \u041d\u043e\u0440\u043c\u0430(\u043d\u0435 \u0431\u044b\u043b\u043e \u0441\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u043d\u0438\u0439); \n\n\u0417\u0430\u0434\u0435\u0440\u0436\u043a\u0430 \u0441\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u043d\u0438\u044f: 3000 \u0441\u0435\u043a.; \n\n\u0412\u0440\u0435\u043c\u044f \u0441\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u043d\u0438\u044f: 08.11.25 14:45:12::806.\n\u003cbr\u003e\u003cb\u003e\u041d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u0425\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0435 \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u0435\u003cbr\u003e\u003cb\u003e\u041e\u0441\u0442\u0430\u043b\u043e\u0441\u044c \u0434\u043d\u0435\u0439:\u003c/b\u003e -2\u003cbr\u003e\u003chr\u003e", "blue_count": 0, "color": "red", "coords": [50.070299, 43.215768], "days_left": -2, "podrazdelenie": "\u041c\u0438\u0445\u0430\u0439\u043b\u043e\u0432\u043a\u0430 1 \u041f\u043e\u043f\u0435\u0440\u0435\u0447\u043d\u0430\u044f", "red_count": 1, "sector": "\u041d\u0435 \u0443\u043a\u0430\u0437\u0430\u043d", "total_requests": 1, "yellow_count": 0}];
+    var allPlacemarks = [];
+    var placemarksByColor = { 'red': [], 'yellow': [], 'blue': [] };
+    var placemarksBySector = {};
+
+    // Инициализируем секторы
+    
+    placemarksBySector['Не указан'] = [];
+    
+
+    placemarks.forEach(function (placemark) {
+        var zIndex = 1;
+        if (placemark.color === 'yellow') {
+            zIndex = 2;
+        } else if (placemark.color === 'red') {
+            zIndex = 3;
+        }
+        
+        var newPlacemark = new ymaps.Placemark(placemark.coords, {
+            balloonContent: placemark.balloonContent,
+            iconCaption: placemark.total_requests.toString()
+        }, {
+            preset: 'islands#dotIcon',
+            iconColor: placemark.color,
+            zIndex: zIndex
+        });
+        
+        newPlacemark.properties.set('color', placemark.color);
+        newPlacemark.properties.set('sector', placemark.sector);
+        newPlacemark.properties.set('zIndex', zIndex);
+        
+        allPlacemarks.push(newPlacemark);
+        
+        // Группировка по цвету
+        placemarksByColor[placemark.color].push(newPlacemark);
+        
+        // Группировка по сектору
+        if (!placemarksBySector[placemark.sector]) {
+            placemarksBySector[placemark.sector] = [];
+        }
+        placemarksBySector[placemark.sector].push(newPlacemark);
+    });
+
+    var activeColors = { 'red': true, 'yellow': true, 'blue': true };
+    var activeSectors = {
+        
+        'Не указан': true,
+        
+        'all': true
+    };
+
+    function addPlacemarks() {
+        myMap.geoObjects.removeAll();
+
+        var sortedPlacemarks = allPlacemarks.slice().sort(function(a, b) {
+            return b.properties.get('zIndex') - a.properties.get('zIndex');
+        });
+
+        sortedPlacemarks.forEach(function (placemark) {
+            var color = placemark.properties.get('color');
+            var sector = placemark.properties.get('sector');
+            
+            // Проверяем активность цвета И сектора
+            var colorActive = activeColors[color];
+            var sectorActive = activeSectors['all'] || activeSectors[sector];
+            
+            if (colorActive && sectorActive) {
+                myMap.geoObjects.add(placemark);
+            }
+        });
+
+        var bounds = myMap.geoObjects.getBounds();
+        if (bounds) {
+            myMap.setBounds(bounds, { checkZoomRange: true, zoomMargin: 20 });
+        }
+    }
+
+    addPlacemarks();
+
+    // Функции для цветов
+    function toggleColor(color) {
+        activeColors[color] = !activeColors[color];
+        updateAllButtonState();
+        addPlacemarks();
+    }
+
+    function updateAllButtonState() {
+        var allActive = true;
+        
+        Object.keys(activeColors).forEach(function(color) {
+            if (!activeColors[color]) {
+                allActive = false;
+            }
+        });
+        
+        var allButton = document.querySelector('#all_button');
+        if (allActive) {
+            allButton.classList.add('active');
+        } else {
+            allButton.classList.remove('active');
+        }
+    }
+
+    function toggleAll() {
+        var allButton = document.querySelector('#all_button');
+        var isActive = allButton.classList.contains('active');
+        
+        if (isActive) {
+            // Выключаем все
+            Object.keys(activeColors).forEach(function(color) {
+                activeColors[color] = false;
+                var button = document.querySelector('#' + color + '_button');
+                if (button) button.classList.remove('active');
+            });
+            
+            allButton.classList.remove('active');
+        } else {
+            // Включаем все
+            Object.keys(activeColors).forEach(function(color) {
+                activeColors[color] = true;
+                var button = document.querySelector('#' + color + '_button');
+                if (button) button.classList.add('active');
+            });
+            
+            allButton.classList.add('active');
+        }
+        
+        addPlacemarks();
+    }
+
+    // Функции для секторов
+    function toggleSector(sector) {
+        if (sector === 'all') {
+            var allSectorsButton = document.querySelector('#all_sectors_button');
+            var isActive = allSectorsButton.classList.contains('active');
+            
+            if (isActive) {
+                // Выключаем все секторы
+                Object.keys(activeSectors).forEach(function(sec) {
+                    if (sec !== 'all') {
+                        activeSectors[sec] = false;
+                        var button = document.querySelector('[id*="sector_"][title*="' + sec + '"]');
+                        if (button) button.classList.remove('active');
+                    }
+                });
+                activeSectors['all'] = false;
+                allSectorsButton.classList.remove('active');
+            } else {
+                // Включаем все секторы
+                Object.keys(activeSectors).forEach(function(sec) {
+                    if (sec !== 'all') {
+                        activeSectors[sec] = true;
+                        var button = document.querySelector('[id*="sector_"][title*="' + sec + '"]');
+                        if (button) button.classList.add('active');
+                    }
+                });
+                activeSectors['all'] = true;
+                allSectorsButton.classList.add('active');
+            }
+        } else {
+            activeSectors[sector] = !activeSectors[sector];
+            updateAllSectorsButtonState();
+        }
+        
+        addPlacemarks();
+    }
+
+    function updateAllSectorsButtonState() {
+        var allSectorsActive = true;
+        
+        Object.keys(activeSectors).forEach(function(sector) {
+            if (sector !== 'all' && !activeSectors[sector]) {
+                allSectorsActive = false;
+            }
+        });
+        
+        var allSectorsButton = document.querySelector('#all_sectors_button');
+        if (allSectorsActive) {
+            allSectorsButton.classList.add('active');
+            activeSectors['all'] = true;
+        } else {
+            allSectorsButton.classList.remove('active');
+            activeSectors['all'] = false;
+        }
+    }
+
+    // Обработчики для кнопок цветов
+    document.querySelector('#red_button').addEventListener('click', function () {
+        this.classList.toggle('active');
+        toggleColor('red');
+    });
+
+    document.querySelector('#yellow_button').addEventListener('click', function () {
+        this.classList.toggle('active');
+        toggleColor('yellow');
+    });
+
+    document.querySelector('#blue_button').addEventListener('click', function () {
+        this.classList.toggle('active');
+        toggleColor('blue');
+    });
+
+    document.querySelector('#all_button').addEventListener('click', function () {
+        toggleAll();
+    });
+
+    // Обработчики для кнопок секторов
+    document.querySelector('#all_sectors_button').addEventListener('click', function () {
+        toggleSector('all');
+    });
+
+    // Обработчики для конкретных секторов
+    
+    document.querySelector('#sector_1_button').addEventListener('click', function () {
+        this.classList.toggle('active');
+        toggleSector('Не указан');
+    });
+    
+
+    // Инициализация состояния кнопок
+    updateAllButtonState();
+    updateAllSectorsButtonState();
+}
+ymaps.ready(init);
+</script>
     
