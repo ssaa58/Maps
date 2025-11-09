@@ -33,12 +33,12 @@
             padding: 10px;
             border-radius: 10px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-            max-width: 60px; /* Уменьшено на 20% */
+            max-width: 60px;
         }
         .color-buttons {
             display: flex;
             flex-direction: column;
-            gap: 6px; /* Уменьшено на 20% */
+            gap: 6px;
             align-items: center;
         }
         button {
@@ -51,8 +51,8 @@
             font-weight: bold;
             border-radius: 50%;
             transition: all 0.3s ease;
-            width: 40px; /* Уменьшено на 20% */
-            height: 40px; /* Уменьшено на 20% */
+            width: 40px;
+            height: 40px;
             text-align: center;
             display: flex;
             align-items: center;
@@ -68,14 +68,13 @@
         button.color-blue.active { background-color: #4444ff; }
         button.color-green.active { background-color: #4CAF50; }
         
-        /* Неактивные кнопки - серые */
         button.color-red:not(.active) { background-color: #f0f0f0; color: #999; border-color: #999; }
         button.color-yellow:not(.active) { background-color: #f0f0f0; color: #999; border-color: #999; }
         button.color-blue:not(.active) { background-color: #f0f0f0; color: #999; border-color: #999; }
         button.color-green:not(.active) { background-color: #f0f0f0; color: #999; border-color: #999; }
         
         .button-text {
-            font-size: 16px; /* Размер цифр оставлен прежним */
+            font-size: 16px;
             font-weight: bold;
             pointer-events: none;
         }
@@ -125,10 +124,10 @@
         
         .controls-title {
             text-align: center;
-            font-size: 9px; /* Уменьшено на 20% */
+            font-size: 9px;
             font-weight: bold;
             color: #333;
-            margin-bottom: 4px; /* Уменьшено на 20% */
+            margin-bottom: 4px;
         }
     </style>
     <script type="text/javascript">
@@ -143,32 +142,27 @@
         var allPlacemarks = [];
         var placemarksByColor = { 'red': [], 'yellow': [], 'blue': [] };
 
-        // Создаем метки С цифрами (iconCaption)
         placemarks.forEach(function (placemark) {
-            // Определяем zIndex в зависимости от цвета
-            var zIndex = 1; // по умолчанию для синих
+            var zIndex = 1;
             if (placemark.color === 'yellow') {
-                zIndex = 2; // желтые поверх синих
+                zIndex = 2;
             } else if (placemark.color === 'red') {
-                zIndex = 3; // красные поверх всех
+                zIndex = 3;
             }
             
-            // Создаем метку С цифрой (добавляем iconCaption)
             var newPlacemark = new ymaps.Placemark(placemark.coords, {
                 balloonContent: placemark.balloonContent,
-                iconCaption: placemark.total_requests.toString() // Цифра на метке
+                iconCaption: placemark.total_requests.toString()
             }, {
                 preset: 'islands#dotIcon',
                 iconColor: placemark.color,
-                zIndex: zIndex  // Устанавливаем приоритет отображения
+                zIndex: zIndex
             });
             
             newPlacemark.properties.set('color', placemark.color);
             newPlacemark.properties.set('zIndex', zIndex);
             
             allPlacemarks.push(newPlacemark);
-            
-            // Группировка по цвету
             placemarksByColor[placemark.color].push(newPlacemark);
         });
 
@@ -177,7 +171,6 @@
         function addPlacemarks() {
             myMap.geoObjects.removeAll();
 
-            // Сортируем метки по zIndex (от большего к меньшему)
             var sortedPlacemarks = allPlacemarks.slice().sort(function(a, b) {
                 return b.properties.get('zIndex') - a.properties.get('zIndex');
             });
@@ -190,7 +183,6 @@
                 }
             });
 
-            // Автоматическое подстраивание границ карты
             var bounds = myMap.geoObjects.getBounds();
             if (bounds) {
                 myMap.setBounds(bounds, { checkZoomRange: true, zoomMargin: 20 });
@@ -208,7 +200,6 @@
         function updateAllButtonState() {
             var allActive = true;
             
-            // Проверяем цвета
             Object.keys(activeColors).forEach(function(color) {
                 if (!activeColors[color]) {
                     allActive = false;
@@ -228,7 +219,6 @@
             var isActive = allButton.classList.contains('active');
             
             if (isActive) {
-                // Выключаем все
                 Object.keys(activeColors).forEach(function(color) {
                     activeColors[color] = false;
                     var button = document.querySelector('#' + color + '_button');
@@ -237,7 +227,6 @@
                 
                 allButton.classList.remove('active');
             } else {
-                // Включаем все
                 Object.keys(activeColors).forEach(function(color) {
                     activeColors[color] = true;
                     var button = document.querySelector('#' + color + '_button');
@@ -250,7 +239,6 @@
             addPlacemarks();
         }
 
-        // Добавляем обработчики для кнопок цветов
         document.querySelector('#red_button').addEventListener('click', function () {
             this.classList.toggle('active');
             toggleColor('red');
@@ -270,7 +258,6 @@
             toggleAll();
         });
 
-        // Инициализация состояния кнопок
         updateAllButtonState();
     }
     ymaps.ready(init);
@@ -295,7 +282,7 @@
             </button>
         </div>
     </div>
-    <div id="report_datetime">Дата и время отчета: 09-11-2025 06:59:23</div>
+    <div id="report_datetime">Дата и время отчета: 09-11-2025 08:23:23</div>
     <div id="title_button">Владикавказ</div>
     <a href="index.html" class="back-link">← Назад к списку филиалов</a>
 </body>
