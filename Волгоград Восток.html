@@ -263,6 +263,21 @@
             color: white;
             border-color: #1976D2;
         }
+        
+        /* Дополнительные стили для выделения области */
+        .selection-hint {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            z-index: 1001;
+            font-size: 14px;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -328,7 +343,11 @@
         📐 Выделить область
     </button>
     
-    <div id="report_datetime">Дата и время отчета: 16-11-2025 21:13:56</div>
+    <div id="selection-hint" class="selection-hint">
+        Перетащите мышью для выделения области
+    </div>
+    
+    <div id="report_datetime">Дата и время отчета: 16-11-2025 21:28:59</div>
     <div id="title_button">Волгоград Восток</div>
     <a href="index.html" class="back-link">← Назад к списку филиалов</a>
 </body>
@@ -338,6 +357,8 @@
 // Глобальные переменные для управления выделением области
 var selectionRectangle = null;
 var isSelectingArea = false;
+var startCoords = null;
+var currentRectangle = null;
 var allPlacemarksData = [{"balloonContent": "\u003cb\u003e\u041f\u043e\u0434\u0440\u0430\u0437\u0434\u0435\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u041a\u0430\u043c\u044b\u0448\u0438\u043d 1 5 \u043c\u0438\u043a\u0440\u043e\u0440\u0430\u0439\u043e\u043d\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432.:\u003c/b\u003e \u041d\u0435 \u0443\u043a\u0430\u0437\u0430\u043d\u003cbr\u003e\u003cb\u003e\u0424\u0438\u043b\u0438\u0430\u043b:\u003c/b\u003e \u0412\u043e\u043b\u0433\u043e\u0433\u0440\u0430\u0434 \u0412\u043e\u0441\u0442\u043e\u043a\u003cbr\u003e\u003cb\u003e\u041d\u043e\u043c\u0435\u0440 \u0437\u0430\u044f\u0432\u043a\u0438:\u003c/b\u003e SMT-\u043200008013088\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u044b\u0439:\u003c/b\u003e \u0422\u0440\u0443\u0434\u043e\u0432 \u0410\u043b\u0435\u043a\u0441\u0435\u0439 \u0412\u043b\u0430\u0434\u0438\u043c\u0438\u0440\u043e\u0432\u0438\u0447\u003cbr\u003e\u003cb\u003e\u0412\u044b\u043f\u043e\u043b\u043d\u0438\u0442\u044c \u0434\u043e:\u003c/b\u003e 18.11.2025 19:09:28\u003cbr\u003e\u003cb\u003e\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435:\u003c/b\u003e \u0422\u0435\u043c\u0430: \u0425\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0435 \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u0435 \n\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435: \u0414\u043e\u0431\u0440\u044b\u0439 \u0434\u0435\u043d\u044c. \u041d\u0435\u043e\u0431\u0445\u043e\u0434\u0438\u043c\u043e \u0432\u044b\u043f\u043e\u043b\u043d\u0438\u0442\u044c \u0437\u0430\u043f\u0440\u043e\u0441, \u0440\u0443\u043a\u043e\u0432\u043e\u0434\u0441\u0442\u0432\u0443\u044f\u0441\u044c \u0441\u043b\u0435\u0434\u0443\u044e\u0449\u0438\u043c\u0438 \u0434\u0430\u043d\u043d\u044b\u043c\u0438:\n\u041e\u0431\u044a\u0435\u043a\u0442 \u0440\u0435\u043c\u043e\u043d\u0442\u0430, \u0441 \u043a\u043e\u0442\u043e\u0440\u044b\u043c \u0432\u043e\u0437\u043d\u0438\u043a\u043b\u0438 \u043f\u0440\u043e\u0431\u043b\u0435\u043c\u044b: \u0425\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u0430\u044f \u043a\u0430\u043c\u0435\u0440\u0430\n\u041f\u0440\u043e\u0431\u043b\u0435\u043c\u0430: \u0422\u0440\u0435\u0431\u0443\u0435\u0442\u0441\u044f \u0437\u0430\u043c\u0435\u043d\u0430 \u043b\u0430\u043c\u043f\u044b\n\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435 \u043f\u0440\u043e\u0431\u043b\u0435\u043c\u044b: \u041d\u0435 \u0433\u043e\u0440\u0438\u0442 \u0441\u0432\u0435\u0442 \u0432 \u043a\u0430\u043c\u0435\u0440\u0435\n\u0421\u043e\u0442\u0440\u0443\u0434\u043d\u0438\u043a \u043c\u0430\u0433\u0430\u0437\u0438\u043d\u0430: \u0414\u0430\n\u0424\u0438\u043b\u0438\u0430\u043b: \u0410\u041e \u0422\u0430\u043d\u0434\u0435\u0440 \u041a\u0430\u043c\u044b\u0448\u0438\u043d 5 \u043c\u0438\u043a\u0440\u043e\u0440\u0430\u0439\u043e\u043d \u0413\u041c\n\u041e\u0431\u044a\u0435\u043a\u0442: \u0421\u0435\u0440\u043c\u0443\u0441 \u041e\u043b\u044c\u0433\u0430 \u0421\u0435\u043c\u0435\u043d\u043e\u0432\u043d\u0430\n\u0424\u0418\u041e: \u0421\u0435\u0440\u043c\u0443\u0441 \u041e.\u0421\n\u041d\u043e\u043c\u0435\u0440 \u0442\u0435\u043b\u0435\u0444\u043e\u043d\u0430: 89275184653\u003cbr\u003e\u003cb\u003e\u041d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u0425\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0435 \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u0435\u003cbr\u003e\u003cb\u003e\u041e\u0441\u0442\u0430\u043b\u043e\u0441\u044c \u0434\u043d\u0435\u0439:\u003c/b\u003e 1\u003cbr\u003e\u003chr\u003e\u003cb\u003e\u041f\u043e\u0434\u0440\u0430\u0437\u0434\u0435\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u041a\u0430\u043c\u044b\u0448\u0438\u043d 1 5 \u043c\u0438\u043a\u0440\u043e\u0440\u0430\u0439\u043e\u043d\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432.:\u003c/b\u003e \u041d\u0435 \u0443\u043a\u0430\u0437\u0430\u043d\u003cbr\u003e\u003cb\u003e\u0424\u0438\u043b\u0438\u0430\u043b:\u003c/b\u003e \u0412\u043e\u043b\u0433\u043e\u0433\u0440\u0430\u0434 \u0412\u043e\u0441\u0442\u043e\u043a\u003cbr\u003e\u003cb\u003e\u041d\u043e\u043c\u0435\u0440 \u0437\u0430\u044f\u0432\u043a\u0438:\u003c/b\u003e SMT-\u043200008014393\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u044b\u0439:\u003c/b\u003e \u0422\u0440\u0443\u0434\u043e\u0432 \u0410\u043b\u0435\u043a\u0441\u0435\u0439 \u0412\u043b\u0430\u0434\u0438\u043c\u0438\u0440\u043e\u0432\u0438\u0447\u003cbr\u003e\u003cb\u003e\u0412\u044b\u043f\u043e\u043b\u043d\u0438\u0442\u044c \u0434\u043e:\u003c/b\u003e 19.11.2025 10:14:30\u003cbr\u003e\u003cb\u003e\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435:\u003c/b\u003e \u0422\u0435\u043c\u0430: \u0421\u0413\u0418 \u041a\u0430\u043c\u044b\u0448\u0438\u043d 1 5 \u043c\u0438\u043a\u0440\u043e\u0440\u0430\u0439\u043e\u043d (993401) \u041d\u0422\u0426..112 SCADA-XO \n\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435: \u0421\u0438\u0433\u043d\u0430\u043b: \u0410\u0432\u0430\u0440\u0438\u044f \u0445\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0433\u043e \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u044f: \u041d\u0422\u0426..112; \u041d\u0430\u0438\u043c\u0435\u043d\u043e\u0432\u0430\u043d\u0438\u0435 \u0430\u0432\u0430\u0440\u0438\u0438: Compressor 3A safety cut out; \n\n\u0412\u0440\u0435\u043c\u0435\u043d\u043d\u0430\u044f \u043c\u0435\u0442\u043a\u0430 \u0441\u0438\u0433\u043d\u0430\u043b\u0430: 16.11.25 08:13:09::886; \n\n\u0417\u043d\u0430\u0447\u0435\u043d\u0438\u0435: true (\u0432\u043a\u043b) ; \n\n\u0421\u0440\u0430\u0431\u043e\u0442\u0430\u0432\u0448\u0435\u0435 \u0441\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u0435: \u0414\u0438\u0441\u043a\u0440\u0435\u0442\u043d\u043e\u0435 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435(\u043b\u043e\u0433. 1); \n\n\u041f\u0440\u0435\u0434\u044b\u0434\u0443\u0449\u0435\u0435 \u0441\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u0435: \u041d\u043e\u0440\u043c\u0430(\u043d\u0435 \u0431\u044b\u043b\u043e \u0441\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u043d\u0438\u0439); \n\n\u0417\u0430\u0434\u0435\u0440\u0436\u043a\u0430 \u0441\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u043d\u0438\u044f: 300 \u0441\u0435\u043a.; \n\n\u0412\u0440\u0435\u043c\u044f \u0441\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u043d\u0438\u044f: 16.11.25 08:13:11::620.\n\u003cbr\u003e\u003cb\u003e\u041d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u0425\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0435 \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u0435\u003cbr\u003e\u003cb\u003e\u041e\u0441\u0442\u0430\u043b\u043e\u0441\u044c \u0434\u043d\u0435\u0439:\u003c/b\u003e 2\u003cbr\u003e\u003chr\u003e", "blue_count": 0, "color": "yellow", "coords": [50.091, 45.3568], "days_left": 1, "podrazdelenie": "\u041a\u0430\u043c\u044b\u0448\u0438\u043d 1 5 \u043c\u0438\u043a\u0440\u043e\u0440\u0430\u0439\u043e\u043d", "red_count": 0, "request_details": [{"days_left": 1, "due_date": "18.11.2025 19:09:28", "html": "\u003cb\u003e\u041f\u043e\u0434\u0440\u0430\u0437\u0434\u0435\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u041a\u0430\u043c\u044b\u0448\u0438\u043d 1 5 \u043c\u0438\u043a\u0440\u043e\u0440\u0430\u0439\u043e\u043d\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432.:\u003c/b\u003e \u041d\u0435 \u0443\u043a\u0430\u0437\u0430\u043d\u003cbr\u003e\u003cb\u003e\u0424\u0438\u043b\u0438\u0430\u043b:\u003c/b\u003e \u0412\u043e\u043b\u0433\u043e\u0433\u0440\u0430\u0434 \u0412\u043e\u0441\u0442\u043e\u043a\u003cbr\u003e\u003cb\u003e\u041d\u043e\u043c\u0435\u0440 \u0437\u0430\u044f\u0432\u043a\u0438:\u003c/b\u003e SMT-\u043200008013088\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u044b\u0439:\u003c/b\u003e \u0422\u0440\u0443\u0434\u043e\u0432 \u0410\u043b\u0435\u043a\u0441\u0435\u0439 \u0412\u043b\u0430\u0434\u0438\u043c\u0438\u0440\u043e\u0432\u0438\u0447\u003cbr\u003e\u003cb\u003e\u0412\u044b\u043f\u043e\u043b\u043d\u0438\u0442\u044c \u0434\u043e:\u003c/b\u003e 18.11.2025 19:09:28\u003cbr\u003e\u003cb\u003e\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435:\u003c/b\u003e \u0422\u0435\u043c\u0430: \u0425\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0435 \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u0435 \n\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435: \u0414\u043e\u0431\u0440\u044b\u0439 \u0434\u0435\u043d\u044c. \u041d\u0435\u043e\u0431\u0445\u043e\u0434\u0438\u043c\u043e \u0432\u044b\u043f\u043e\u043b\u043d\u0438\u0442\u044c \u0437\u0430\u043f\u0440\u043e\u0441, \u0440\u0443\u043a\u043e\u0432\u043e\u0434\u0441\u0442\u0432\u0443\u044f\u0441\u044c \u0441\u043b\u0435\u0434\u0443\u044e\u0449\u0438\u043c\u0438 \u0434\u0430\u043d\u043d\u044b\u043c\u0438:\n\u041e\u0431\u044a\u0435\u043a\u0442 \u0440\u0435\u043c\u043e\u043d\u0442\u0430, \u0441 \u043a\u043e\u0442\u043e\u0440\u044b\u043c \u0432\u043e\u0437\u043d\u0438\u043a\u043b\u0438 \u043f\u0440\u043e\u0431\u043b\u0435\u043c\u044b: \u0425\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u0430\u044f \u043a\u0430\u043c\u0435\u0440\u0430\n\u041f\u0440\u043e\u0431\u043b\u0435\u043c\u0430: \u0422\u0440\u0435\u0431\u0443\u0435\u0442\u0441\u044f \u0437\u0430\u043c\u0435\u043d\u0430 \u043b\u0430\u043c\u043f\u044b\n\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435 \u043f\u0440\u043e\u0431\u043b\u0435\u043c\u044b: \u041d\u0435 \u0433\u043e\u0440\u0438\u0442 \u0441\u0432\u0435\u0442 \u0432 \u043a\u0430\u043c\u0435\u0440\u0435\n\u0421\u043e\u0442\u0440\u0443\u0434\u043d\u0438\u043a \u043c\u0430\u0433\u0430\u0437\u0438\u043d\u0430: \u0414\u0430\n\u0424\u0438\u043b\u0438\u0430\u043b: \u0410\u041e \u0422\u0430\u043d\u0434\u0435\u0440 \u041a\u0430\u043c\u044b\u0448\u0438\u043d 5 \u043c\u0438\u043a\u0440\u043e\u0440\u0430\u0439\u043e\u043d \u0413\u041c\n\u041e\u0431\u044a\u0435\u043a\u0442: \u0421\u0435\u0440\u043c\u0443\u0441 \u041e\u043b\u044c\u0433\u0430 \u0421\u0435\u043c\u0435\u043d\u043e\u0432\u043d\u0430\n\u0424\u0418\u041e: \u0421\u0435\u0440\u043c\u0443\u0441 \u041e.\u0421\n\u041d\u043e\u043c\u0435\u0440 \u0442\u0435\u043b\u0435\u0444\u043e\u043d\u0430: 89275184653\u003cbr\u003e\u003cb\u003e\u041d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u0425\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0435 \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u0435\u003cbr\u003e\u003cb\u003e\u041e\u0441\u0442\u0430\u043b\u043e\u0441\u044c \u0434\u043d\u0435\u0439:\u003c/b\u003e 1\u003cbr\u003e", "number": "SMT-\u043200008013088"}, {"days_left": 2, "due_date": "19.11.2025 10:14:30", "html": "\u003cb\u003e\u041f\u043e\u0434\u0440\u0430\u0437\u0434\u0435\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u041a\u0430\u043c\u044b\u0448\u0438\u043d 1 5 \u043c\u0438\u043a\u0440\u043e\u0440\u0430\u0439\u043e\u043d\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432.:\u003c/b\u003e \u041d\u0435 \u0443\u043a\u0430\u0437\u0430\u043d\u003cbr\u003e\u003cb\u003e\u0424\u0438\u043b\u0438\u0430\u043b:\u003c/b\u003e \u0412\u043e\u043b\u0433\u043e\u0433\u0440\u0430\u0434 \u0412\u043e\u0441\u0442\u043e\u043a\u003cbr\u003e\u003cb\u003e\u041d\u043e\u043c\u0435\u0440 \u0437\u0430\u044f\u0432\u043a\u0438:\u003c/b\u003e SMT-\u043200008014393\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u044b\u0439:\u003c/b\u003e \u0422\u0440\u0443\u0434\u043e\u0432 \u0410\u043b\u0435\u043a\u0441\u0435\u0439 \u0412\u043b\u0430\u0434\u0438\u043c\u0438\u0440\u043e\u0432\u0438\u0447\u003cbr\u003e\u003cb\u003e\u0412\u044b\u043f\u043e\u043b\u043d\u0438\u0442\u044c \u0434\u043e:\u003c/b\u003e 19.11.2025 10:14:30\u003cbr\u003e\u003cb\u003e\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435:\u003c/b\u003e \u0422\u0435\u043c\u0430: \u0421\u0413\u0418 \u041a\u0430\u043c\u044b\u0448\u0438\u043d 1 5 \u043c\u0438\u043a\u0440\u043e\u0440\u0430\u0439\u043e\u043d (993401) \u041d\u0422\u0426..112 SCADA-XO \n\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435: \u0421\u0438\u0433\u043d\u0430\u043b: \u0410\u0432\u0430\u0440\u0438\u044f \u0445\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0433\u043e \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u044f: \u041d\u0422\u0426..112; \u041d\u0430\u0438\u043c\u0435\u043d\u043e\u0432\u0430\u043d\u0438\u0435 \u0430\u0432\u0430\u0440\u0438\u0438: Compressor 3A safety cut out; \n\n\u0412\u0440\u0435\u043c\u0435\u043d\u043d\u0430\u044f \u043c\u0435\u0442\u043a\u0430 \u0441\u0438\u0433\u043d\u0430\u043b\u0430: 16.11.25 08:13:09::886; \n\n\u0417\u043d\u0430\u0447\u0435\u043d\u0438\u0435: true (\u0432\u043a\u043b) ; \n\n\u0421\u0440\u0430\u0431\u043e\u0442\u0430\u0432\u0448\u0435\u0435 \u0441\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u0435: \u0414\u0438\u0441\u043a\u0440\u0435\u0442\u043d\u043e\u0435 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435(\u043b\u043e\u0433. 1); \n\n\u041f\u0440\u0435\u0434\u044b\u0434\u0443\u0449\u0435\u0435 \u0441\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u0435: \u041d\u043e\u0440\u043c\u0430(\u043d\u0435 \u0431\u044b\u043b\u043e \u0441\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u043d\u0438\u0439); \n\n\u0417\u0430\u0434\u0435\u0440\u0436\u043a\u0430 \u0441\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u043d\u0438\u044f: 300 \u0441\u0435\u043a.; \n\n\u0412\u0440\u0435\u043c\u044f \u0441\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u043d\u0438\u044f: 16.11.25 08:13:11::620.\n\u003cbr\u003e\u003cb\u003e\u041d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u0425\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0435 \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u0435\u003cbr\u003e\u003cb\u003e\u041e\u0441\u0442\u0430\u043b\u043e\u0441\u044c \u0434\u043d\u0435\u0439:\u003c/b\u003e 2\u003cbr\u003e", "number": "SMT-\u043200008014393"}], "sector": "\u041d\u0435 \u0443\u043a\u0430\u0437\u0430\u043d", "total_requests": 2, "yellow_count": 2}, {"balloonContent": "\u003cb\u003e\u041f\u043e\u0434\u0440\u0430\u0437\u0434\u0435\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u041c\u0438\u0445\u0430\u0439\u043b\u043e\u0432\u043a\u0430 1 \u041f\u043e\u043f\u0435\u0440\u0435\u0447\u043d\u0430\u044f\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432.:\u003c/b\u003e \u041d\u0435 \u0443\u043a\u0430\u0437\u0430\u043d\u003cbr\u003e\u003cb\u003e\u0424\u0438\u043b\u0438\u0430\u043b:\u003c/b\u003e \u0412\u043e\u043b\u0433\u043e\u0433\u0440\u0430\u0434 \u0412\u043e\u0441\u0442\u043e\u043a\u003cbr\u003e\u003cb\u003e\u041d\u043e\u043c\u0435\u0440 \u0437\u0430\u044f\u0432\u043a\u0438:\u003c/b\u003e SMT-\u043200008016079\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u044b\u0439:\u003c/b\u003e \u0414\u0440\u043e\u043d\u043e\u0432 \u0414\u0430\u043d\u0438\u043b\u0430 \u0415\u0432\u0433\u0435\u043d\u044c\u0435\u0432\u0438\u0447\u003cbr\u003e\u003cb\u003e\u0412\u044b\u043f\u043e\u043b\u043d\u0438\u0442\u044c \u0434\u043e:\u003c/b\u003e 17.11.2025 03:37:19\u003cbr\u003e\u003cb\u003e\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435:\u003c/b\u003e \u0422\u0435\u043c\u0430: \u0421\u0413\u0418 \u041c\u0438\u0445\u0430\u0439\u043b\u043e\u0432\u043a\u0430 1 \u041f\u043e\u043f\u0435\u0440\u0435\u0447\u043d\u0430\u044f (993412) \u0411_\u041f\u0424..21 SCADA-XO \n\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435: \u0421\u0438\u0433\u043d\u0430\u043b: \u0410\u0432\u0430\u0440\u0438\u044f \u0445\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0433\u043e \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u044f: \u0411_\u041f\u0424..21; \u041d\u0430\u0438\u043c\u0435\u043d\u043e\u0432\u0430\u043d\u0438\u0435 \u0430\u0432\u0430\u0440\u0438\u0438: A1. \u0412\u044b\u0441\u043e\u043a\u0430\u044f \u0442\u0435\u043c\u043f\u0435\u0440\u0430\u0442\u0443\u0440\u0430; \n\n\u0412\u0440\u0435\u043c\u0435\u043d\u043d\u0430\u044f \u043c\u0435\u0442\u043a\u0430 \u0441\u0438\u0433\u043d\u0430\u043b\u0430: 16.11.25 14:45:37::298; \n\n\u0417\u043d\u0430\u0447\u0435\u043d\u0438\u0435: true (\u0432\u043a\u043b) ; \n\n\u0421\u0440\u0430\u0431\u043e\u0442\u0430\u0432\u0448\u0435\u0435 \u0441\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u0435: \u0414\u0438\u0441\u043a\u0440\u0435\u0442\u043d\u043e\u0435 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435(\u043b\u043e\u0433. 1); \n\n\u041f\u0440\u0435\u0434\u044b\u0434\u0443\u0449\u0435\u0435 \u0441\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u0435: \u041d\u043e\u0440\u043c\u0430(\u043d\u0435 \u0431\u044b\u043b\u043e \u0441\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u043d\u0438\u0439); \n\n\u0417\u0430\u0434\u0435\u0440\u0436\u043a\u0430 \u0441\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u043d\u0438\u044f: 3000 \u0441\u0435\u043a.; \n\n\u0412\u0440\u0435\u043c\u044f \u0441\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u043d\u0438\u044f: 16.11.25 14:45:38::517.\n\u003cbr\u003e\u003cb\u003e\u041d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u0425\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0435 \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u0435\u003cbr\u003e\u003cb\u003e\u041e\u0441\u0442\u0430\u043b\u043e\u0441\u044c \u0434\u043d\u0435\u0439:\u003c/b\u003e 0\u003cbr\u003e\u003chr\u003e", "blue_count": 0, "color": "yellow", "coords": [50.070299, 43.215768], "days_left": 0, "podrazdelenie": "\u041c\u0438\u0445\u0430\u0439\u043b\u043e\u0432\u043a\u0430 1 \u041f\u043e\u043f\u0435\u0440\u0435\u0447\u043d\u0430\u044f", "red_count": 0, "request_details": [{"days_left": 0, "due_date": "17.11.2025 03:37:19", "html": "\u003cb\u003e\u041f\u043e\u0434\u0440\u0430\u0437\u0434\u0435\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u041c\u0438\u0445\u0430\u0439\u043b\u043e\u0432\u043a\u0430 1 \u041f\u043e\u043f\u0435\u0440\u0435\u0447\u043d\u0430\u044f\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432.:\u003c/b\u003e \u041d\u0435 \u0443\u043a\u0430\u0437\u0430\u043d\u003cbr\u003e\u003cb\u003e\u0424\u0438\u043b\u0438\u0430\u043b:\u003c/b\u003e \u0412\u043e\u043b\u0433\u043e\u0433\u0440\u0430\u0434 \u0412\u043e\u0441\u0442\u043e\u043a\u003cbr\u003e\u003cb\u003e\u041d\u043e\u043c\u0435\u0440 \u0437\u0430\u044f\u0432\u043a\u0438:\u003c/b\u003e SMT-\u043200008016079\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u044b\u0439:\u003c/b\u003e \u0414\u0440\u043e\u043d\u043e\u0432 \u0414\u0430\u043d\u0438\u043b\u0430 \u0415\u0432\u0433\u0435\u043d\u044c\u0435\u0432\u0438\u0447\u003cbr\u003e\u003cb\u003e\u0412\u044b\u043f\u043e\u043b\u043d\u0438\u0442\u044c \u0434\u043e:\u003c/b\u003e 17.11.2025 03:37:19\u003cbr\u003e\u003cb\u003e\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435:\u003c/b\u003e \u0422\u0435\u043c\u0430: \u0421\u0413\u0418 \u041c\u0438\u0445\u0430\u0439\u043b\u043e\u0432\u043a\u0430 1 \u041f\u043e\u043f\u0435\u0440\u0435\u0447\u043d\u0430\u044f (993412) \u0411_\u041f\u0424..21 SCADA-XO \n\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435: \u0421\u0438\u0433\u043d\u0430\u043b: \u0410\u0432\u0430\u0440\u0438\u044f \u0445\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0433\u043e \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u044f: \u0411_\u041f\u0424..21; \u041d\u0430\u0438\u043c\u0435\u043d\u043e\u0432\u0430\u043d\u0438\u0435 \u0430\u0432\u0430\u0440\u0438\u0438: A1. \u0412\u044b\u0441\u043e\u043a\u0430\u044f \u0442\u0435\u043c\u043f\u0435\u0440\u0430\u0442\u0443\u0440\u0430; \n\n\u0412\u0440\u0435\u043c\u0435\u043d\u043d\u0430\u044f \u043c\u0435\u0442\u043a\u0430 \u0441\u0438\u0433\u043d\u0430\u043b\u0430: 16.11.25 14:45:37::298; \n\n\u0417\u043d\u0430\u0447\u0435\u043d\u0438\u0435: true (\u0432\u043a\u043b) ; \n\n\u0421\u0440\u0430\u0431\u043e\u0442\u0430\u0432\u0448\u0435\u0435 \u0441\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u0435: \u0414\u0438\u0441\u043a\u0440\u0435\u0442\u043d\u043e\u0435 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435(\u043b\u043e\u0433. 1); \n\n\u041f\u0440\u0435\u0434\u044b\u0434\u0443\u0449\u0435\u0435 \u0441\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u0435: \u041d\u043e\u0440\u043c\u0430(\u043d\u0435 \u0431\u044b\u043b\u043e \u0441\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u043d\u0438\u0439); \n\n\u0417\u0430\u0434\u0435\u0440\u0436\u043a\u0430 \u0441\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u043d\u0438\u044f: 3000 \u0441\u0435\u043a.; \n\n\u0412\u0440\u0435\u043c\u044f \u0441\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u043d\u0438\u044f: 16.11.25 14:45:38::517.\n\u003cbr\u003e\u003cb\u003e\u041d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u0425\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0435 \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u0435\u003cbr\u003e\u003cb\u003e\u041e\u0441\u0442\u0430\u043b\u043e\u0441\u044c \u0434\u043d\u0435\u0439:\u003c/b\u003e 0\u003cbr\u003e", "number": "SMT-\u043200008016079"}], "sector": "\u041d\u0435 \u0443\u043a\u0430\u0437\u0430\u043d", "total_requests": 1, "yellow_count": 1}];
 var flattenedRequests = [];
 
@@ -395,7 +416,13 @@ function parseRequestData(requestHtml, placemark) {
                         requestData.dueDate = value;
                         break;
                     case 'Осталось дней':
-                        var days = parseInt(value.replace('-', ''));
+                        var daysText = value.replace('-', '');
+                        var days = parseInt(daysText);
+                        if (isNaN(days)) {
+                            // Пробуем извлечь число из строки
+                            var match = daysText.match(/\-?\d+/);
+                            days = match ? parseInt(match[0]) : 0;
+                        }
                         if (days < 0) {
                             requestData.status = 'Просрочена';
                         } else if (days <= 2) {
@@ -501,7 +528,7 @@ function init() {
 
     addPlacemarks();
 
-    // Функции для цветов
+    // Функции для цветов (оставляем без изменений)
     function toggleColor(color) {
         activeColors[color] = !activeColors[color];
         updateAllButtonState();
@@ -552,7 +579,7 @@ function init() {
         addPlacemarks();
     }
 
-    // Функции для секторов
+    // Функции для секторов (оставляем без изменений)
     function toggleSector(sector) {
         if (sector === 'all') {
             var allSectorsButton = document.querySelector('#all_sectors_button');
@@ -608,7 +635,7 @@ function init() {
         }
     }
 
-    // Обработчики для кнопок цветов
+    // Обработчики для кнопок цветов (оставляем без изменений)
     document.querySelector('#red_button').addEventListener('click', function () {
         this.classList.toggle('active');
         toggleColor('red');
@@ -628,7 +655,7 @@ function init() {
         toggleAll();
     });
 
-    // Обработчики для кнопок секторов
+    // Обработчики для кнопок секторов (оставляем без изменений)
     document.querySelector('#all_sectors_button').addEventListener('click', function () {
         toggleSector('all');
     });
@@ -648,23 +675,63 @@ function init() {
     // Инициализация данных для таблицы
     flattenPlacemarksData();
 
-    // Функции для выделения области
+    // Функции для выделения области - ПЕРЕРАБОТАННЫЙ КОД
     function toggleAreaSelection() {
         var button = document.getElementById('area-selection-button');
+        var hint = document.getElementById('selection-hint');
+        
         isSelectingArea = !isSelectingArea;
         
         if (isSelectingArea) {
             button.classList.add('active');
+            hint.style.display = 'block';
             startAreaSelection();
         } else {
             button.classList.remove('active');
+            hint.style.display = 'none';
             stopAreaSelection();
         }
     }
 
     function startAreaSelection() {
-        // Создаем прямоугольник для выделения области
-        selectionRectangle = new ymaps.Rectangle([], {}, {
+        // Устанавливаем курсор в режим выделения
+        myMap.container.getElement().style.cursor = 'crosshair';
+        
+        // Подписываемся на события карты
+        myMap.events.add('mousedown', onMapMouseDown);
+        myMap.events.add('mousemove', onMapMouseMove);
+        myMap.events.add('mouseup', onMapMouseUp);
+    }
+
+    function stopAreaSelection() {
+        // Возвращаем обычный курсор
+        myMap.container.getElement().style.cursor = '';
+        
+        // Отписываемся от событий
+        myMap.events.remove('mousedown', onMapMouseDown);
+        myMap.events.remove('mousemove', onMapMouseMove);
+        myMap.events.remove('mouseup', onMapMouseUp);
+        
+        // Удаляем прямоугольник если есть
+        if (currentRectangle) {
+            myMap.geoObjects.remove(currentRectangle);
+            currentRectangle = null;
+        }
+        
+        // Скрываем подсказку
+        document.getElementById('selection-hint').style.display = 'none';
+    }
+
+    function onMapMouseDown(e) {
+        if (!isSelectingArea) return;
+        
+        startCoords = e.get('coords');
+        
+        // Создаем прямоугольник
+        currentRectangle = new ymaps.Rectangle([
+            [startCoords[0], startCoords[1]],
+            [startCoords[0], startCoords[1]]
+        ], {}, {
             fillColor: '#00FF00',
             fillOpacity: 0.2,
             strokeColor: '#00FF00',
@@ -672,59 +739,72 @@ function init() {
             strokeWidth: 2
         });
         
-        myMap.geoObjects.add(selectionRectangle);
-        
-        // Включаем режим рисования
-        myMap.editor.startDrawing();
-        
-        // Обработчик завершения рисования
-        myMap.editor.events.add('drawingcomplete', function (event) {
-            var geometry = event.get('geometry');
-            if (geometry) {
-                var coordinates = geometry.getCoordinates();
-                findRequestsInArea(coordinates);
-            }
-            stopAreaSelection();
-        });
+        myMap.geoObjects.add(currentRectangle);
     }
 
-    function stopAreaSelection() {
-        if (selectionRectangle) {
-            myMap.geoObjects.remove(selectionRectangle);
-            selectionRectangle = null;
-        }
-        myMap.editor.stopDrawing();
+    function onMapMouseMove(e) {
+        if (!isSelectingArea || !startCoords || !currentRectangle) return;
+        
+        var currentCoords = e.get('coords');
+        
+        // Обновляем геометрию прямоугольника
+        currentRectangle.geometry.setCoordinates([
+            [startCoords[0], startCoords[1]],
+            [currentCoords[0], currentCoords[1]]
+        ]);
+    }
+
+    function onMapMouseUp(e) {
+        if (!isSelectingArea || !startCoords || !currentRectangle) return;
+        
+        var endCoords = e.get('coords');
+        
+        // Определяем границы прямоугольника
+        var north = Math.max(startCoords[0], endCoords[0]);
+        var south = Math.min(startCoords[0], endCoords[0]);
+        var east = Math.max(startCoords[1], endCoords[1]);
+        var west = Math.min(startCoords[1], endCoords[1]);
+        
+        var bounds = [
+            [south, west], // юго-запад
+            [north, east]  // северо-восток
+        ];
+        
+        // Ищем заявки в области
+        findRequestsInBounds(bounds);
+        
+        // Сбрасываем состояние
+        startCoords = null;
         isSelectingArea = false;
         document.getElementById('area-selection-button').classList.remove('active');
+        document.getElementById('selection-hint').style.display = 'none';
+        
+        // Оставляем прямоугольник на карте для наглядности
+        setTimeout(function() {
+            if (currentRectangle) {
+                myMap.geoObjects.remove(currentRectangle);
+                currentRectangle = null;
+            }
+        }, 2000);
     }
 
-    function findRequestsInArea(areaCoordinates) {
+    function findRequestsInBounds(bounds) {
         var requestsInArea = [];
+        var south = bounds[0][0];
+        var north = bounds[1][0];
+        var west = bounds[0][1];
+        var east = bounds[1][1];
         
         flattenedRequests.forEach(function(request) {
-            if (isPointInPolygon(request.coords, areaCoordinates[0])) {
+            var lat = request.coords[0];
+            var lon = request.coords[1];
+            
+            if (lat >= south && lat <= north && lon >= west && lon <= east) {
                 requestsInArea.push(request);
             }
         });
         
         showRequestsTable(requestsInArea);
-    }
-
-    function isPointInPolygon(point, polygon) {
-        var x = point[0], y = point[1];
-        var inside = false;
-        
-        for (var i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
-            var xi = polygon[i][0], yi = polygon[i][1];
-            var xj = polygon[j][0], yj = polygon[j][1];
-            
-            var intersect = ((yi > y) != (yj > y)) &&
-                (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
-            
-            if (intersect) inside = !inside;
-        }
-        
-        return inside;
     }
 
     function showRequestsTable(requests) {
@@ -739,10 +819,10 @@ function init() {
             var row = document.createElement('tr');
             
             row.innerHTML = `
-                <td>${request.podrazdelenie}</td>
-                <td>${request.number}</td>
-                <td>${request.dueDate}</td>
-                <td>${request.status}</td>
+                <td>${request.podrazdelenie || 'Не указано'}</td>
+                <td>${request.number || 'Не указан'}</td>
+                <td>${request.dueDate || 'Не указан'}</td>
+                <td>${request.status || 'Не определен'}</td>
             `;
             
             // Добавляем обработчик клика для показа полной информации
@@ -771,7 +851,9 @@ function init() {
         detailsHtml += '<h4>Детали заявки</h4>';
         
         for (var key in request.fullData) {
-            detailsHtml += '<p><strong>' + key + ':</strong> ' + request.fullData[key] + '</p>';
+            if (request.fullData[key]) {
+                detailsHtml += '<p><strong>' + key + ':</strong> ' + request.fullData[key] + '</p>';
+            }
         }
         
         detailsHtml += '</div>';
@@ -792,9 +874,7 @@ function init() {
         modal.style.overflow = 'auto';
         
         modal.innerHTML = detailsHtml + 
-            '<button onclick="this.parentElement.remove()" style="margin-top: 10px; padding: 5px 10px; background: #ff4444; color: white; border: none; border-radius: 4px; cursor: pointer;">Закрыть</button>';
-        
-        document.body.appendChild(modal);
+            '<button onclick="this.parentElement.remove(); document.body.removeChild(overlay)" style="margin-top: 10px; padding: 5px 10px; background: #ff4444; color: white; border: none; border-radius: 4px; cursor: pointer;">Закрыть</button>';
         
         // Добавляем затемнение фона
         var overlay = document.createElement('div');
@@ -806,11 +886,14 @@ function init() {
         overlay.style.backgroundColor = 'rgba(0,0,0,0.5)';
         overlay.style.zIndex = '1999';
         overlay.onclick = function() {
-            document.body.removeChild(modal);
+            if (document.body.contains(modal)) {
+                document.body.removeChild(modal);
+            }
             document.body.removeChild(overlay);
         };
         
         document.body.appendChild(overlay);
+        document.body.appendChild(modal);
     }
 }
 
