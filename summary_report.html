@@ -13,7 +13,7 @@
             background-color: #f5f5f5;
         }
         .container {
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
             background: white;
             padding: 30px;
@@ -27,7 +27,7 @@
         }
         .summary-header {
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
             gap: 10px;
             margin-bottom: 20px;
             padding: 15px;
@@ -70,6 +70,14 @@
         }
         .overdue {
             color: #dc3545;
+            font-weight: bold;
+        }
+        .resolved {
+            color: #28a745;
+            font-weight: bold;
+        }
+        .returned {
+            color: #ffc107;
             font-weight: bold;
         }
         .high-count {
@@ -144,8 +152,16 @@
                 <div class="summary-header-label">Заявок ТОИР</div>
             </div>
             <div class="summary-header-item">
-                <div class="summary-header-value">15</div>
+                <div class="summary-header-value">25</div>
                 <div class="summary-header-label">Просрочено</div>
+            </div>
+            <div class="summary-header-item">
+                <div class="summary-header-value">2789</div>
+                <div class="summary-header-label">Решено Евроком</div>
+            </div>
+            <div class="summary-header-item">
+                <div class="summary-header-value">66</div>
+                <div class="summary-header-label">Возвращено Евроком</div>
             </div>
             <div class="summary-header-item">
                 <div class="summary-header-value">8/8</div>
@@ -162,6 +178,8 @@
                     <th>BMC</th>
                     <th>ТОИР</th>
                     <th>Просрочено</th>
+                    <th>Решено Евроком</th>
+                    <th>Возвращено Евроком</th>
                     <th>SLA</th>
                 </tr>
             </thead>
@@ -177,7 +195,9 @@
                     <td>26</td>
                     <td>65</td>
                     <td>22</td>
-                    <td class="overdue">11</td>
+                    <td class="overdue">13</td>
+                    <td class="resolved">816</td>
+                    <td class="returned">1</td>
                     <td class="sla-good">
                         100,00%
                     </td>
@@ -193,7 +213,9 @@
                     <td>5</td>
                     <td>78</td>
                     <td>15</td>
-                    <td class="overdue">1</td>
+                    <td class="overdue">2</td>
+                    <td class="resolved">228</td>
+                    <td class="returned">13</td>
                     <td class="sla-good">
                         99,63%
                     </td>
@@ -210,6 +232,8 @@
                     <td>82</td>
                     <td>1</td>
                     <td class="overdue">1</td>
+                    <td class="resolved">511</td>
+                    <td class="returned">20</td>
                     <td class="sla-good">
                         99,58%
                     </td>
@@ -225,7 +249,9 @@
                     <td>8</td>
                     <td>70</td>
                     <td>5</td>
-                    <td class="overdue">1</td>
+                    <td class="overdue">6</td>
+                    <td class="resolved">540</td>
+                    <td class="returned">17</td>
                     <td class="sla-good">
                         100,00%
                     </td>
@@ -242,6 +268,8 @@
                     <td>30</td>
                     <td>7</td>
                     <td class="overdue">0</td>
+                    <td class="resolved">280</td>
+                    <td class="returned">6</td>
                     <td class="sla-good">
                         99,52%
                     </td>
@@ -258,6 +286,8 @@
                     <td>37</td>
                     <td>1</td>
                     <td class="overdue">0</td>
+                    <td class="resolved">210</td>
+                    <td class="returned">9</td>
                     <td class="sla-good">
                         100,00%
                     </td>
@@ -273,7 +303,9 @@
                     <td>2</td>
                     <td>7</td>
                     <td>1</td>
-                    <td class="overdue">0</td>
+                    <td class="overdue">2</td>
+                    <td class="resolved">55</td>
+                    <td class="returned">0</td>
                     <td class="sla-good">
                         100,00%
                     </td>
@@ -290,6 +322,8 @@
                     <td>1</td>
                     <td>1</td>
                     <td class="overdue">1</td>
+                    <td class="resolved">149</td>
+                    <td class="returned">0</td>
                     <td class="sla-good">
                         100,00%
                     </td>
@@ -304,8 +338,10 @@
         </div>
         
         <div style="text-align: center; margin-top: 20px; color: #666; font-size: 12px;">
-            Отчет сгенерирован: 16.11.2025 07:06<br>
-            <small>SLA данные загружены из файлов: SLA_Волжский.xlsx и SLA_Кавказский.xlsx</small>
+            Отчет сгенерирован: 16.11.2025 18:40<br>
+            <small>SLA данные загружены из файлов: SLA_Волжский.xlsx и SLA_Кавказский.xlsx<br>
+            Статистика по решенным заявкам: Решенные.xlsx<br>
+            Статистика по возвращенным заявкам: Возвращенные.xlsx</small>
         </div>
     </div>
 </body>
