@@ -263,6 +263,117 @@
             color: white;
             border-color: #1976D2;
         }
+        <style>
+    body, html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        width: 100%;
+        font-family: Arial, sans-serif;
+    }
+    #map {
+        width: 100%;
+        height: 600px;
+        position: relative;
+    }
+    @media (max-width: 768px) {
+        #map {
+            height: 400px;
+        }
+    }
+    #controls {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        z-index: 1000;
+        background-color: rgba(255, 255, 255, 0.95);
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        max-width: 200px;
+    }
+    
+    /* ... много других стилей ... */
+    
+    .area-selection-button {
+        position: absolute;
+        top: 10px;
+        right: 120px;
+        z-index: 1000;
+        background-color: rgba(255, 255, 255, 0.9);
+        padding: 8px 12px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 12px;
+        color: #333;
+        cursor: pointer;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    
+    .area-selection-button:hover {
+        background-color: #f8f8f8;
+    }
+    
+    .area-selection-button.active {
+        background-color: #2196F3;
+        color: white;
+        border-color: #1976D2;
+    }
+    
+    /* ДОБАВЬТЕ НОВЫЕ СТИЛИ ЗДЕСЬ - ПОСЛЕ СУЩЕСТВУЮЩИХ СТИЛЕЙ ДЛЯ .area-selection-button */
+    
+    /* НАЧАЛО НОВЫХ СТИЛЕЙ */
+    .area-selection-button {
+        position: absolute;
+        top: 10px;
+        right: 120px;
+        z-index: 1000;
+        background-color: rgba(255, 255, 255, 0.95);
+        padding: 10px 15px;
+        border: 2px solid #2196F3;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: bold;
+        color: #2196F3;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        transition: all 0.3s ease;
+    }
+
+    .area-selection-button:hover {
+        background-color: #2196F3;
+        color: white;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+    }
+
+    .area-selection-button.active {
+        background-color: #2196F3;
+        color: white;
+        border-color: #1976D2;
+        box-shadow: 0 4px 12px rgba(33, 150, 243, 0.4);
+    }
+
+    .area-selection-button:active {
+        transform: translateY(0);
+    }
+    /* КОНЕЦ НОВЫХ СТИЛЕЙ */
+    
+    /* Дополнительные стили для выделения области */
+    .selection-hint {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        z-index: 1001;
+        font-size: 14px;
+        display: none;
+    }
+</style>
         
         /* Дополнительные стили для выделения области */
         .selection-hint {
@@ -347,7 +458,7 @@
         Перетащите мышью для выделения области
     </div>
     
-    <div id="report_datetime">Дата и время отчета: 16-11-2025 21:28:59</div>
+    <div id="report_datetime">Дата и время отчета: 16-11-2025 21:51:47</div>
     <div id="title_button">Волгоград Восток</div>
     <a href="index.html" class="back-link">← Назад к списку филиалов</a>
 </body>
@@ -355,7 +466,6 @@
 
 <script type="text/javascript">
 // Глобальные переменные для управления выделением области
-var selectionRectangle = null;
 var isSelectingArea = false;
 var startCoords = null;
 var currentRectangle = null;
@@ -379,6 +489,7 @@ function flattenPlacemarksData() {
             }
         });
     });
+    console.log('Загружено заявок для таблицы:', flattenedRequests.length);
 }
 
 // Парсим данные заявки из HTML контента
@@ -387,7 +498,9 @@ function parseRequestData(requestHtml, placemark) {
         var tempDiv = document.createElement('div');
         tempDiv.innerHTML = requestHtml;
         
-        var rows = tempDiv.innerHTML.split('<br>');
+        var textContent = tempDiv.textContent || tempDiv.innerText || '';
+        var lines = textContent.split('\n').filter(line => line.trim());
+        
         var requestData = {
             coords: placemark.coords,
             podrazdelenie: '',
@@ -397,32 +510,24 @@ function parseRequestData(requestHtml, placemark) {
             fullData: {}
         };
         
-        rows.forEach(function(row) {
-            var parts = row.split(':');
+        lines.forEach(function(line) {
+            var parts = line.split(':');
             if (parts.length >= 2) {
-                var key = parts[0].replace('<b>', '').replace('</b>', '').trim();
+                var key = parts[0].trim();
                 var value = parts.slice(1).join(':').trim();
                 
                 requestData.fullData[key] = value;
                 
-                switch(key) {
-                    case 'Подразделение':
-                        requestData.podrazdelenie = value;
-                        break;
-                    case 'Номер заявки':
-                        requestData.number = value;
-                        break;
-                    case 'Выполнить до':
-                        requestData.dueDate = value;
-                        break;
-                    case 'Осталось дней':
-                        var daysText = value.replace('-', '');
-                        var days = parseInt(daysText);
-                        if (isNaN(days)) {
-                            // Пробуем извлечь число из строки
-                            var match = daysText.match(/\-?\d+/);
-                            days = match ? parseInt(match[0]) : 0;
-                        }
+                if (key.includes('Подразделение')) {
+                    requestData.podrazdelenie = value;
+                } else if (key.includes('Номер заявки')) {
+                    requestData.number = value;
+                } else if (key.includes('Выполнить до')) {
+                    requestData.dueDate = value;
+                } else if (key.includes('Осталось дней')) {
+                    var daysMatch = value.match(/-?\d+/);
+                    if (daysMatch) {
+                        var days = parseInt(daysMatch[0]);
                         if (days < 0) {
                             requestData.status = 'Просрочена';
                         } else if (days <= 2) {
@@ -430,7 +535,7 @@ function parseRequestData(requestHtml, placemark) {
                         } else {
                             requestData.status = 'Обычная';
                         }
-                        break;
+                    }
                 }
             }
         });
@@ -449,234 +554,14 @@ function init() {
         controls: []
     });
 
-    var placemarks = [{"balloonContent": "\u003cb\u003e\u041f\u043e\u0434\u0440\u0430\u0437\u0434\u0435\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u041a\u0430\u043c\u044b\u0448\u0438\u043d 1 5 \u043c\u0438\u043a\u0440\u043e\u0440\u0430\u0439\u043e\u043d\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432.:\u003c/b\u003e \u041d\u0435 \u0443\u043a\u0430\u0437\u0430\u043d\u003cbr\u003e\u003cb\u003e\u0424\u0438\u043b\u0438\u0430\u043b:\u003c/b\u003e \u0412\u043e\u043b\u0433\u043e\u0433\u0440\u0430\u0434 \u0412\u043e\u0441\u0442\u043e\u043a\u003cbr\u003e\u003cb\u003e\u041d\u043e\u043c\u0435\u0440 \u0437\u0430\u044f\u0432\u043a\u0438:\u003c/b\u003e SMT-\u043200008013088\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u044b\u0439:\u003c/b\u003e \u0422\u0440\u0443\u0434\u043e\u0432 \u0410\u043b\u0435\u043a\u0441\u0435\u0439 \u0412\u043b\u0430\u0434\u0438\u043c\u0438\u0440\u043e\u0432\u0438\u0447\u003cbr\u003e\u003cb\u003e\u0412\u044b\u043f\u043e\u043b\u043d\u0438\u0442\u044c \u0434\u043e:\u003c/b\u003e 18.11.2025 19:09:28\u003cbr\u003e\u003cb\u003e\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435:\u003c/b\u003e \u0422\u0435\u043c\u0430: \u0425\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0435 \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u0435 \n\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435: \u0414\u043e\u0431\u0440\u044b\u0439 \u0434\u0435\u043d\u044c. \u041d\u0435\u043e\u0431\u0445\u043e\u0434\u0438\u043c\u043e \u0432\u044b\u043f\u043e\u043b\u043d\u0438\u0442\u044c \u0437\u0430\u043f\u0440\u043e\u0441, \u0440\u0443\u043a\u043e\u0432\u043e\u0434\u0441\u0442\u0432\u0443\u044f\u0441\u044c \u0441\u043b\u0435\u0434\u0443\u044e\u0449\u0438\u043c\u0438 \u0434\u0430\u043d\u043d\u044b\u043c\u0438:\n\u041e\u0431\u044a\u0435\u043a\u0442 \u0440\u0435\u043c\u043e\u043d\u0442\u0430, \u0441 \u043a\u043e\u0442\u043e\u0440\u044b\u043c \u0432\u043e\u0437\u043d\u0438\u043a\u043b\u0438 \u043f\u0440\u043e\u0431\u043b\u0435\u043c\u044b: \u0425\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u0430\u044f \u043a\u0430\u043c\u0435\u0440\u0430\n\u041f\u0440\u043e\u0431\u043b\u0435\u043c\u0430: \u0422\u0440\u0435\u0431\u0443\u0435\u0442\u0441\u044f \u0437\u0430\u043c\u0435\u043d\u0430 \u043b\u0430\u043c\u043f\u044b\n\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435 \u043f\u0440\u043e\u0431\u043b\u0435\u043c\u044b: \u041d\u0435 \u0433\u043e\u0440\u0438\u0442 \u0441\u0432\u0435\u0442 \u0432 \u043a\u0430\u043c\u0435\u0440\u0435\n\u0421\u043e\u0442\u0440\u0443\u0434\u043d\u0438\u043a \u043c\u0430\u0433\u0430\u0437\u0438\u043d\u0430: \u0414\u0430\n\u0424\u0438\u043b\u0438\u0430\u043b: \u0410\u041e \u0422\u0430\u043d\u0434\u0435\u0440 \u041a\u0430\u043c\u044b\u0448\u0438\u043d 5 \u043c\u0438\u043a\u0440\u043e\u0440\u0430\u0439\u043e\u043d \u0413\u041c\n\u041e\u0431\u044a\u0435\u043a\u0442: \u0421\u0435\u0440\u043c\u0443\u0441 \u041e\u043b\u044c\u0433\u0430 \u0421\u0435\u043c\u0435\u043d\u043e\u0432\u043d\u0430\n\u0424\u0418\u041e: \u0421\u0435\u0440\u043c\u0443\u0441 \u041e.\u0421\n\u041d\u043e\u043c\u0435\u0440 \u0442\u0435\u043b\u0435\u0444\u043e\u043d\u0430: 89275184653\u003cbr\u003e\u003cb\u003e\u041d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u0425\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0435 \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u0435\u003cbr\u003e\u003cb\u003e\u041e\u0441\u0442\u0430\u043b\u043e\u0441\u044c \u0434\u043d\u0435\u0439:\u003c/b\u003e 1\u003cbr\u003e\u003chr\u003e\u003cb\u003e\u041f\u043e\u0434\u0440\u0430\u0437\u0434\u0435\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u041a\u0430\u043c\u044b\u0448\u0438\u043d 1 5 \u043c\u0438\u043a\u0440\u043e\u0440\u0430\u0439\u043e\u043d\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432.:\u003c/b\u003e \u041d\u0435 \u0443\u043a\u0430\u0437\u0430\u043d\u003cbr\u003e\u003cb\u003e\u0424\u0438\u043b\u0438\u0430\u043b:\u003c/b\u003e \u0412\u043e\u043b\u0433\u043e\u0433\u0440\u0430\u0434 \u0412\u043e\u0441\u0442\u043e\u043a\u003cbr\u003e\u003cb\u003e\u041d\u043e\u043c\u0435\u0440 \u0437\u0430\u044f\u0432\u043a\u0438:\u003c/b\u003e SMT-\u043200008014393\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u044b\u0439:\u003c/b\u003e \u0422\u0440\u0443\u0434\u043e\u0432 \u0410\u043b\u0435\u043a\u0441\u0435\u0439 \u0412\u043b\u0430\u0434\u0438\u043c\u0438\u0440\u043e\u0432\u0438\u0447\u003cbr\u003e\u003cb\u003e\u0412\u044b\u043f\u043e\u043b\u043d\u0438\u0442\u044c \u0434\u043e:\u003c/b\u003e 19.11.2025 10:14:30\u003cbr\u003e\u003cb\u003e\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435:\u003c/b\u003e \u0422\u0435\u043c\u0430: \u0421\u0413\u0418 \u041a\u0430\u043c\u044b\u0448\u0438\u043d 1 5 \u043c\u0438\u043a\u0440\u043e\u0440\u0430\u0439\u043e\u043d (993401) \u041d\u0422\u0426..112 SCADA-XO \n\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435: \u0421\u0438\u0433\u043d\u0430\u043b: \u0410\u0432\u0430\u0440\u0438\u044f \u0445\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0433\u043e \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u044f: \u041d\u0422\u0426..112; \u041d\u0430\u0438\u043c\u0435\u043d\u043e\u0432\u0430\u043d\u0438\u0435 \u0430\u0432\u0430\u0440\u0438\u0438: Compressor 3A safety cut out; \n\n\u0412\u0440\u0435\u043c\u0435\u043d\u043d\u0430\u044f \u043c\u0435\u0442\u043a\u0430 \u0441\u0438\u0433\u043d\u0430\u043b\u0430: 16.11.25 08:13:09::886; \n\n\u0417\u043d\u0430\u0447\u0435\u043d\u0438\u0435: true (\u0432\u043a\u043b) ; \n\n\u0421\u0440\u0430\u0431\u043e\u0442\u0430\u0432\u0448\u0435\u0435 \u0441\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u0435: \u0414\u0438\u0441\u043a\u0440\u0435\u0442\u043d\u043e\u0435 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435(\u043b\u043e\u0433. 1); \n\n\u041f\u0440\u0435\u0434\u044b\u0434\u0443\u0449\u0435\u0435 \u0441\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u0435: \u041d\u043e\u0440\u043c\u0430(\u043d\u0435 \u0431\u044b\u043b\u043e \u0441\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u043d\u0438\u0439); \n\n\u0417\u0430\u0434\u0435\u0440\u0436\u043a\u0430 \u0441\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u043d\u0438\u044f: 300 \u0441\u0435\u043a.; \n\n\u0412\u0440\u0435\u043c\u044f \u0441\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u043d\u0438\u044f: 16.11.25 08:13:11::620.\n\u003cbr\u003e\u003cb\u003e\u041d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u0425\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0435 \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u0435\u003cbr\u003e\u003cb\u003e\u041e\u0441\u0442\u0430\u043b\u043e\u0441\u044c \u0434\u043d\u0435\u0439:\u003c/b\u003e 2\u003cbr\u003e\u003chr\u003e", "blue_count": 0, "color": "yellow", "coords": [50.091, 45.3568], "days_left": 1, "podrazdelenie": "\u041a\u0430\u043c\u044b\u0448\u0438\u043d 1 5 \u043c\u0438\u043a\u0440\u043e\u0440\u0430\u0439\u043e\u043d", "red_count": 0, "request_details": [{"days_left": 1, "due_date": "18.11.2025 19:09:28", "html": "\u003cb\u003e\u041f\u043e\u0434\u0440\u0430\u0437\u0434\u0435\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u041a\u0430\u043c\u044b\u0448\u0438\u043d 1 5 \u043c\u0438\u043a\u0440\u043e\u0440\u0430\u0439\u043e\u043d\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432.:\u003c/b\u003e \u041d\u0435 \u0443\u043a\u0430\u0437\u0430\u043d\u003cbr\u003e\u003cb\u003e\u0424\u0438\u043b\u0438\u0430\u043b:\u003c/b\u003e \u0412\u043e\u043b\u0433\u043e\u0433\u0440\u0430\u0434 \u0412\u043e\u0441\u0442\u043e\u043a\u003cbr\u003e\u003cb\u003e\u041d\u043e\u043c\u0435\u0440 \u0437\u0430\u044f\u0432\u043a\u0438:\u003c/b\u003e SMT-\u043200008013088\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u044b\u0439:\u003c/b\u003e \u0422\u0440\u0443\u0434\u043e\u0432 \u0410\u043b\u0435\u043a\u0441\u0435\u0439 \u0412\u043b\u0430\u0434\u0438\u043c\u0438\u0440\u043e\u0432\u0438\u0447\u003cbr\u003e\u003cb\u003e\u0412\u044b\u043f\u043e\u043b\u043d\u0438\u0442\u044c \u0434\u043e:\u003c/b\u003e 18.11.2025 19:09:28\u003cbr\u003e\u003cb\u003e\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435:\u003c/b\u003e \u0422\u0435\u043c\u0430: \u0425\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0435 \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u0435 \n\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435: \u0414\u043e\u0431\u0440\u044b\u0439 \u0434\u0435\u043d\u044c. \u041d\u0435\u043e\u0431\u0445\u043e\u0434\u0438\u043c\u043e \u0432\u044b\u043f\u043e\u043b\u043d\u0438\u0442\u044c \u0437\u0430\u043f\u0440\u043e\u0441, \u0440\u0443\u043a\u043e\u0432\u043e\u0434\u0441\u0442\u0432\u0443\u044f\u0441\u044c \u0441\u043b\u0435\u0434\u0443\u044e\u0449\u0438\u043c\u0438 \u0434\u0430\u043d\u043d\u044b\u043c\u0438:\n\u041e\u0431\u044a\u0435\u043a\u0442 \u0440\u0435\u043c\u043e\u043d\u0442\u0430, \u0441 \u043a\u043e\u0442\u043e\u0440\u044b\u043c \u0432\u043e\u0437\u043d\u0438\u043a\u043b\u0438 \u043f\u0440\u043e\u0431\u043b\u0435\u043c\u044b: \u0425\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u0430\u044f \u043a\u0430\u043c\u0435\u0440\u0430\n\u041f\u0440\u043e\u0431\u043b\u0435\u043c\u0430: \u0422\u0440\u0435\u0431\u0443\u0435\u0442\u0441\u044f \u0437\u0430\u043c\u0435\u043d\u0430 \u043b\u0430\u043c\u043f\u044b\n\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435 \u043f\u0440\u043e\u0431\u043b\u0435\u043c\u044b: \u041d\u0435 \u0433\u043e\u0440\u0438\u0442 \u0441\u0432\u0435\u0442 \u0432 \u043a\u0430\u043c\u0435\u0440\u0435\n\u0421\u043e\u0442\u0440\u0443\u0434\u043d\u0438\u043a \u043c\u0430\u0433\u0430\u0437\u0438\u043d\u0430: \u0414\u0430\n\u0424\u0438\u043b\u0438\u0430\u043b: \u0410\u041e \u0422\u0430\u043d\u0434\u0435\u0440 \u041a\u0430\u043c\u044b\u0448\u0438\u043d 5 \u043c\u0438\u043a\u0440\u043e\u0440\u0430\u0439\u043e\u043d \u0413\u041c\n\u041e\u0431\u044a\u0435\u043a\u0442: \u0421\u0435\u0440\u043c\u0443\u0441 \u041e\u043b\u044c\u0433\u0430 \u0421\u0435\u043c\u0435\u043d\u043e\u0432\u043d\u0430\n\u0424\u0418\u041e: \u0421\u0435\u0440\u043c\u0443\u0441 \u041e.\u0421\n\u041d\u043e\u043c\u0435\u0440 \u0442\u0435\u043b\u0435\u0444\u043e\u043d\u0430: 89275184653\u003cbr\u003e\u003cb\u003e\u041d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u0425\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0435 \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u0435\u003cbr\u003e\u003cb\u003e\u041e\u0441\u0442\u0430\u043b\u043e\u0441\u044c \u0434\u043d\u0435\u0439:\u003c/b\u003e 1\u003cbr\u003e", "number": "SMT-\u043200008013088"}, {"days_left": 2, "due_date": "19.11.2025 10:14:30", "html": "\u003cb\u003e\u041f\u043e\u0434\u0440\u0430\u0437\u0434\u0435\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u041a\u0430\u043c\u044b\u0448\u0438\u043d 1 5 \u043c\u0438\u043a\u0440\u043e\u0440\u0430\u0439\u043e\u043d\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432.:\u003c/b\u003e \u041d\u0435 \u0443\u043a\u0430\u0437\u0430\u043d\u003cbr\u003e\u003cb\u003e\u0424\u0438\u043b\u0438\u0430\u043b:\u003c/b\u003e \u0412\u043e\u043b\u0433\u043e\u0433\u0440\u0430\u0434 \u0412\u043e\u0441\u0442\u043e\u043a\u003cbr\u003e\u003cb\u003e\u041d\u043e\u043c\u0435\u0440 \u0437\u0430\u044f\u0432\u043a\u0438:\u003c/b\u003e SMT-\u043200008014393\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u044b\u0439:\u003c/b\u003e \u0422\u0440\u0443\u0434\u043e\u0432 \u0410\u043b\u0435\u043a\u0441\u0435\u0439 \u0412\u043b\u0430\u0434\u0438\u043c\u0438\u0440\u043e\u0432\u0438\u0447\u003cbr\u003e\u003cb\u003e\u0412\u044b\u043f\u043e\u043b\u043d\u0438\u0442\u044c \u0434\u043e:\u003c/b\u003e 19.11.2025 10:14:30\u003cbr\u003e\u003cb\u003e\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435:\u003c/b\u003e \u0422\u0435\u043c\u0430: \u0421\u0413\u0418 \u041a\u0430\u043c\u044b\u0448\u0438\u043d 1 5 \u043c\u0438\u043a\u0440\u043e\u0440\u0430\u0439\u043e\u043d (993401) \u041d\u0422\u0426..112 SCADA-XO \n\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435: \u0421\u0438\u0433\u043d\u0430\u043b: \u0410\u0432\u0430\u0440\u0438\u044f \u0445\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0433\u043e \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u044f: \u041d\u0422\u0426..112; \u041d\u0430\u0438\u043c\u0435\u043d\u043e\u0432\u0430\u043d\u0438\u0435 \u0430\u0432\u0430\u0440\u0438\u0438: Compressor 3A safety cut out; \n\n\u0412\u0440\u0435\u043c\u0435\u043d\u043d\u0430\u044f \u043c\u0435\u0442\u043a\u0430 \u0441\u0438\u0433\u043d\u0430\u043b\u0430: 16.11.25 08:13:09::886; \n\n\u0417\u043d\u0430\u0447\u0435\u043d\u0438\u0435: true (\u0432\u043a\u043b) ; \n\n\u0421\u0440\u0430\u0431\u043e\u0442\u0430\u0432\u0448\u0435\u0435 \u0441\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u0435: \u0414\u0438\u0441\u043a\u0440\u0435\u0442\u043d\u043e\u0435 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435(\u043b\u043e\u0433. 1); \n\n\u041f\u0440\u0435\u0434\u044b\u0434\u0443\u0449\u0435\u0435 \u0441\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u0435: \u041d\u043e\u0440\u043c\u0430(\u043d\u0435 \u0431\u044b\u043b\u043e \u0441\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u043d\u0438\u0439); \n\n\u0417\u0430\u0434\u0435\u0440\u0436\u043a\u0430 \u0441\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u043d\u0438\u044f: 300 \u0441\u0435\u043a.; \n\n\u0412\u0440\u0435\u043c\u044f \u0441\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u043d\u0438\u044f: 16.11.25 08:13:11::620.\n\u003cbr\u003e\u003cb\u003e\u041d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u0425\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0435 \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u0435\u003cbr\u003e\u003cb\u003e\u041e\u0441\u0442\u0430\u043b\u043e\u0441\u044c \u0434\u043d\u0435\u0439:\u003c/b\u003e 2\u003cbr\u003e", "number": "SMT-\u043200008014393"}], "sector": "\u041d\u0435 \u0443\u043a\u0430\u0437\u0430\u043d", "total_requests": 2, "yellow_count": 2}, {"balloonContent": "\u003cb\u003e\u041f\u043e\u0434\u0440\u0430\u0437\u0434\u0435\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u041c\u0438\u0445\u0430\u0439\u043b\u043e\u0432\u043a\u0430 1 \u041f\u043e\u043f\u0435\u0440\u0435\u0447\u043d\u0430\u044f\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432.:\u003c/b\u003e \u041d\u0435 \u0443\u043a\u0430\u0437\u0430\u043d\u003cbr\u003e\u003cb\u003e\u0424\u0438\u043b\u0438\u0430\u043b:\u003c/b\u003e \u0412\u043e\u043b\u0433\u043e\u0433\u0440\u0430\u0434 \u0412\u043e\u0441\u0442\u043e\u043a\u003cbr\u003e\u003cb\u003e\u041d\u043e\u043c\u0435\u0440 \u0437\u0430\u044f\u0432\u043a\u0438:\u003c/b\u003e SMT-\u043200008016079\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u044b\u0439:\u003c/b\u003e \u0414\u0440\u043e\u043d\u043e\u0432 \u0414\u0430\u043d\u0438\u043b\u0430 \u0415\u0432\u0433\u0435\u043d\u044c\u0435\u0432\u0438\u0447\u003cbr\u003e\u003cb\u003e\u0412\u044b\u043f\u043e\u043b\u043d\u0438\u0442\u044c \u0434\u043e:\u003c/b\u003e 17.11.2025 03:37:19\u003cbr\u003e\u003cb\u003e\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435:\u003c/b\u003e \u0422\u0435\u043c\u0430: \u0421\u0413\u0418 \u041c\u0438\u0445\u0430\u0439\u043b\u043e\u0432\u043a\u0430 1 \u041f\u043e\u043f\u0435\u0440\u0435\u0447\u043d\u0430\u044f (993412) \u0411_\u041f\u0424..21 SCADA-XO \n\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435: \u0421\u0438\u0433\u043d\u0430\u043b: \u0410\u0432\u0430\u0440\u0438\u044f \u0445\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0433\u043e \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u044f: \u0411_\u041f\u0424..21; \u041d\u0430\u0438\u043c\u0435\u043d\u043e\u0432\u0430\u043d\u0438\u0435 \u0430\u0432\u0430\u0440\u0438\u0438: A1. \u0412\u044b\u0441\u043e\u043a\u0430\u044f \u0442\u0435\u043c\u043f\u0435\u0440\u0430\u0442\u0443\u0440\u0430; \n\n\u0412\u0440\u0435\u043c\u0435\u043d\u043d\u0430\u044f \u043c\u0435\u0442\u043a\u0430 \u0441\u0438\u0433\u043d\u0430\u043b\u0430: 16.11.25 14:45:37::298; \n\n\u0417\u043d\u0430\u0447\u0435\u043d\u0438\u0435: true (\u0432\u043a\u043b) ; \n\n\u0421\u0440\u0430\u0431\u043e\u0442\u0430\u0432\u0448\u0435\u0435 \u0441\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u0435: \u0414\u0438\u0441\u043a\u0440\u0435\u0442\u043d\u043e\u0435 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435(\u043b\u043e\u0433. 1); \n\n\u041f\u0440\u0435\u0434\u044b\u0434\u0443\u0449\u0435\u0435 \u0441\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u0435: \u041d\u043e\u0440\u043c\u0430(\u043d\u0435 \u0431\u044b\u043b\u043e \u0441\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u043d\u0438\u0439); \n\n\u0417\u0430\u0434\u0435\u0440\u0436\u043a\u0430 \u0441\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u043d\u0438\u044f: 3000 \u0441\u0435\u043a.; \n\n\u0412\u0440\u0435\u043c\u044f \u0441\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u043d\u0438\u044f: 16.11.25 14:45:38::517.\n\u003cbr\u003e\u003cb\u003e\u041d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u0425\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0435 \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u0435\u003cbr\u003e\u003cb\u003e\u041e\u0441\u0442\u0430\u043b\u043e\u0441\u044c \u0434\u043d\u0435\u0439:\u003c/b\u003e 0\u003cbr\u003e\u003chr\u003e", "blue_count": 0, "color": "yellow", "coords": [50.070299, 43.215768], "days_left": 0, "podrazdelenie": "\u041c\u0438\u0445\u0430\u0439\u043b\u043e\u0432\u043a\u0430 1 \u041f\u043e\u043f\u0435\u0440\u0435\u0447\u043d\u0430\u044f", "red_count": 0, "request_details": [{"days_left": 0, "due_date": "17.11.2025 03:37:19", "html": "\u003cb\u003e\u041f\u043e\u0434\u0440\u0430\u0437\u0434\u0435\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u041c\u0438\u0445\u0430\u0439\u043b\u043e\u0432\u043a\u0430 1 \u041f\u043e\u043f\u0435\u0440\u0435\u0447\u043d\u0430\u044f\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432.:\u003c/b\u003e \u041d\u0435 \u0443\u043a\u0430\u0437\u0430\u043d\u003cbr\u003e\u003cb\u003e\u0424\u0438\u043b\u0438\u0430\u043b:\u003c/b\u003e \u0412\u043e\u043b\u0433\u043e\u0433\u0440\u0430\u0434 \u0412\u043e\u0441\u0442\u043e\u043a\u003cbr\u003e\u003cb\u003e\u041d\u043e\u043c\u0435\u0440 \u0437\u0430\u044f\u0432\u043a\u0438:\u003c/b\u003e SMT-\u043200008016079\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u044b\u0439:\u003c/b\u003e \u0414\u0440\u043e\u043d\u043e\u0432 \u0414\u0430\u043d\u0438\u043b\u0430 \u0415\u0432\u0433\u0435\u043d\u044c\u0435\u0432\u0438\u0447\u003cbr\u003e\u003cb\u003e\u0412\u044b\u043f\u043e\u043b\u043d\u0438\u0442\u044c \u0434\u043e:\u003c/b\u003e 17.11.2025 03:37:19\u003cbr\u003e\u003cb\u003e\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435:\u003c/b\u003e \u0422\u0435\u043c\u0430: \u0421\u0413\u0418 \u041c\u0438\u0445\u0430\u0439\u043b\u043e\u0432\u043a\u0430 1 \u041f\u043e\u043f\u0435\u0440\u0435\u0447\u043d\u0430\u044f (993412) \u0411_\u041f\u0424..21 SCADA-XO \n\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435: \u0421\u0438\u0433\u043d\u0430\u043b: \u0410\u0432\u0430\u0440\u0438\u044f \u0445\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0433\u043e \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u044f: \u0411_\u041f\u0424..21; \u041d\u0430\u0438\u043c\u0435\u043d\u043e\u0432\u0430\u043d\u0438\u0435 \u0430\u0432\u0430\u0440\u0438\u0438: A1. \u0412\u044b\u0441\u043e\u043a\u0430\u044f \u0442\u0435\u043c\u043f\u0435\u0440\u0430\u0442\u0443\u0440\u0430; \n\n\u0412\u0440\u0435\u043c\u0435\u043d\u043d\u0430\u044f \u043c\u0435\u0442\u043a\u0430 \u0441\u0438\u0433\u043d\u0430\u043b\u0430: 16.11.25 14:45:37::298; \n\n\u0417\u043d\u0430\u0447\u0435\u043d\u0438\u0435: true (\u0432\u043a\u043b) ; \n\n\u0421\u0440\u0430\u0431\u043e\u0442\u0430\u0432\u0448\u0435\u0435 \u0441\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u0435: \u0414\u0438\u0441\u043a\u0440\u0435\u0442\u043d\u043e\u0435 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435(\u043b\u043e\u0433. 1); \n\n\u041f\u0440\u0435\u0434\u044b\u0434\u0443\u0449\u0435\u0435 \u0441\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u0435: \u041d\u043e\u0440\u043c\u0430(\u043d\u0435 \u0431\u044b\u043b\u043e \u0441\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u043d\u0438\u0439); \n\n\u0417\u0430\u0434\u0435\u0440\u0436\u043a\u0430 \u0441\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u043d\u0438\u044f: 3000 \u0441\u0435\u043a.; \n\n\u0412\u0440\u0435\u043c\u044f \u0441\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u043d\u0438\u044f: 16.11.25 14:45:38::517.\n\u003cbr\u003e\u003cb\u003e\u041d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u0425\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0435 \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u0435\u003cbr\u003e\u003cb\u003e\u041e\u0441\u0442\u0430\u043b\u043e\u0441\u044c \u0434\u043d\u0435\u0439:\u003c/b\u003e 0\u003cbr\u003e", "number": "SMT-\u043200008016079"}], "sector": "\u041d\u0435 \u0443\u043a\u0430\u0437\u0430\u043d", "total_requests": 1, "yellow_count": 1}];
-    var allPlacemarks = [];
-    var placemarksByColor = { 'red': [], 'yellow': [], 'blue': [] };
-    var placemarksBySector = {};
-
-    // Инициализируем секторы
-    
-    placemarksBySector['Не указан'] = [];
-    
-
-    placemarks.forEach(function (placemark) {
-        var zIndex = 1;
-        if (placemark.color === 'yellow') {
-            zIndex = 2;
-        } else if (placemark.color === 'red') {
-            zIndex = 3;
-        }
-        
-        var newPlacemark = new ymaps.Placemark(placemark.coords, {
-            balloonContent: placemark.balloonContent,
-            iconCaption: placemark.total_requests.toString()
-        }, {
-            preset: 'islands#dotIcon',
-            iconColor: placemark.color,
-            zIndex: zIndex
-        });
-        
-        newPlacemark.properties.set('color', placemark.color);
-        newPlacemark.properties.set('sector', placemark.sector);
-        newPlacemark.properties.set('zIndex', zIndex);
-        
-        allPlacemarks.push(newPlacemark);
-        
-        // Группировка по цвету
-        placemarksByColor[placemark.color].push(newPlacemark);
-        
-        // Группировка по сектору
-        if (!placemarksBySector[placemark.sector]) {
-            placemarksBySector[placemark.sector] = [];
-        }
-        placemarksBySector[placemark.sector].push(newPlacemark);
-    });
-
-    var activeColors = { 'red': true, 'yellow': true, 'blue': true };
-    var activeSectors = {
-        
-        'Не указан': true,
-        
-        'all': true
-    };
-
-    function addPlacemarks() {
-        myMap.geoObjects.removeAll();
-
-        var sortedPlacemarks = allPlacemarks.slice().sort(function(a, b) {
-            return b.properties.get('zIndex') - a.properties.get('zIndex');
-        });
-
-        sortedPlacemarks.forEach(function (placemark) {
-            var color = placemark.properties.get('color');
-            var sector = placemark.properties.get('sector');
-            
-            // Проверяем активность цвета И сектора
-            var colorActive = activeColors[color];
-            var sectorActive = activeSectors['all'] || activeSectors[sector];
-            
-            if (colorActive && sectorActive) {
-                myMap.geoObjects.add(placemark);
-            }
-        });
-
-        var bounds = myMap.geoObjects.getBounds();
-        if (bounds) {
-            myMap.setBounds(bounds, { checkZoomRange: true, zoomMargin: 20 });
-        }
-    }
-
-    addPlacemarks();
-
-    // Функции для цветов (оставляем без изменений)
-    function toggleColor(color) {
-        activeColors[color] = !activeColors[color];
-        updateAllButtonState();
-        addPlacemarks();
-    }
-
-    function updateAllButtonState() {
-        var allActive = true;
-        
-        Object.keys(activeColors).forEach(function(color) {
-            if (!activeColors[color]) {
-                allActive = false;
-            }
-        });
-        
-        var allButton = document.querySelector('#all_button');
-        if (allActive) {
-            allButton.classList.add('active');
-        } else {
-            allButton.classList.remove('active');
-        }
-    }
-
-    function toggleAll() {
-        var allButton = document.querySelector('#all_button');
-        var isActive = allButton.classList.contains('active');
-        
-        if (isActive) {
-            // Выключаем все
-            Object.keys(activeColors).forEach(function(color) {
-                activeColors[color] = false;
-                var button = document.querySelector('#' + color + '_button');
-                if (button) button.classList.remove('active');
-            });
-            
-            allButton.classList.remove('active');
-        } else {
-            // Включаем все
-            Object.keys(activeColors).forEach(function(color) {
-                activeColors[color] = true;
-                var button = document.querySelector('#' + color + '_button');
-                if (button) button.classList.add('active');
-            });
-            
-            allButton.classList.add('active');
-        }
-        
-        addPlacemarks();
-    }
-
-    // Функции для секторов (оставляем без изменений)
-    function toggleSector(sector) {
-        if (sector === 'all') {
-            var allSectorsButton = document.querySelector('#all_sectors_button');
-            var isActive = allSectorsButton.classList.contains('active');
-            
-            if (isActive) {
-                // Выключаем все секторы
-                Object.keys(activeSectors).forEach(function(sec) {
-                    if (sec !== 'all') {
-                        activeSectors[sec] = false;
-                        var button = document.querySelector('[id*="sector_"][title*="' + sec + '"]');
-                        if (button) button.classList.remove('active');
-                    }
-                });
-                activeSectors['all'] = false;
-                allSectorsButton.classList.remove('active');
-            } else {
-                // Включаем все секторы
-                Object.keys(activeSectors).forEach(function(sec) {
-                    if (sec !== 'all') {
-                        activeSectors[sec] = true;
-                        var button = document.querySelector('[id*="sector_"][title*="' + sec + '"]');
-                        if (button) button.classList.add('active');
-                    }
-                });
-                activeSectors['all'] = true;
-                allSectorsButton.classList.add('active');
-            }
-        } else {
-            activeSectors[sector] = !activeSectors[sector];
-            updateAllSectorsButtonState();
-        }
-        
-        addPlacemarks();
-    }
-
-    function updateAllSectorsButtonState() {
-        var allSectorsActive = true;
-        
-        Object.keys(activeSectors).forEach(function(sector) {
-            if (sector !== 'all' && !activeSectors[sector]) {
-                allSectorsActive = false;
-            }
-        });
-        
-        var allSectorsButton = document.querySelector('#all_sectors_button');
-        if (allSectorsActive) {
-            allSectorsButton.classList.add('active');
-            activeSectors['all'] = true;
-        } else {
-            allSectorsButton.classList.remove('active');
-            activeSectors['all'] = false;
-        }
-    }
-
-    // Обработчики для кнопок цветов (оставляем без изменений)
-    document.querySelector('#red_button').addEventListener('click', function () {
-        this.classList.toggle('active');
-        toggleColor('red');
-    });
-
-    document.querySelector('#yellow_button').addEventListener('click', function () {
-        this.classList.toggle('active');
-        toggleColor('yellow');
-    });
-
-    document.querySelector('#blue_button').addEventListener('click', function () {
-        this.classList.toggle('active');
-        toggleColor('blue');
-    });
-
-    document.querySelector('#all_button').addEventListener('click', function () {
-        toggleAll();
-    });
-
-    // Обработчики для кнопок секторов (оставляем без изменений)
-    document.querySelector('#all_sectors_button').addEventListener('click', function () {
-        toggleSector('all');
-    });
-
-    // Обработчики для конкретных секторов
-    
-    document.querySelector('#sector_1_button').addEventListener('click', function () {
-        this.classList.toggle('active');
-        toggleSector('Не указан');
-    });
-    
-
-    // Инициализация состояния кнопок
-    updateAllButtonState();
-    updateAllSectorsButtonState();
+    // ... (предыдущий код с метками и фильтрами остается без изменений) ...
 
     // Инициализация данных для таблицы
     flattenPlacemarksData();
 
-    // Функции для выделения области - ПЕРЕРАБОТАННЫЙ КОД
+    // Функции для выделения области - УПРОЩЕННАЯ ВЕРСИЯ
     function toggleAreaSelection() {
+        console.log('Кнопка выделения области нажата');
         var button = document.getElementById('area-selection-button');
         var hint = document.getElementById('selection-hint');
         
@@ -684,18 +569,23 @@ function init() {
         
         if (isSelectingArea) {
             button.classList.add('active');
+            button.innerHTML = '❌ Отменить выделение';
             hint.style.display = 'block';
             startAreaSelection();
+            console.log('Режим выделения активирован');
         } else {
             button.classList.remove('active');
+            button.innerHTML = '📐 Выделить область';
             hint.style.display = 'none';
             stopAreaSelection();
+            console.log('Режим выделения деактивирован');
         }
     }
 
     function startAreaSelection() {
         // Устанавливаем курсор в режим выделения
         myMap.container.getElement().style.cursor = 'crosshair';
+        console.log('Курсор изменен на crosshair');
         
         // Подписываемся на события карты
         myMap.events.add('mousedown', onMapMouseDown);
@@ -720,11 +610,14 @@ function init() {
         
         // Скрываем подсказку
         document.getElementById('selection-hint').style.display = 'none';
+        
+        console.log('Режим выделения остановлен');
     }
 
     function onMapMouseDown(e) {
         if (!isSelectingArea) return;
         
+        console.log('Мышь нажата на карте');
         startCoords = e.get('coords');
         
         // Создаем прямоугольник
@@ -740,6 +633,7 @@ function init() {
         });
         
         myMap.geoObjects.add(currentRectangle);
+        console.log('Прямоугольник создан');
     }
 
     function onMapMouseMove(e) {
@@ -757,6 +651,7 @@ function init() {
     function onMapMouseUp(e) {
         if (!isSelectingArea || !startCoords || !currentRectangle) return;
         
+        console.log('Мышь отпущена, завершаем выделение');
         var endCoords = e.get('coords');
         
         // Определяем границы прямоугольника
@@ -770,13 +665,19 @@ function init() {
             [north, east]  // северо-восток
         ];
         
+        console.log('Границы области:', bounds);
+        
         // Ищем заявки в области
         findRequestsInBounds(bounds);
         
         // Сбрасываем состояние
         startCoords = null;
         isSelectingArea = false;
-        document.getElementById('area-selection-button').classList.remove('active');
+        
+        var button = document.getElementById('area-selection-button');
+        button.classList.remove('active');
+        button.innerHTML = '📐 Выделить область';
+        
         document.getElementById('selection-hint').style.display = 'none';
         
         // Оставляем прямоугольник на карте для наглядности
@@ -784,8 +685,9 @@ function init() {
             if (currentRectangle) {
                 myMap.geoObjects.remove(currentRectangle);
                 currentRectangle = null;
+                console.log('Прямоугольник удален');
             }
-        }, 2000);
+        }, 3000);
     }
 
     function findRequestsInBounds(bounds) {
@@ -794,6 +696,8 @@ function init() {
         var north = bounds[1][0];
         var west = bounds[0][1];
         var east = bounds[1][1];
+        
+        console.log('Поиск заявок в области:', {south, north, west, east});
         
         flattenedRequests.forEach(function(request) {
             var lat = request.coords[0];
@@ -804,6 +708,7 @@ function init() {
             }
         });
         
+        console.log('Найдено заявок в области:', requestsInArea.length);
         showRequestsTable(requestsInArea);
     }
 
@@ -815,7 +720,7 @@ function init() {
         tableBody.innerHTML = '';
         
         // Заполняем таблицу данными
-        requests.forEach(function(request) {
+        requests.forEach(function(request, index) {
             var row = document.createElement('tr');
             
             row.innerHTML = `
@@ -840,20 +745,28 @@ function init() {
         // Если заявок нет, показываем сообщение
         if (requests.length === 0) {
             var emptyRow = document.createElement('tr');
-            emptyRow.innerHTML = '<td colspan="4" style="text-align: center;">В выделенной области нет заявок</td>';
+            emptyRow.innerHTML = '<td colspan="4" style="text-align: center; color: #666;">В выделенной области нет заявок</td>';
             tableBody.appendChild(emptyRow);
         }
+        
+        console.log('Таблица обновлена, показано заявок:', requests.length);
     }
 
     function showRequestDetails(request) {
         // Создаем всплывающее окно с полной информацией о заявке
-        var detailsHtml = '<div style="max-width: 400px; max-height: 300px; overflow-y: auto;">';
-        detailsHtml += '<h4>Детали заявки</h4>';
+        var detailsHtml = '<div style="max-width: 500px; max-height: 400px; overflow-y: auto; padding: 10px;">';
+        detailsHtml += '<h4 style="margin-top: 0; color: #333;">Детали заявки</h4>';
         
+        var hasData = false;
         for (var key in request.fullData) {
-            if (request.fullData[key]) {
-                detailsHtml += '<p><strong>' + key + ':</strong> ' + request.fullData[key] + '</p>';
+            if (request.fullData[key] && request.fullData[key] !== 'Не указано') {
+                detailsHtml += '<p style="margin: 8px 0;"><strong style="color: #555;">' + key + ':</strong> ' + request.fullData[key] + '</p>';
+                hasData = true;
             }
+        }
+        
+        if (!hasData) {
+            detailsHtml += '<p style="color: #666; text-align: center;">Нет дополнительной информации</p>';
         }
         
         detailsHtml += '</div>';
@@ -865,19 +778,22 @@ function init() {
         modal.style.left = '50%';
         modal.style.transform = 'translate(-50%, -50%)';
         modal.style.backgroundColor = 'white';
-        modal.style.padding = '20px';
+        modal.style.padding = '0';
         modal.style.borderRadius = '10px';
         modal.style.boxShadow = '0 4px 20px rgba(0,0,0,0.3)';
         modal.style.zIndex = '2000';
-        modal.style.maxWidth = '500px';
-        modal.style.maxHeight = '400px';
-        modal.style.overflow = 'auto';
+        modal.style.maxWidth = '90%';
+        modal.style.maxHeight = '80%';
+        modal.style.overflow = 'hidden';
         
         modal.innerHTML = detailsHtml + 
-            '<button onclick="this.parentElement.remove(); document.body.removeChild(overlay)" style="margin-top: 10px; padding: 5px 10px; background: #ff4444; color: white; border: none; border-radius: 4px; cursor: pointer;">Закрыть</button>';
+            '<div style="padding: 10px; text-align: center; border-top: 1px solid #eee;">' +
+            '<button onclick="closeModal()" style="padding: 8px 16px; background: #ff4444; color: white; border: none; border-radius: 4px; cursor: pointer;">Закрыть</button>' +
+            '</div>';
         
         // Добавляем затемнение фона
         var overlay = document.createElement('div');
+        overlay.id = 'modal-overlay';
         overlay.style.position = 'fixed';
         overlay.style.top = '0';
         overlay.style.left = '0';
@@ -885,20 +801,38 @@ function init() {
         overlay.style.height = '100%';
         overlay.style.backgroundColor = 'rgba(0,0,0,0.5)';
         overlay.style.zIndex = '1999';
-        overlay.onclick = function() {
-            if (document.body.contains(modal)) {
-                document.body.removeChild(modal);
-            }
-            document.body.removeChild(overlay);
-        };
         
         document.body.appendChild(overlay);
         document.body.appendChild(modal);
+        
+        console.log('Модальное окно с деталями показано');
     }
+
+    // Глобальная функция для закрытия модального окна
+    window.closeModal = function() {
+        var modal = document.querySelector('div[style*="z-index: 2000"]');
+        var overlay = document.getElementById('modal-overlay');
+        
+        if (modal) {
+            document.body.removeChild(modal);
+        }
+        if (overlay) {
+            document.body.removeChild(overlay);
+        }
+    }
+
+    // Добавляем обработчик для кнопки выделения области
+    document.getElementById('area-selection-button').addEventListener('click', function(e) {
+        e.stopPropagation();
+        toggleAreaSelection();
+    });
+
+    console.log('Инициализация завершена, кнопка выделения области готова');
 }
 
 function closeRequestsTable() {
     document.getElementById('requests-table-container').style.display = 'none';
+    console.log('Таблица заявок закрыта');
 }
 
 ymaps.ready(init);
