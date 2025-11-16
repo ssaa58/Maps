@@ -42,6 +42,22 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
+        .details-link {
+            display: block;
+            text-align: center;
+            margin: 15px 0;
+            padding: 12px;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: transform 0.3s;
+        }
+        .details-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
         .filial-list {
             list-style: none;
             padding: 0;
@@ -91,11 +107,15 @@
     <div class="container">
         <div class="header-info">
             <h1>Заявки ТОИР - Все филиалы</h1>
-            <p>Дата генерации: 16.11.2025 19:39</p>
+            <p>Дата генерации: 16.11.2025 19:55</p>
         </div>
         
         <a href="summary_report.html" class="summary-link">
             📊 Смотреть сводный отчет по всем филиалам
+        </a>
+        
+        <a href="https://github.com/ssaa58/Maps/tree/main/детальные_отчеты" class="details-link" target="_blank">
+            📁 Открыть папку с детальными отчетами
         </a>
         
         <ul class="filial-list">
