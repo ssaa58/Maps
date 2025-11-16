@@ -80,15 +80,6 @@
             color: #ffc107;
             font-weight: bold;
         }
-        .clickable {
-            cursor: pointer;
-            text-decoration: underline;
-            transition: all 0.3s ease;
-        }
-        .clickable:hover {
-            background-color: #e3f2fd;
-            transform: scale(1.05);
-        }
         .high-count {
             background-color: #fff3cd;
         }
@@ -133,23 +124,9 @@
             color: #6c757d;
             font-style: italic;
         }
-        #notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 20px;
-            background: #28a745;
-            color: white;
-            border-radius: 5px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            z-index: 1000;
-            display: none;
-        }
     </style>
 </head>
 <body>
-    <div id="notification">Детальный отчет генерируется...</div>
-    
     <div class="container">
         <h1>📊 Сводный отчет по филиалам</h1>
         
@@ -180,11 +157,11 @@
             </div>
             <div class="summary-header-item">
                 <div class="summary-header-value">2844</div>
-                <div class="summary-header-label">Решено</div>
+                <div class="summary-header-label">Решено</div> <!-- ИЗМЕНЕНО -->
             </div>
             <div class="summary-header-item">
                 <div class="summary-header-value">64</div>
-                <div class="summary-header-label">Возвращено</div>
+                <div class="summary-header-label">Возвращено</div> <!-- ИЗМЕНЕНО -->
             </div>
             <div class="summary-header-item">
                 <div class="summary-header-value">8/8</div>
@@ -201,8 +178,8 @@
                     <th>BMC</th>
                     <th>ТОИР</th>
                     <th>Просрочено</th>
-                    <th>Решено</th>
-                    <th>Возвращено</th>
+                    <th>Решено</th> <!-- ИЗМЕНЕНО -->
+                    <th>Возвращено</th> <!-- ИЗМЕНЕНО -->
                     <th>SLA</th>
                 </tr>
             </thead>
@@ -214,53 +191,13 @@
                         <a href="Пятигорск.html" class="filial-link">Пятигорск</a>
                         
                     </td>
-                    <td>
-                        <span class="clickable" onclick="generateDetailedReport('Пятигорск', 'all', 123)">
-                            123
-                        </span>
-                    </td>
-                    <td>
-                        
-                        <span class="clickable" onclick="generateDetailedReport('Пятигорск', 'gk', 26)">
-                            26
-                        </span>
-                        
-                    </td>
-                    <td>
-                        
-                        <span class="clickable" onclick="generateDetailedReport('Пятигорск', 'bmc', 75)">
-                            75
-                        </span>
-                        
-                    </td>
-                    <td>
-                        
-                        <span class="clickable" onclick="generateDetailedReport('Пятигорск', 'toir', 22)">
-                            22
-                        </span>
-                        
-                    </td>
-                    <td class="overdue">
-                        
-                        <span class="clickable" onclick="generateDetailedReport('Пятигорск', 'overdue', 11)">
-                            11
-                        </span>
-                        
-                    </td>
-                    <td class="resolved">
-                        
-                        <span class="clickable" onclick="generateDetailedReport('Пятигорск', 'resolved', 827)">
-                            827
-                        </span>
-                        
-                    </td>
-                    <td class="returned">
-                        
-                        <span class="clickable" onclick="generateDetailedReport('Пятигорск', 'returned', 1)">
-                            1
-                        </span>
-                        
-                    </td>
+                    <td>123</td>
+                    <td>26</td>
+                    <td>75</td>
+                    <td>22</td>
+                    <td class="overdue">11</td>
+                    <td class="resolved">827</td> <!-- ИЗМЕНЕНО -->
+                    <td class="returned">1</td> <!-- ИЗМЕНЕНО -->
                     <td class="sla-good">
                         100,00%
                     </td>
@@ -272,51 +209,13 @@
                         <a href="Самара Запад.html" class="filial-link">Самара Запад</a>
                         
                     </td>
-                    <td>
-                        <span class="clickable" onclick="generateDetailedReport('Самара Запад', 'all', 100)">
-                            100
-                        </span>
-                    </td>
-                    <td>
-                        
-                        <span class="clickable" onclick="generateDetailedReport('Самара Запад', 'gk', 5)">
-                            5
-                        </span>
-                        
-                    </td>
-                    <td>
-                        
-                        <span class="clickable" onclick="generateDetailedReport('Самара Запад', 'bmc', 80)">
-                            80
-                        </span>
-                        
-                    </td>
-                    <td>
-                        
-                        <span class="clickable" onclick="generateDetailedReport('Самара Запад', 'toir', 15)">
-                            15
-                        </span>
-                        
-                    </td>
-                    <td class="overdue">
-                        
-                        0
-                        
-                    </td>
-                    <td class="resolved">
-                        
-                        <span class="clickable" onclick="generateDetailedReport('Самара Запад', 'resolved', 232)">
-                            232
-                        </span>
-                        
-                    </td>
-                    <td class="returned">
-                        
-                        <span class="clickable" onclick="generateDetailedReport('Самара Запад', 'returned', 11)">
-                            11
-                        </span>
-                        
-                    </td>
+                    <td>100</td>
+                    <td>5</td>
+                    <td>80</td>
+                    <td>15</td>
+                    <td class="overdue">0</td>
+                    <td class="resolved">232</td> <!-- ИЗМЕНЕНО -->
+                    <td class="returned">11</td> <!-- ИЗМЕНЕНО -->
                     <td class="sla-good">
                         100,00%
                     </td>
@@ -328,51 +227,13 @@
                         <a href="Саратов Восток.html" class="filial-link">Саратов Восток</a>
                         
                     </td>
-                    <td>
-                        <span class="clickable" onclick="generateDetailedReport('Саратов Восток', 'all', 98)">
-                            98
-                        </span>
-                    </td>
-                    <td>
-                        
-                        <span class="clickable" onclick="generateDetailedReport('Саратов Восток', 'gk', 11)">
-                            11
-                        </span>
-                        
-                    </td>
-                    <td>
-                        
-                        <span class="clickable" onclick="generateDetailedReport('Саратов Восток', 'bmc', 87)">
-                            87
-                        </span>
-                        
-                    </td>
-                    <td>
-                        
-                        0
-                        
-                    </td>
-                    <td class="overdue">
-                        
-                        <span class="clickable" onclick="generateDetailedReport('Саратов Восток', 'overdue', 1)">
-                            1
-                        </span>
-                        
-                    </td>
-                    <td class="resolved">
-                        
-                        <span class="clickable" onclick="generateDetailedReport('Саратов Восток', 'resolved', 517)">
-                            517
-                        </span>
-                        
-                    </td>
-                    <td class="returned">
-                        
-                        <span class="clickable" onclick="generateDetailedReport('Саратов Восток', 'returned', 20)">
-                            20
-                        </span>
-                        
-                    </td>
+                    <td>98</td>
+                    <td>11</td>
+                    <td>87</td>
+                    <td>0</td>
+                    <td class="overdue">1</td>
+                    <td class="resolved">517</td> <!-- ИЗМЕНЕНО -->
+                    <td class="returned">20</td> <!-- ИЗМЕНЕНО -->
                     <td class="sla-good">
                         99,59%
                     </td>
@@ -384,53 +245,13 @@
                         <a href="Саратов Запад.html" class="filial-link">Саратов Запад</a>
                         
                     </td>
-                    <td>
-                        <span class="clickable" onclick="generateDetailedReport('Саратов Запад', 'all', 80)">
-                            80
-                        </span>
-                    </td>
-                    <td>
-                        
-                        <span class="clickable" onclick="generateDetailedReport('Саратов Запад', 'gk', 8)">
-                            8
-                        </span>
-                        
-                    </td>
-                    <td>
-                        
-                        <span class="clickable" onclick="generateDetailedReport('Саратов Запад', 'bmc', 69)">
-                            69
-                        </span>
-                        
-                    </td>
-                    <td>
-                        
-                        <span class="clickable" onclick="generateDetailedReport('Саратов Запад', 'toir', 3)">
-                            3
-                        </span>
-                        
-                    </td>
-                    <td class="overdue">
-                        
-                        <span class="clickable" onclick="generateDetailedReport('Саратов Запад', 'overdue', 1)">
-                            1
-                        </span>
-                        
-                    </td>
-                    <td class="resolved">
-                        
-                        <span class="clickable" onclick="generateDetailedReport('Саратов Запад', 'resolved', 557)">
-                            557
-                        </span>
-                        
-                    </td>
-                    <td class="returned">
-                        
-                        <span class="clickable" onclick="generateDetailedReport('Саратов Запад', 'returned', 17)">
-                            17
-                        </span>
-                        
-                    </td>
+                    <td>80</td>
+                    <td>8</td>
+                    <td>69</td>
+                    <td>3</td>
+                    <td class="overdue">1</td>
+                    <td class="resolved">557</td> <!-- ИЗМЕНЕНО -->
+                    <td class="returned">17</td> <!-- ИЗМЕНЕНО -->
                     <td class="sla-good">
                         100,00%
                     </td>
@@ -442,51 +263,13 @@
                         <a href="Пенза.html" class="filial-link">Пенза</a>
                         
                     </td>
-                    <td>
-                        <span class="clickable" onclick="generateDetailedReport('Пенза', 'all', 53)">
-                            53
-                        </span>
-                    </td>
-                    <td>
-                        
-                        <span class="clickable" onclick="generateDetailedReport('Пенза', 'gk', 12)">
-                            12
-                        </span>
-                        
-                    </td>
-                    <td>
-                        
-                        <span class="clickable" onclick="generateDetailedReport('Пенза', 'bmc', 34)">
-                            34
-                        </span>
-                        
-                    </td>
-                    <td>
-                        
-                        <span class="clickable" onclick="generateDetailedReport('Пенза', 'toir', 7)">
-                            7
-                        </span>
-                        
-                    </td>
-                    <td class="overdue">
-                        
-                        0
-                        
-                    </td>
-                    <td class="resolved">
-                        
-                        <span class="clickable" onclick="generateDetailedReport('Пенза', 'resolved', 291)">
-                            291
-                        </span>
-                        
-                    </td>
-                    <td class="returned">
-                        
-                        <span class="clickable" onclick="generateDetailedReport('Пенза', 'returned', 6)">
-                            6
-                        </span>
-                        
-                    </td>
+                    <td>53</td>
+                    <td>12</td>
+                    <td>34</td>
+                    <td>7</td>
+                    <td class="overdue">0</td>
+                    <td class="resolved">291</td> <!-- ИЗМЕНЕНО -->
+                    <td class="returned">6</td> <!-- ИЗМЕНЕНО -->
                     <td class="sla-good">
                         99,54%
                     </td>
@@ -498,49 +281,13 @@
                         <a href="Тольятти.html" class="filial-link">Тольятти</a>
                         
                     </td>
-                    <td>
-                        <span class="clickable" onclick="generateDetailedReport('Тольятти', 'all', 38)">
-                            38
-                        </span>
-                    </td>
-                    <td>
-                        
-                        0
-                        
-                    </td>
-                    <td>
-                        
-                        <span class="clickable" onclick="generateDetailedReport('Тольятти', 'bmc', 37)">
-                            37
-                        </span>
-                        
-                    </td>
-                    <td>
-                        
-                        <span class="clickable" onclick="generateDetailedReport('Тольятти', 'toir', 1)">
-                            1
-                        </span>
-                        
-                    </td>
-                    <td class="overdue">
-                        
-                        0
-                        
-                    </td>
-                    <td class="resolved">
-                        
-                        <span class="clickable" onclick="generateDetailedReport('Тольятти', 'resolved', 213)">
-                            213
-                        </span>
-                        
-                    </td>
-                    <td class="returned">
-                        
-                        <span class="clickable" onclick="generateDetailedReport('Тольятти', 'returned', 9)">
-                            9
-                        </span>
-                        
-                    </td>
+                    <td>38</td>
+                    <td>0</td>
+                    <td>37</td>
+                    <td>1</td>
+                    <td class="overdue">0</td>
+                    <td class="resolved">213</td> <!-- ИЗМЕНЕНО -->
+                    <td class="returned">9</td> <!-- ИЗМЕНЕНО -->
                     <td class="sla-good">
                         100,00%
                     </td>
@@ -552,49 +299,13 @@
                         <a href="Владикавказ.html" class="filial-link">Владикавказ</a>
                         
                     </td>
-                    <td>
-                        <span class="clickable" onclick="generateDetailedReport('Владикавказ', 'all', 8)">
-                            8
-                        </span>
-                    </td>
-                    <td>
-                        
-                        <span class="clickable" onclick="generateDetailedReport('Владикавказ', 'gk', 2)">
-                            2
-                        </span>
-                        
-                    </td>
-                    <td>
-                        
-                        <span class="clickable" onclick="generateDetailedReport('Владикавказ', 'bmc', 5)">
-                            5
-                        </span>
-                        
-                    </td>
-                    <td>
-                        
-                        <span class="clickable" onclick="generateDetailedReport('Владикавказ', 'toir', 1)">
-                            1
-                        </span>
-                        
-                    </td>
-                    <td class="overdue">
-                        
-                        0
-                        
-                    </td>
-                    <td class="resolved">
-                        
-                        <span class="clickable" onclick="generateDetailedReport('Владикавказ', 'resolved', 57)">
-                            57
-                        </span>
-                        
-                    </td>
-                    <td class="returned">
-                        
-                        0
-                        
-                    </td>
+                    <td>8</td>
+                    <td>2</td>
+                    <td>5</td>
+                    <td>1</td>
+                    <td class="overdue">0</td>
+                    <td class="resolved">57</td> <!-- ИЗМЕНЕНО -->
+                    <td class="returned">0</td> <!-- ИЗМЕНЕНО -->
                     <td class="sla-good">
                         100,00%
                     </td>
@@ -606,45 +317,13 @@
                         <a href="Волгоград Восток.html" class="filial-link">Волгоград Восток</a>
                         
                     </td>
-                    <td>
-                        <span class="clickable" onclick="generateDetailedReport('Волгоград Восток', 'all', 3)">
-                            3
-                        </span>
-                    </td>
-                    <td>
-                        
-                        0
-                        
-                    </td>
-                    <td>
-                        
-                        <span class="clickable" onclick="generateDetailedReport('Волгоград Восток', 'bmc', 3)">
-                            3
-                        </span>
-                        
-                    </td>
-                    <td>
-                        
-                        0
-                        
-                    </td>
-                    <td class="overdue">
-                        
-                        0
-                        
-                    </td>
-                    <td class="resolved">
-                        
-                        <span class="clickable" onclick="generateDetailedReport('Волгоград Восток', 'resolved', 150)">
-                            150
-                        </span>
-                        
-                    </td>
-                    <td class="returned">
-                        
-                        0
-                        
-                    </td>
+                    <td>3</td>
+                    <td>0</td>
+                    <td>3</td>
+                    <td>0</td>
+                    <td class="overdue">0</td>
+                    <td class="resolved">150</td> <!-- ИЗМЕНЕНО -->
+                    <td class="returned">0</td> <!-- ИЗМЕНЕНО -->
                     <td class="sla-good">
                         100,00%
                     </td>
@@ -656,94 +335,15 @@
         <div class="nav-links">
             <a href="index.html">← Назад к списку филиалов</a>
             <a href="Сводный_отчет_по_филиалам.xlsx">📥 Скачать Excel отчет</a>
-            <a href="https://github.com/ssaa58/Maps/tree/main/детальные_отчеты" target="_blank">📁 Открыть папку с детальными отчетами</a>
         </div>
         
         <div style="text-align: center; margin-top: 20px; color: #666; font-size: 12px;">
-            Отчет сгенерирован: 16.11.2025 19:55<br>
-            <small>💡 Нажмите на любую цифру (кроме SLA) чтобы скачать детальный отчет по этим данным</small><br>
+            Отчет сгенерирован: 16.11.2025 20:01<br>
             <small>SLA данные загружены из файлов: SLA_Волжский.xlsx и SLA_Кавказский.xlsx<br>
             Статистика по решенным заявкам: Решенные.xlsx<br>
             Статистика по возвращенным заявкам: Возвращенные.xlsx</small>
         </div>
     </div>
-
-    <script>
-        function generateDetailedReport(filial, type, count) {
-            if (count === 0) return;
-            
-            // Показываем уведомление
-            const notification = document.getElementById('notification');
-            notification.style.display = 'block';
-            notification.textContent = `Генерируется детальный отчет для ${filial}...`;
-            
-            // Создаем скрытую форму для отправки запроса
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.action = '/generate_detailed_report';
-            
-            const filialInput = document.createElement('input');
-            filialInput.type = 'hidden';
-            filialInput.name = 'filial';
-            filialInput.value = filial;
-            
-            const typeInput = document.createElement('input');
-            typeInput.type = 'hidden';
-            typeInput.name = 'type';
-            typeInput.value = type;
-            
-            const countInput = document.createElement('input');
-            countInput.type = 'hidden';
-            countInput.name = 'count';
-            countInput.value = count;
-            
-            form.appendChild(filialInput);
-            form.appendChild(typeInput);
-            form.appendChild(countInput);
-            document.body.appendChild(form);
-            
-            // В реальной реализации здесь был бы AJAX запрос к серверу
-            // Для демонстрации просто скачиваем существующий файл
-            setTimeout(() => {
-                notification.textContent = `Детальный отчет для ${filial} готов!`;
-                setTimeout(() => {
-                    notification.style.display = 'none';
-                }, 3000);
-                
-                // В реальном приложении здесь будет ссылка на сгенерированный файл
-                alert(`Детальный отчет для филиала "${filial}" (${type}) готов!
-Файл сохранен в папке "детальные_отчеты" на GitHub`);
-            }, 2000);
-        }
-        
-        // Добавляем обработчики для заголовков
-        document.addEventListener('DOMContentLoaded', function() {
-            const headerValues = document.querySelectorAll('.summary-header-value');
-            headerValues.forEach(header => {
-                const count = parseInt(header.textContent);
-                if (count > 0 && !header.textContent.includes('/')) {
-                    header.style.cursor = 'pointer';
-                    header.style.textDecoration = 'underline';
-                    header.addEventListener('click', function() {
-                        const label = this.nextElementSibling.textContent.trim();
-                        let type = '';
-                        
-                        if (label.includes('Всего')) type = 'all';
-                        else if (label.includes('ГК')) type = 'gk';
-                        else if (label.includes('BMC')) type = 'bmc';
-                        else if (label.includes('ТОИР')) type = 'toir';
-                        else if (label.includes('Просрочено')) type = 'overdue';
-                        else if (label.includes('Решено')) type = 'resolved';
-                        else if (label.includes('Возвращено')) type = 'returned';
-                        
-                        if (type) {
-                            alert(`Генерация сводного отчета по всем филиалам для: ${label}`);
-                        }
-                    });
-                }
-            });
-        });
-    </script>
 </body>
 </html>
     
