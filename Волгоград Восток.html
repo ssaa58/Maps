@@ -211,7 +211,7 @@
             </div>
         </div>
     </div>
-    <div id="report_datetime">Дата и время отчета: 17-11-2025 23:45:47</div>
+    <div id="report_datetime">Дата и время отчета: 18-11-2025 00:01:02</div>
     <div id="title_button">Волгоград Восток</div>
     <a href="index.html" class="back-link">← Назад к списку филиалов</a>
 </body>
@@ -366,7 +366,7 @@ function init() {
                 Object.keys(activeSectors).forEach(function(sec) {
                     if (sec !== 'all') {
                         activeSectors[sec] = false;
-                        var button = document.querySelector('[id*="sector_"][title*="' + sec + '"]);
+                        var button = document.querySelector('[id*="sector_"][title*="' + sec + '"]');
                         if (button) button.classList.remove('active');
                     }
                 });
