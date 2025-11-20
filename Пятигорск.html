@@ -39,10 +39,47 @@
             box-shadow: 0 2px 15px rgba(0,0,0,0.2);
             max-width: 200px;
             backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+        
+        #controls.collapsed {
+            max-width: 40px;
+            max-height: 40px;
+            overflow: hidden;
+            padding: 8px;
+        }
+        
+        .collapse-button {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: none;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background-color 0.3s;
+        }
+        
+        .collapse-button:hover {
+            background-color: rgba(0,0,0,0.1);
         }
         
         .filter-section {
             margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        #controls.collapsed .filter-section {
+            opacity: 0;
+            height: 0;
+            margin: 0;
+            overflow: hidden;
         }
         
         .filter-title {
@@ -145,6 +182,12 @@
             color: #333;
             box-shadow: 0 2px 8px rgba(0,0,0,0.15);
             backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+        
+        #report_datetime.collapsed {
+            opacity: 0.5;
+            transform: scale(0.9);
         }
         
         #title_button {
@@ -161,6 +204,13 @@
             color: #333;
             box-shadow: 0 2px 8px rgba(0,0,0,0.15);
             backdrop-filter: blur(5px);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        #title_button.collapsed {
+            opacity: 0.5;
+            transform: scale(0.9);
         }
         
         .back-link {
@@ -176,10 +226,16 @@
             text-decoration: none;
             box-shadow: 0 2px 8px rgba(0,0,0,0.15);
             backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
         }
         
         .back-link:hover {
             background-color: #f8f8f8;
+        }
+        
+        .back-link.collapsed {
+            opacity: 0.5;
+            transform: scale(0.9);
         }
         
         .controls-title {
@@ -194,6 +250,13 @@
             height: 1px;
             background-color: #ddd;
             margin: 8px 0;
+            transition: all 0.3s ease;
+        }
+        
+        #controls.collapsed .divider {
+            opacity: 0;
+            height: 0;
+            margin: 0;
         }
         
         .balloon-link {
@@ -224,6 +287,13 @@
                 right: 10px;
                 max-width: none;
                 padding: 10px;
+            }
+            
+            #controls.collapsed {
+                max-width: 35px;
+                max-height: 35px;
+                top: 10px;
+                left: 10px;
             }
             
             .color-buttons {
@@ -271,6 +341,12 @@
                 padding: 8px;
             }
             
+            #controls.collapsed {
+                max-width: 30px;
+                max-height: 30px;
+                padding: 5px;
+            }
+            
             button {
                 width: 35px;
                 height: 35px;
@@ -284,12 +360,20 @@
                 font-size: 9px;
                 padding: 3px 6px;
             }
+            
+            .collapse-button {
+                width: 18px;
+                height: 18px;
+                font-size: 14px;
+            }
         }
     </style>
 </head>
 <body>
     <div id="map"></div>
+    
     <div id="controls">
+        <button class="collapse-button" onclick="toggleControls()">−</button>
         <div class="filter-section">
             <div class="filter-title">ЗАЯВКИ</div>
             <div class="color-buttons">
@@ -341,13 +425,55 @@
         </div>
     </div>
     
-    <div id="report_datetime">Дата и время отчета: 20-11-2025 23:32:12</div>
-    <div id="title_button">Пятигорск</div>
+    <div id="report_datetime">Дата и время отчета: 20-11-2025 23:44:59</div>
+    <div id="title_button" onclick="toggleAllElements()">Пятигорск</div>
     <a href="index.html" class="back-link">← Назад к списку филиалов</a>
 </body>
 </html>
 
 <script type="text/javascript">
+let controlsCollapsed = false;
+let allElementsCollapsed = false;
+
+function toggleControls() {
+    const controls = document.getElementById('controls');
+    const collapseButton = controls.querySelector('.collapse-button');
+    
+    if (controlsCollapsed) {
+        // Разворачиваем
+        controls.classList.remove('collapsed');
+        collapseButton.textContent = '−';
+        controlsCollapsed = false;
+    } else {
+        // Сворачиваем
+        controls.classList.add('collapsed');
+        collapseButton.textContent = '+';
+        controlsCollapsed = true;
+    }
+}
+
+function toggleAllElements() {
+    const titleButton = document.getElementById('title_button');
+    const reportDatetime = document.getElementById('report_datetime');
+    const backLink = document.querySelector('.back-link');
+    
+    if (allElementsCollapsed) {
+        // Показываем все элементы
+        titleButton.classList.remove('collapsed');
+        reportDatetime.classList.remove('collapsed');
+        backLink.classList.remove('collapsed');
+        titleButton.textContent = 'Пятигорск';
+        allElementsCollapsed = false;
+    } else {
+        // Скрываем все элементы (кроме заголовка)
+        titleButton.classList.add('collapsed');
+        reportDatetime.classList.add('collapsed');
+        backLink.classList.add('collapsed');
+        titleButton.textContent = '👁';
+        allElementsCollapsed = true;
+    }
+}
+
 function init() {
     var myMap = new ymaps.Map("map", {
         center: [44.0486, 43.0594],
