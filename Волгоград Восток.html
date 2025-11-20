@@ -7,37 +7,44 @@
     <title>Волгоград Восток</title>
     <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
     <style>
-        body, html {
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body, html {
             height: 100%;
             width: 100%;
             font-family: Arial, sans-serif;
+            overflow: hidden;
         }
+        
         #map {
             width: 100%;
-            height: 600px;
-            position: relative;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
         }
-        @media (max-width: 768px) {
-            #map {
-                height: 400px;
-            }
-        }
+        
         #controls {
-            position: absolute;
-            top: 10px;
-            left: 10px;
+            position: fixed;
+            top: 20px;
+            left: 20px;
             z-index: 1000;
             background-color: rgba(255, 255, 255, 0.95);
             padding: 15px;
             border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.2);
             max-width: 200px;
+            backdrop-filter: blur(5px);
         }
+        
         .filter-section {
             margin-bottom: 15px;
         }
+        
         .filter-title {
             font-size: 12px;
             font-weight: bold;
@@ -45,6 +52,7 @@
             margin-bottom: 8px;
             text-align: center;
         }
+        
         .color-buttons {
             display: flex;
             flex-direction: column;
@@ -52,11 +60,13 @@
             align-items: center;
             margin-bottom: 10px;
         }
+        
         .sector-buttons {
             display: flex;
             flex-direction: column;
             gap: 5px;
         }
+        
         button {
             padding: 0;
             border: 2px solid #ccc;
@@ -75,6 +85,7 @@
             justify-content: center;
             position: relative;
         }
+        
         .sector-button {
             width: auto;
             height: auto;
@@ -85,14 +96,17 @@
             color: #333;
             border: 1px solid #ddd;
         }
+        
         button.active {
             border: 3px solid #333;
             box-shadow: 0 0 8px rgba(0,0,0,0.5);
         }
+        
         button.color-red.active { background-color: #ff4444; }
         button.color-yellow.active { background-color: #ffcc00; }
         button.color-blue.active { background-color: #4444ff; }
         button.color-green.active { background-color: #4CAF50; }
+        
         .sector-button.active { 
             background-color: #2196F3; 
             color: white;
@@ -103,6 +117,7 @@
         button.color-yellow:not(.active) { background-color: #f0f0f0; color: #999; border-color: #999; }
         button.color-blue:not(.active) { background-color: #f0f0f0; color: #999; border-color: #999; }
         button.color-green:not(.active) { background-color: #f0f0f0; color: #999; border-color: #999; }
+        
         .sector-button:not(.active):hover {
             background-color: #e9ecef;
         }
@@ -112,50 +127,57 @@
             font-weight: bold;
             pointer-events: none;
         }
+        
         .sector-text {
             font-size: 10px;
             pointer-events: none;
         }
         
         #report_datetime {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
             z-index: 1000;
             background-color: rgba(255, 255, 255, 0.9);
-            padding: 6px 10px;
-            border-radius: 4px;
-            font-size: 11px;
-            color: #333;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        }
-        #title_button {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            z-index: 1000;
-            background-color: rgba(255, 255, 255, 0.9);
-            padding: 6px 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            padding: 8px 12px;
+            border-radius: 6px;
             font-size: 12px;
+            color: #333;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            backdrop-filter: blur(5px);
+        }
+        
+        #title_button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
             font-weight: bold;
             color: #333;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            backdrop-filter: blur(5px);
         }
+        
         .back-link {
-            position: absolute;
-            bottom: 10px;
-            left: 10px;
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
             z-index: 1000;
             background-color: rgba(255, 255, 255, 0.9);
-            padding: 6px 10px;
-            border-radius: 4px;
-            font-size: 11px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
             color: #333;
             text-decoration: none;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            backdrop-filter: blur(5px);
         }
+        
         .back-link:hover {
             background-color: #f8f8f8;
         }
@@ -167,6 +189,7 @@
             color: #333;
             margin-bottom: 4px;
         }
+        
         .divider {
             height: 1px;
             background-color: #ddd;
@@ -186,10 +209,81 @@
             margin: 5px;
             text-align: center;
         }
+        
         .balloon-link:hover {
             background: #1976D2;
             color: white;
             text-decoration: none;
+        }
+
+        /* Адаптивность для мобильных устройств */
+        @media (max-width: 768px) {
+            #controls {
+                top: 10px;
+                left: 10px;
+                right: 10px;
+                max-width: none;
+                padding: 10px;
+            }
+            
+            .color-buttons {
+                flex-direction: row;
+                justify-content: space-around;
+            }
+            
+            .sector-buttons {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 3px;
+            }
+            
+            .sector-button {
+                font-size: 10px;
+                padding: 4px 8px;
+            }
+            
+            #title_button {
+                top: 10px;
+                right: 10px;
+                font-size: 12px;
+                padding: 6px 10px;
+            }
+            
+            #report_datetime {
+                bottom: 10px;
+                right: 10px;
+                font-size: 10px;
+                padding: 6px 10px;
+            }
+            
+            .back-link {
+                bottom: 10px;
+                left: 10px;
+                font-size: 10px;
+                padding: 6px 10px;
+            }
+        }
+
+        /* Для очень маленьких экранов */
+        @media (max-width: 480px) {
+            #controls {
+                padding: 8px;
+            }
+            
+            button {
+                width: 35px;
+                height: 35px;
+            }
+            
+            .button-text {
+                font-size: 14px;
+            }
+            
+            .sector-button {
+                font-size: 9px;
+                padding: 3px 6px;
+            }
         }
     </style>
 </head>
@@ -231,7 +325,7 @@
         </div>
     </div>
     
-    <div id="report_datetime">Дата и время отчета: 20-11-2025 23:21:02</div>
+    <div id="report_datetime">Дата и время отчета: 20-11-2025 23:32:13</div>
     <div id="title_button">Волгоград Восток</div>
     <a href="index.html" class="back-link">← Назад к списку филиалов</a>
 </body>
@@ -242,7 +336,7 @@ function init() {
     var myMap = new ymaps.Map("map", {
         center: [48.708, 44.5133],
         zoom: 10,
-        controls: []
+        controls: ['zoomControl', 'fullscreenControl']
     });
 
     var placemarks = [{"address": "", "balloonContent": "\u003cb\u003e\u041f\u043e\u0434\u0440\u0430\u0437\u0434\u0435\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u041a\u0430\u043c\u044b\u0448\u0438\u043d 1 5 \u043c\u0438\u043a\u0440\u043e\u0440\u0430\u0439\u043e\u043d\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432.:\u003c/b\u003e \u041d\u0435 \u0443\u043a\u0430\u0437\u0430\u043d\u003cbr\u003e\u003cb\u003e\u0410\u0434\u0440\u0435\u0441:\u003c/b\u003e \u041d\u0435 \u0443\u043a\u0430\u0437\u0430\u043d\u003cbr\u003e\u003cb\u003e\u0424\u0438\u043b\u0438\u0430\u043b:\u003c/b\u003e \u0412\u043e\u043b\u0433\u043e\u0433\u0440\u0430\u0434 \u0412\u043e\u0441\u0442\u043e\u043a\u003cbr\u003e\u003cb\u003e\u041d\u043e\u043c\u0435\u0440 \u0437\u0430\u044f\u0432\u043a\u0438:\u003c/b\u003e SMT-\u043200008049730\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u044b\u0439:\u003c/b\u003e \u0422\u0440\u0443\u0434\u043e\u0432 \u0410\u043b\u0435\u043a\u0441\u0435\u0439 \u0412\u043b\u0430\u0434\u0438\u043c\u0438\u0440\u043e\u0432\u0438\u0447\u003cbr\u003e\u003cb\u003e\u0412\u044b\u043f\u043e\u043b\u043d\u0438\u0442\u044c \u0434\u043e:\u003c/b\u003e 19.11.2025\u003cbr\u003e\u003cb\u003e\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435:\u003c/b\u003e \u0412\u041d\u0418\u041c\u0410\u041d\u0418\u0415! \u041f\u043e\u0432\u0442\u043e\u0440\u043d\u0430\u044f \u0437\u0430\u044f\u0432\u043a\u0430, \u043d\u0438\u0437\u043a\u043e\u0435 \u043a\u0430\u0447\u0435\u0441\u0442\u0432\u043e \u0432\u044b\u043f\u043e\u043b\u043d\u0435\u043d\u0438\u044f \u0440\u0435\u043c\u043e\u043d\u0442\u0430 \u043f\u043e \u043f\u0440\u0435\u0434\u0448\u0435\u0441\u0442\u0432\u0443\u044e\u0449\u0438\u043c \u0437\u0430\u044f\u0432\u043a\u0430\u043c.\n\n\u0422\u0435\u043c\u0430: \u0421\u0413\u0418 \u041a\u0430\u043c\u044b\u0448\u0438\u043d 1 5 \u043c\u0438\u043a\u0440\u043e\u0440\u0430\u0439\u043e\u043d (993401) \u0412_\u042f\u0433\u043e\u0434\u044b..71 SCADA-XO \n\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435: \u0421\u0438\u0433\u043d\u0430\u043b: \u0410\u0432\u0430\u0440\u0438\u044f \u0445\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0433\u043e \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u044f: \u0412_\u042f\u0433\u043e\u0434\u044b..71; \u041d\u0430\u0438\u043c\u0435\u043d\u043e\u0432\u0430\u043d\u0438\u0435 \u0430\u0432\u0430\u0440\u0438\u0438: A1. \u0412\u044b\u0441\u043e\u043a\u0430\u044f \u0442\u0435\u043c\u043f\u0435\u0440\u0430\u0442\u0443\u0440\u0430; \n\n\u0412\u0440\u0435\u043c\u0435\u043d\u043d\u0430\u044f \u043c\u0435\u0442\u043a\u0430 \u0441\u0438\u0433\u043d\u0430\u043b\u0430: 19.11.25 19:17:34::52; \n\n\u0417\u043d\u0430\u0447\u0435\u043d\u0438\u0435: true (\u0432\u043a\u043b) ; \n\n\u0421\u0440\u0430\u0431\u043e\u0442\u0430\u0432\u0448\u0435\u0435 \u0441\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u0435: \u0414\u0438\u0441\u043a\u0440\u0435\u0442\u043d\u043e\u0435 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435(\u043b\u043e\u0433. 1); \n\n\u041f\u0440\u0435\u0434\u044b\u0434\u0443\u0449\u0435\u0435 \u0441\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u0435: \u041d\u043e\u0440\u043c\u0430(\u043d\u0435 \u0431\u044b\u043b\u043e \u0441\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u043d\u0438\u0439); \n\n\u0417\u0430\u0434\u0435\u0440\u0436\u043a\u0430 \u0441\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u043d\u0438\u044f: 3000 \u0441\u0435\u043a.; \n\n\u0412\u0440\u0435\u043c\u044f \u0441\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u043d\u0438\u044f: 19.11.25 19:17:37::115.\n\u003cbr\u003e\u003cb\u003e\u041d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u0425\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0435 \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u0435\u003cbr\u003e\u003cb\u003e\u041e\u0441\u0442\u0430\u043b\u043e\u0441\u044c \u0434\u043d\u0435\u0439:\u003c/b\u003e -2\u003cbr\u003e\u003chr\u003e\u003cb\u003e\u041f\u043e\u0434\u0440\u0430\u0437\u0434\u0435\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u041a\u0430\u043c\u044b\u0448\u0438\u043d 1 5 \u043c\u0438\u043a\u0440\u043e\u0440\u0430\u0439\u043e\u043d\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432.:\u003c/b\u003e \u041d\u0435 \u0443\u043a\u0430\u0437\u0430\u043d\u003cbr\u003e\u003cb\u003e\u0410\u0434\u0440\u0435\u0441:\u003c/b\u003e \u041d\u0435 \u0443\u043a\u0430\u0437\u0430\u043d\u003cbr\u003e\u003cb\u003e\u0424\u0438\u043b\u0438\u0430\u043b:\u003c/b\u003e \u0412\u043e\u043b\u0433\u043e\u0433\u0440\u0430\u0434 \u0412\u043e\u0441\u0442\u043e\u043a\u003cbr\u003e\u003cb\u003e\u041d\u043e\u043c\u0435\u0440 \u0437\u0430\u044f\u0432\u043a\u0438:\u003c/b\u003e SMT-\u043200008049739\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u044b\u0439:\u003c/b\u003e \u0422\u0440\u0443\u0434\u043e\u0432 \u0410\u043b\u0435\u043a\u0441\u0435\u0439 \u0412\u043b\u0430\u0434\u0438\u043c\u0438\u0440\u043e\u0432\u0438\u0447\u003cbr\u003e\u003cb\u003e\u0412\u044b\u043f\u043e\u043b\u043d\u0438\u0442\u044c \u0434\u043e:\u003c/b\u003e 19.11.2025\u003cbr\u003e\u003cb\u003e\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435:\u003c/b\u003e \u0412\u041d\u0418\u041c\u0410\u041d\u0418\u0415! \u041f\u043e\u0432\u0442\u043e\u0440\u043d\u0430\u044f \u0437\u0430\u044f\u0432\u043a\u0430, \u043d\u0438\u0437\u043a\u043e\u0435 \u043a\u0430\u0447\u0435\u0441\u0442\u0432\u043e \u0432\u044b\u043f\u043e\u043b\u043d\u0435\u043d\u0438\u044f \u0440\u0435\u043c\u043e\u043d\u0442\u0430 \u043f\u043e \u043f\u0440\u0435\u0434\u0448\u0435\u0441\u0442\u0432\u0443\u044e\u0449\u0438\u043c \u0437\u0430\u044f\u0432\u043a\u0430\u043c.\n\n\u0422\u0435\u043c\u0430: \u0421\u0413\u0418 \u041a\u0430\u043c\u044b\u0448\u0438\u043d 1 5 \u043c\u0438\u043a\u0440\u043e\u0440\u0430\u0439\u043e\u043d (993401) \u041d\u0422\u0426..112 SCADA-XO \n\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435: \u0421\u0438\u0433\u043d\u0430\u043b: \u0410\u0432\u0430\u0440\u0438\u044f \u0445\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0433\u043e \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u044f: \u041d\u0422\u0426..112; \u041d\u0430\u0438\u043c\u0435\u043d\u043e\u0432\u0430\u043d\u0438\u0435 \u0430\u0432\u0430\u0440\u0438\u0438: Compressor 2A safety cut out; \n\n\u0412\u0440\u0435\u043c\u0435\u043d\u043d\u0430\u044f \u043c\u0435\u0442\u043a\u0430 \u0441\u0438\u0433\u043d\u0430\u043b\u0430: 19.11.25 10:55:35::883; \n\n\u0417\u043d\u0430\u0447\u0435\u043d\u0438\u0435: true (\u0432\u043a\u043b) ; \n\n\u0421\u0440\u0430\u0431\u043e\u0442\u0430\u0432\u0448\u0435\u0435 \u0441\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u0435: \u0414\u0438\u0441\u043a\u0440\u0435\u0442\u043d\u043e\u0435 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435(\u043b\u043e\u0433. 1); \n\n\u041f\u0440\u0435\u0434\u044b\u0434\u0443\u0449\u0435\u0435 \u0441\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u0435: \u041d\u043e\u0440\u043c\u0430(\u043d\u0435 \u0431\u044b\u043b\u043e \u0441\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u043d\u0438\u0439); \n\n\u0417\u0430\u0434\u0435\u0440\u0436\u043a\u0430 \u0441\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u043d\u0438\u044f: 300 \u0441\u0435\u043a.; \n\n\u0412\u0440\u0435\u043c\u044f \u0441\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u043d\u0438\u044f: 19.11.25 10:55:37::664.\n\u003cbr\u003e\u003cb\u003e\u041d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u0425\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0435 \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u0435\u003cbr\u003e\u003cb\u003e\u041e\u0441\u0442\u0430\u043b\u043e\u0441\u044c \u0434\u043d\u0435\u0439:\u003c/b\u003e -2\u003cbr\u003e\u003chr\u003e\n            \u003cdiv style=\"text-align: center; margin-top: 10px;\"\u003e\n                \u003ca href=\"https://yandex.ru/maps/?pt=45.3568,50.091\u0026z=15\u0026l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\"\u003e\n                    \ud83d\udccd \u041e\u0442\u043a\u0440\u044b\u0442\u044c \u0432 \u042f\u043d\u0434\u0435\u043a\u0441.\u041a\u0430\u0440\u0442\u0430\u0445\n                \u003c/a\u003e\n            \u003c/div\u003e\n            ", "blue_count": 0, "color": "red", "coords": [50.091, 45.3568], "days_left": -2, "podrazdelenie": "\u041a\u0430\u043c\u044b\u0448\u0438\u043d 1 5 \u043c\u0438\u043a\u0440\u043e\u0440\u0430\u0439\u043e\u043d", "red_count": 2, "sector": "\u041d\u0435 \u0443\u043a\u0430\u0437\u0430\u043d", "total_requests": 2, "yellow_count": 0}, {"address": "", "balloonContent": "\u003cb\u003e\u041f\u043e\u0434\u0440\u0430\u0437\u0434\u0435\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u041b\u0438\u043c\u0431\u0430\u0436\u0438\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432.:\u003c/b\u003e \u041d\u0435 \u0443\u043a\u0430\u0437\u0430\u043d\u003cbr\u003e\u003cb\u003e\u0410\u0434\u0440\u0435\u0441:\u003c/b\u003e \u041d\u0435 \u0443\u043a\u0430\u0437\u0430\u043d\u003cbr\u003e\u003cb\u003e\u0424\u0438\u043b\u0438\u0430\u043b:\u003c/b\u003e \u0412\u043e\u043b\u0433\u043e\u0433\u0440\u0430\u0434 \u0412\u043e\u0441\u0442\u043e\u043a\u003cbr\u003e\u003cb\u003e\u041d\u043e\u043c\u0435\u0440 \u0437\u0430\u044f\u0432\u043a\u0438:\u003c/b\u003e SMT-\u043200008036155\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u044b\u0439:\u003c/b\u003e \u0414\u0440\u043e\u043d\u043e\u0432 \u0414\u0430\u043d\u0438\u043b\u0430 \u0415\u0432\u0433\u0435\u043d\u044c\u0435\u0432\u0438\u0447\u003cbr\u003e\u003cb\u003e\u0412\u044b\u043f\u043e\u043b\u043d\u0438\u0442\u044c \u0434\u043e:\u003c/b\u003e 21.11.2025\u003cbr\u003e\u003cb\u003e\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435:\u003c/b\u003e \u0422\u0435\u043c\u0430: \u0425\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0435 \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u0435 \n\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435: \u0414\u043e\u0431\u0440\u044b\u0439 \u0434\u0435\u043d\u044c. \u041d\u0435\u043e\u0431\u0445\u043e\u0434\u0438\u043c\u043e \u0432\u044b\u043f\u043e\u043b\u043d\u0438\u0442\u044c \u0437\u0430\u043f\u0440\u043e\u0441, \u0440\u0443\u043a\u043e\u0432\u043e\u0434\u0441\u0442\u0432\u0443\u044f\u0441\u044c \u0441\u043b\u0435\u0434\u0443\u044e\u0449\u0438\u043c\u0438 \u0434\u0430\u043d\u043d\u044b\u043c\u0438:\n\u041e\u0431\u044a\u0435\u043a\u0442 \u0440\u0435\u043c\u043e\u043d\u0442\u0430, \u0441 \u043a\u043e\u0442\u043e\u0440\u044b\u043c \u0432\u043e\u0437\u043d\u0438\u043a\u043b\u0438 \u043f\u0440\u043e\u0431\u043b\u0435\u043c\u044b: \u0413\u043e\u0440\u043a\u0430 \u0445\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u0430\u044f\n\u041f\u0440\u043e\u0431\u043b\u0435\u043c\u0430: \u0422\u0440\u0435\u0431\u0443\u0435\u0442\u0441\u044f \u0437\u0430\u043c\u0435\u043d\u0430 \u043b\u0430\u043c\u043f\u044b\n\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435 \u043f\u0440\u043e\u0431\u043b\u0435\u043c\u044b: \u0442\u0440\u0435\u0431\u0443\u0435\u0442\u0441\u044f \u0437\u0430\u043c\u0435\u043d\u0430 \u043b\u0430\u043c\u043f\u044b \u0432 \u0425\u0413 \u041c\u043e\u043b\u043e\u0447\u043a\u0430 1\u0448, \u0438 \u0425\u0413 \u0441 \u043d\u0430\u043f\u0438\u0442\u043a\u0430\u043c\u0438 1 \u0448\u0442\n\u0421\u043e\u0442\u0440\u0443\u0434\u043d\u0438\u043a \u043c\u0430\u0433\u0430\u0437\u0438\u043d\u0430: \u0414\u0430\n\u0424\u0438\u043b\u0438\u0430\u043b: \u0410\u041e \u0422\u0430\u043d\u0434\u0435\u0440 \u0412\u043e\u043b\u0433\u043e\u0433\u0440\u0430\u0434\u0441\u043a\u0438\u0439 \u0444\u0438\u043b\u0438\u0430\u043b\n\u041e\u0431\u044a\u0435\u043a\u0442: \u041b\u0438\u043c\u0431\u0430\u0436\u0438 \u041c\u0414 \u0412\u043b\u0424\n\u0424\u0418\u041e: \u0421\u0435\u043d\u0438\u0447\u043a\u0438\u043d\u0430 \u0416\u041d\n\u041d\u043e\u043c\u0435\u0440 \u0442\u0435\u043b\u0435\u0444\u043e\u043d\u0430: 89954283454\u003cbr\u003e\u003cb\u003e\u041d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u0425\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0435 \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u0435\u003cbr\u003e\u003cb\u003e\u041e\u0441\u0442\u0430\u043b\u043e\u0441\u044c \u0434\u043d\u0435\u0439:\u003c/b\u003e 0\u003cbr\u003e\u003chr\u003e\n            \u003cdiv style=\"text-align: center; margin-top: 10px;\"\u003e\n                \u003ca href=\"https://yandex.ru/maps/?pt=43.289813,50.095208\u0026z=15\u0026l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\"\u003e\n                    \ud83d\udccd \u041e\u0442\u043a\u0440\u044b\u0442\u044c \u0432 \u042f\u043d\u0434\u0435\u043a\u0441.\u041a\u0430\u0440\u0442\u0430\u0445\n                \u003c/a\u003e\n            \u003c/div\u003e\n            ", "blue_count": 0, "color": "yellow", "coords": [50.095208, 43.289813], "days_left": 0, "podrazdelenie": "\u041b\u0438\u043c\u0431\u0430\u0436\u0438", "red_count": 0, "sector": "\u041d\u0435 \u0443\u043a\u0430\u0437\u0430\u043d", "total_requests": 1, "yellow_count": 1}, {"address": "", "balloonContent": "\u003cb\u003e\u041f\u043e\u0434\u0440\u0430\u0437\u0434\u0435\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u0424\u0438\u043b\u043e\u043d\u043e\u0432\u0441\u043a\u0438\u0439\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432.:\u003c/b\u003e \u041d\u0435 \u0443\u043a\u0430\u0437\u0430\u043d\u003cbr\u003e\u003cb\u003e\u0410\u0434\u0440\u0435\u0441:\u003c/b\u003e \u041d\u0435 \u0443\u043a\u0430\u0437\u0430\u043d\u003cbr\u003e\u003cb\u003e\u0424\u0438\u043b\u0438\u0430\u043b:\u003c/b\u003e \u0412\u043e\u043b\u0433\u043e\u0433\u0440\u0430\u0434 \u0412\u043e\u0441\u0442\u043e\u043a\u003cbr\u003e\u003cb\u003e\u041d\u043e\u043c\u0435\u0440 \u0437\u0430\u044f\u0432\u043a\u0438:\u003c/b\u003e SMT-\u043200008040416\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u044b\u0439:\u003c/b\u003e \u0414\u0440\u043e\u043d\u043e\u0432 \u0414\u0430\u043d\u0438\u043b\u0430 \u0415\u0432\u0433\u0435\u043d\u044c\u0435\u0432\u0438\u0447\u003cbr\u003e\u003cb\u003e\u0412\u044b\u043f\u043e\u043b\u043d\u0438\u0442\u044c \u0434\u043e:\u003c/b\u003e 28.11.2025\u003cbr\u003e\u003cb\u003e\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435:\u003c/b\u003e \u0417\u0430\u043a\u0443\u043f\u043a\u0430 \u0438 \u0437\u0430\u043c\u0435\u043d\u0430 \u043a\u0440\u043e\u043d\u0448\u0442\u0435\u0439\u043d\u043e\u0432 \u0428\u0425 \u0433\u0430\u0440\u0430\u043d\u0442\u0438\u0438 \u003cbr\u003e\u003cb\u003e\u041d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u0417\u0434\u0430\u043d\u0438\u044f \u0438 \u0441\u043e\u043e\u0440\u0443\u0436\u0435\u043d\u0438\u044f\u003cbr\u003e\u003cb\u003e\u041e\u0441\u0442\u0430\u043b\u043e\u0441\u044c \u0434\u043d\u0435\u0439:\u003c/b\u003e 7\u003cbr\u003e\u003chr\u003e\n            \u003cdiv style=\"text-align: center; margin-top: 10px;\"\u003e\n                \u003ca href=\"https://yandex.ru/maps/?pt=42.673908,50.532972\u0026z=15\u0026l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\"\u003e\n                    \ud83d\udccd \u041e\u0442\u043a\u0440\u044b\u0442\u044c \u0432 \u042f\u043d\u0434\u0435\u043a\u0441.\u041a\u0430\u0440\u0442\u0430\u0445\n                \u003c/a\u003e\n            \u003c/div\u003e\n            ", "blue_count": 1, "color": "blue", "coords": [50.532972, 42.673908], "days_left": 7, "podrazdelenie": "\u0424\u0438\u043b\u043e\u043d\u043e\u0432\u0441\u043a\u0438\u0439", "red_count": 0, "sector": "\u041d\u0435 \u0443\u043a\u0430\u0437\u0430\u043d", "total_requests": 1, "yellow_count": 0}, {"address": "", "balloonContent": "\u003cb\u003e\u041f\u043e\u0434\u0440\u0430\u0437\u0434\u0435\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u0424\u0440\u043e\u043b\u043e\u0432\u0441\u043a\u0438\u0439\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432.:\u003c/b\u003e \u041d\u0435 \u0443\u043a\u0430\u0437\u0430\u043d\u003cbr\u003e\u003cb\u003e\u0410\u0434\u0440\u0435\u0441:\u003c/b\u003e \u041d\u0435 \u0443\u043a\u0430\u0437\u0430\u043d\u003cbr\u003e\u003cb\u003e\u0424\u0438\u043b\u0438\u0430\u043b:\u003c/b\u003e \u0412\u043e\u043b\u0433\u043e\u0433\u0440\u0430\u0434 \u0412\u043e\u0441\u0442\u043e\u043a\u003cbr\u003e\u003cb\u003e\u041d\u043e\u043c\u0435\u0440 \u0437\u0430\u044f\u0432\u043a\u0438:\u003c/b\u003e SMT-\u043200008040306\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u044b\u0439:\u003c/b\u003e \u0414\u0440\u043e\u043d\u043e\u0432 \u0414\u0430\u043d\u0438\u043b\u0430 \u0415\u0432\u0433\u0435\u043d\u044c\u0435\u0432\u0438\u0447\u003cbr\u003e\u003cb\u003e\u0412\u044b\u043f\u043e\u043b\u043d\u0438\u0442\u044c \u0434\u043e:\u003c/b\u003e 28.11.2025\u003cbr\u003e\u003cb\u003e\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435:\u003c/b\u003e \u0437\u0430\u043c\u0435\u043d\u0430 \u043c\u043e\u0434\u0443\u043b\u044f \u0434\u0432\u0435\u0440\u0438 \u0425\u0413\u003cbr\u003e\u003cb\u003e\u041d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u0417\u0434\u0430\u043d\u0438\u044f \u0438 \u0441\u043e\u043e\u0440\u0443\u0436\u0435\u043d\u0438\u044f\u003cbr\u003e\u003cb\u003e\u041e\u0441\u0442\u0430\u043b\u043e\u0441\u044c \u0434\u043d\u0435\u0439:\u003c/b\u003e 7\u003cbr\u003e\u003chr\u003e\n            \u003cdiv style=\"text-align: center; margin-top: 10px;\"\u003e\n                \u003ca href=\"https://yandex.ru/maps/?pt=43.647158,49.765821\u0026z=15\u0026l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\"\u003e\n                    \ud83d\udccd \u041e\u0442\u043a\u0440\u044b\u0442\u044c \u0432 \u042f\u043d\u0434\u0435\u043a\u0441.\u041a\u0430\u0440\u0442\u0430\u0445\n                \u003c/a\u003e\n            \u003c/div\u003e\n            ", "blue_count": 1, "color": "blue", "coords": [49.765821, 43.647158], "days_left": 7, "podrazdelenie": "\u0424\u0440\u043e\u043b\u043e\u0432\u0441\u043a\u0438\u0439", "red_count": 0, "sector": "\u041d\u0435 \u0443\u043a\u0430\u0437\u0430\u043d", "total_requests": 1, "yellow_count": 0}, {"address": "", "balloonContent": "\u003cb\u003e\u041f\u043e\u0434\u0440\u0430\u0437\u0434\u0435\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u042d\u0442\u0430\u0436\u043d\u043e\u0441\u0442\u044c\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432.:\u003c/b\u003e \u041d\u0435 \u0443\u043a\u0430\u0437\u0430\u043d\u003cbr\u003e\u003cb\u003e\u0410\u0434\u0440\u0435\u0441:\u003c/b\u003e \u041d\u0435 \u0443\u043a\u0430\u0437\u0430\u043d\u003cbr\u003e\u003cb\u003e\u0424\u0438\u043b\u0438\u0430\u043b:\u003c/b\u003e \u0412\u043e\u043b\u0433\u043e\u0433\u0440\u0430\u0434 \u0412\u043e\u0441\u0442\u043e\u043a\u003cbr\u003e\u003cb\u003e\u041d\u043e\u043c\u0435\u0440 \u0437\u0430\u044f\u0432\u043a\u0438:\u003c/b\u003e SMT-\u043200008045130\u003cbr\u003e\u003cb\u003e\u041e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u044b\u0439:\u003c/b\u003e \u0422\u0440\u0443\u0434\u043e\u0432 \u0410\u043b\u0435\u043a\u0441\u0435\u0439 \u0412\u043b\u0430\u0434\u0438\u043c\u0438\u0440\u043e\u0432\u0438\u0447\u003cbr\u003e\u003cb\u003e\u0412\u044b\u043f\u043e\u043b\u043d\u0438\u0442\u044c \u0434\u043e:\u003c/b\u003e 22.11.2025\u003cbr\u003e\u003cb\u003e\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435:\u003c/b\u003e \u0422\u0435\u043c\u0430: \u0425\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0435 \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u0435 \n\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435: \u0414\u043e\u0431\u0440\u044b\u0439 \u0434\u0435\u043d\u044c. \u041d\u0435\u043e\u0431\u0445\u043e\u0434\u0438\u043c\u043e \u0432\u044b\u043f\u043e\u043b\u043d\u0438\u0442\u044c \u0437\u0430\u043f\u0440\u043e\u0441, \u0440\u0443\u043a\u043e\u0432\u043e\u0434\u0441\u0442\u0432\u0443\u044f\u0441\u044c \u0441\u043b\u0435\u0434\u0443\u044e\u0449\u0438\u043c\u0438 \u0434\u0430\u043d\u043d\u044b\u043c\u0438:\n\u041e\u0431\u044a\u0435\u043a\u0442 \u0440\u0435\u043c\u043e\u043d\u0442\u0430, \u0441 \u043a\u043e\u0442\u043e\u0440\u044b\u043c \u0432\u043e\u0437\u043d\u0438\u043a\u043b\u0438 \u043f\u0440\u043e\u0431\u043b\u0435\u043c\u044b: \u0411\u043e\u043d\u043d\u0435\u0442\u0430\n\u041f\u0440\u043e\u0431\u043b\u0435\u043c\u0430: \u0422\u0440\u0435\u0431\u0443\u0435\u0442\u0441\u044f \u0437\u0430\u043c\u0435\u043d\u0430 \u043b\u0430\u043c\u043f\u044b\n\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435 \u043f\u0440\u043e\u0431\u043b\u0435\u043c\u044b:  \u0441\u0432\u0435\u0442\u043e\u0434\u0438\u043e\u0434\u043d\u0430\u044f \u043b\u0435\u043d\u0442\u0430 \u043c\u043e\u0440\u0433\u0430\u0435\u0442 \n\u0421\u043e\u0442\u0440\u0443\u0434\u043d\u0438\u043a \u043c\u0430\u0433\u0430\u0437\u0438\u043d\u0430: \u0414\u0430\n\u0424\u0438\u043b\u0438\u0430\u043b: \u0410\u041e \u0422\u0430\u043d\u0434\u0435\u0440 \u0412\u043e\u043b\u0433\u043e\u0433\u0440\u0430\u0434\u0441\u043a\u0438\u0439 \u0444\u0438\u043b\u0438\u0430\u043b\n\u041e\u0431\u044a\u0435\u043a\u0442: \u042d\u0442\u0430\u0436\u043d\u043e\u0441\u0442\u044c \u041c\u0414 \u0412\u043b\u0424\n\u0424\u0418\u041e: \u041a\u0443\u0437\u044f\u0435\u0432 \u0414,\u0410\n\u041d\u043e\u043c\u0435\u0440 \u0442\u0435\u043b\u0435\u0444\u043e\u043d\u0430: 89297868981\u003cbr\u003e\u003cb\u003e\u041d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435:\u003c/b\u003e \u0425\u043e\u043b\u043e\u0434\u0438\u043b\u044c\u043d\u043e\u0435 \u043e\u0431\u043e\u0440\u0443\u0434\u043e\u0432\u0430\u043d\u0438\u0435\u003cbr\u003e\u003cb\u003e\u041e\u0441\u0442\u0430\u043b\u043e\u0441\u044c \u0434\u043d\u0435\u0439:\u003c/b\u003e 1\u003cbr\u003e\u003chr\u003e\n            \u003cdiv style=\"text-align: center; margin-top: 10px;\"\u003e\n                \u003ca href=\"https://yandex.ru/maps/?pt=45.386802,50.078565\u0026z=15\u0026l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\"\u003e\n                    \ud83d\udccd \u041e\u0442\u043a\u0440\u044b\u0442\u044c \u0432 \u042f\u043d\u0434\u0435\u043a\u0441.\u041a\u0430\u0440\u0442\u0430\u0445\n                \u003c/a\u003e\n            \u003c/div\u003e\n            ", "blue_count": 0, "color": "yellow", "coords": [50.078565, 45.386802], "days_left": 1, "podrazdelenie": "\u042d\u0442\u0430\u0436\u043d\u043e\u0441\u0442\u044c", "red_count": 0, "sector": "\u041d\u0435 \u0443\u043a\u0430\u0437\u0430\u043d", "total_requests": 1, "yellow_count": 1}];
