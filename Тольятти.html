@@ -28,46 +28,52 @@
             left: 0;
         }
         
+        /* Основная панель управления для десктопов */
         #controls {
             position: fixed;
             top: 20px;
             left: 20px;
             z-index: 1000;
-            background-color: rgba(255, 255, 255, 0.95);
+            background-color: rgba(255, 255, 255, 0.85);
             padding: 15px;
             border-radius: 10px;
             box-shadow: 0 2px 15px rgba(0,0,0,0.2);
             max-width: 200px;
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
             transition: all 0.3s ease;
         }
         
         #controls.collapsed {
-            max-width: 40px;
-            max-height: 40px;
+            max-width: 50px;
+            max-height: 50px;
             overflow: hidden;
-            padding: 8px;
+            padding: 10px;
         }
         
         .collapse-button {
             position: absolute;
-            top: 5px;
-            right: 5px;
-            background: none;
-            border: none;
+            top: -10px;
+            left: -10px;
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid #ccc;
             font-size: 16px;
+            font-weight: bold;
             cursor: pointer;
-            width: 20px;
-            height: 20px;
+            width: 30px;
+            height: 30px;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-            transition: background-color 0.3s;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            z-index: 1001;
         }
         
         .collapse-button:hover {
-            background-color: rgba(0,0,0,0.1);
+            background: #f8f8f8;
+            transform: scale(1.1);
         }
         
         .filter-section {
@@ -175,13 +181,14 @@
             bottom: 20px;
             right: 20px;
             z-index: 1000;
-            background-color: rgba(255, 255, 255, 0.9);
+            background-color: rgba(255, 255, 255, 0.85);
             padding: 8px 12px;
             border-radius: 6px;
             font-size: 12px;
             color: #333;
             box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
             transition: all 0.3s ease;
         }
         
@@ -195,7 +202,7 @@
             top: 20px;
             right: 20px;
             z-index: 1000;
-            background-color: rgba(255, 255, 255, 0.9);
+            background-color: rgba(255, 255, 255, 0.85);
             padding: 8px 12px;
             border: 1px solid #ccc;
             border-radius: 6px;
@@ -203,7 +210,8 @@
             font-weight: bold;
             color: #333;
             box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
             cursor: pointer;
             transition: all 0.3s ease;
         }
@@ -218,19 +226,20 @@
             bottom: 20px;
             left: 20px;
             z-index: 1000;
-            background-color: rgba(255, 255, 255, 0.9);
+            background-color: rgba(255, 255, 255, 0.85);
             padding: 8px 12px;
             border-radius: 6px;
             font-size: 12px;
             color: #333;
             text-decoration: none;
             box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
             transition: all 0.3s ease;
         }
         
         .back-link:hover {
-            background-color: #f8f8f8;
+            background-color: rgba(248, 248, 248, 0.9);
         }
         
         .back-link.collapsed {
@@ -284,33 +293,52 @@
             #controls {
                 top: 10px;
                 left: 10px;
-                right: 10px;
-                max-width: none;
-                padding: 10px;
+                max-width: 180px;
+                padding: 12px;
+                background-color: rgba(255, 255, 255, 0.9);
             }
             
             #controls.collapsed {
-                max-width: 35px;
-                max-height: 35px;
+                max-width: 40px;
+                max-height: 40px;
                 top: 10px;
                 left: 10px;
+                padding: 8px;
             }
             
+            .collapse-button {
+                top: -8px;
+                left: -8px;
+                width: 25px;
+                height: 25px;
+                font-size: 14px;
+            }
+            
+            /* Вертикальное расположение для мобильных */
             .color-buttons {
-                flex-direction: row;
-                justify-content: space-around;
+                flex-direction: column;
+                justify-content: flex-start;
             }
             
             .sector-buttons {
-                flex-direction: row;
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 3px;
+                flex-direction: column;
+                flex-wrap: nowrap;
+                justify-content: flex-start;
+                gap: 4px;
             }
             
             .sector-button {
                 font-size: 10px;
                 padding: 4px 8px;
+            }
+            
+            button {
+                width: 35px;
+                height: 35px;
+            }
+            
+            .button-text {
+                font-size: 14px;
             }
             
             #title_button {
@@ -333,27 +361,40 @@
                 font-size: 10px;
                 padding: 6px 10px;
             }
+            
+            .filter-title {
+                font-size: 11px;
+            }
         }
 
         /* Для очень маленьких экранов */
         @media (max-width: 480px) {
             #controls {
-                padding: 8px;
+                max-width: 160px;
+                padding: 10px;
             }
             
             #controls.collapsed {
-                max-width: 30px;
-                max-height: 30px;
-                padding: 5px;
+                max-width: 35px;
+                max-height: 35px;
+                padding: 6px;
+            }
+            
+            .collapse-button {
+                top: -6px;
+                left: -6px;
+                width: 22px;
+                height: 22px;
+                font-size: 12px;
             }
             
             button {
-                width: 35px;
-                height: 35px;
+                width: 32px;
+                height: 32px;
             }
             
             .button-text {
-                font-size: 14px;
+                font-size: 13px;
             }
             
             .sector-button {
@@ -361,10 +402,31 @@
                 padding: 3px 6px;
             }
             
-            .collapse-button {
-                width: 18px;
-                height: 18px;
-                font-size: 14px;
+            .filter-title {
+                font-size: 10px;
+            }
+        }
+
+        /* Для очень высоких экранов */
+        @media (min-height: 800px) {
+            #controls {
+                top: 25px;
+                left: 25px;
+            }
+            
+            #title_button {
+                top: 25px;
+                right: 25px;
+            }
+            
+            #report_datetime {
+                bottom: 25px;
+                right: 25px;
+            }
+            
+            .back-link {
+                bottom: 25px;
+                left: 25px;
             }
         }
     </style>
@@ -413,7 +475,7 @@
         </div>
     </div>
     
-    <div id="report_datetime">Дата и время отчета: 20-11-2025 23:44:59</div>
+    <div id="report_datetime">Дата и время отчета: 20-11-2025 23:59:58</div>
     <div id="title_button" onclick="toggleAllElements()">Тольятти</div>
     <a href="index.html" class="back-link">← Назад к списку филиалов</a>
 </body>
