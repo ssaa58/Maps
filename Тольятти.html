@@ -307,24 +307,33 @@
             display: none;
         }
         
-        /* Адаптивность для мобильных устройств */
-        @media (max-width: 768px) {
+        /* Адаптивность для мобильных устройств - ИСПРАВЛЕНА */
+        @media (max-width: 1024px) {
             #controls {
                 top: 15px;
                 left: 15px;
                 gap: 12px;
+                max-width: 90vw; /* Ограничиваем ширину на мобильных */
             }
             
             #title_button {
                 top: 15px;
                 right: 15px;
                 font-size: 12px;
+                max-width: 40vw; /* Ограничиваем ширину названия филиала */
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
             }
             
             #report_datetime {
                 bottom: 50px;
                 right: 15px;
                 font-size: 10px;
+                max-width: 60vw; /* Ограничиваем ширину даты */
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
             }
             
             button {
@@ -332,15 +341,21 @@
                 height: 40px;
             }
             
+            .sector-buttons {
+                max-height: 150px; /* Уменьшаем высоту списка секторов */
+                max-width: 200px; /* Ограничиваем ширину списка секторов */
+            }
+            
             .sector-button {
                 font-size: 10px;
                 padding: 6px 10px;
                 min-height: 32px;
+                max-width: 180px; /* Ограничиваем ширину кнопок секторов */
             }
             
             .sector-text {
                 font-size: 9px;
-                max-width: 120px;
+                max-width: 160px; /* Ограничиваем ширину текста секторов */
             }
             
             .filter-title {
@@ -352,6 +367,46 @@
                 height: 30px;
                 font-size: 16px;
                 margin: 0 auto 8px auto;
+            }
+        }
+        
+        /* Особые стили для горизонтальной ориентации на мобильных */
+        @media (max-width: 1024px) and (orientation: landscape) {
+            #controls {
+                top: 10px;
+                left: 10px;
+                gap: 8px;
+                max-width: 85vw;
+            }
+            
+            .sector-buttons {
+                max-height: 120px; /* Еще меньше высота в ландшафте */
+                max-width: 180px;
+            }
+            
+            .sector-button {
+                font-size: 9px;
+                padding: 4px 8px;
+                min-height: 28px;
+                max-width: 160px;
+            }
+            
+            .sector-text {
+                font-size: 8px;
+                max-width: 140px;
+            }
+            
+            .color-buttons {
+                gap: 6px;
+            }
+            
+            button {
+                width: 36px;
+                height: 36px;
+            }
+            
+            .button-text {
+                font-size: 14px;
             }
         }
         
@@ -466,7 +521,7 @@
     </div>
     
     <!-- Прозрачные информационные элементы -->
-    <div id="report_datetime">Дата и время отчета: 21-11-2025 21:12:16</div>
+    <div id="report_datetime">Дата и время отчета: 21-11-2025 21:52:55</div>
     <div id="title_button">Тольятти</div>
     
     <!-- Кнопка "Назад" - без изменений -->
