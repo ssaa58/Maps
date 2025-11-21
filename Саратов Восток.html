@@ -34,13 +34,22 @@
             top: 10px;
             left: 10px;
             z-index: 1000;
-            background-color: rgba(255, 255, 255, 0.98);
+            background-color: rgba(0, 0, 0, 0.1);
             padding: 15px;
             border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-            max-width: 220px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.2);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        #controls.collapsed {
+            background-color: rgba(0, 0, 0, 0.05);
+            padding: 10px;
+        }
+        
+        #controls.collapsed .filter-content {
+            display: none;
         }
         
         .filter-section {
@@ -50,9 +59,10 @@
         .filter-title {
             font-size: 12px;
             font-weight: bold;
-            color: #333;
+            color: #fff;
             margin-bottom: 8px;
             text-align: center;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
         }
         
         .color-buttons {
@@ -77,19 +87,19 @@
         }
         
         .sector-buttons::-webkit-scrollbar-track {
-            background: #f1f1f1;
+            background: rgba(255, 255, 255, 0.2);
             border-radius: 2px;
         }
         
         .sector-buttons::-webkit-scrollbar-thumb {
-            background: #c1c1c1;
+            background: rgba(255, 255, 255, 0.5);
             border-radius: 2px;
         }
         
         button {
             padding: 0;
-            border: 2px solid #ccc;
-            background-color: #f0f0f0;
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            background-color: rgba(255, 255, 255, 0.2);
             color: white;
             cursor: pointer;
             font-size: 14px;
@@ -103,6 +113,7 @@
             align-items: center;
             justify-content: center;
             position: relative;
+            backdrop-filter: blur(10px);
         }
         
         .sector-button {
@@ -111,41 +122,59 @@
             border-radius: 18px;
             padding: 8px 12px;
             font-size: 11px;
-            background-color: #f8f9fa;
-            color: #333;
-            border: 1px solid #ddd;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.4);
             min-height: 36px;
+            backdrop-filter: blur(10px);
         }
         
         button.active {
-            border: 3px solid #333;
-            box-shadow: 0 0 12px rgba(0,0,0,0.3);
+            border: 3px solid #fff;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
             transform: scale(1.05);
         }
         
-        button.color-red.active { background-color: #ff4444; }
-        button.color-yellow.active { background-color: #ffcc00; }
-        button.color-blue.active { background-color: #4444ff; }
-        button.color-green.active { background-color: #4CAF50; }
+        button.color-red.active { background-color: rgba(255, 68, 68, 0.9); }
+        button.color-yellow.active { background-color: rgba(255, 204, 0, 0.9); }
+        button.color-blue.active { background-color: rgba(68, 68, 255, 0.9); }
+        button.color-green.active { background-color: rgba(76, 175, 80, 0.9); }
         .sector-button.active { 
-            background-color: #2196F3; 
+            background-color: rgba(33, 150, 243, 0.9); 
             color: white;
-            border-color: #1976D2;
+            border-color: rgba(255, 255, 255, 0.8);
         }
         
-        button.color-red:not(.active) { background-color: #f0f0f0; color: #999; border-color: #999; }
-        button.color-yellow:not(.active) { background-color: #f0f0f0; color: #999; border-color: #999; }
-        button.color-blue:not(.active) { background-color: #f0f0f0; color: #999; border-color: #999; }
-        button.color-green:not(.active) { background-color: #f0f0f0; color: #999; border-color: #999; }
+        button.color-red:not(.active) { 
+            background-color: rgba(255, 255, 255, 0.15); 
+            color: rgba(255, 255, 255, 0.7); 
+            border-color: rgba(255, 255, 255, 0.4); 
+        }
+        button.color-yellow:not(.active) { 
+            background-color: rgba(255, 255, 255, 0.15); 
+            color: rgba(255, 255, 255, 0.7); 
+            border-color: rgba(255, 255, 255, 0.4); 
+        }
+        button.color-blue:not(.active) { 
+            background-color: rgba(255, 255, 255, 0.15); 
+            color: rgba(255, 255, 255, 0.7); 
+            border-color: rgba(255, 255, 255, 0.4); 
+        }
+        button.color-green:not(.active) { 
+            background-color: rgba(255, 255, 255, 0.15); 
+            color: rgba(255, 255, 255, 0.7); 
+            border-color: rgba(255, 255, 255, 0.4); 
+        }
         
         .sector-button:not(.active):hover {
-            background-color: #e9ecef;
+            background-color: rgba(255, 255, 255, 0.25);
         }
         
         .button-text {
             font-size: 16px;
             font-weight: bold;
             pointer-events: none;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
         }
         
         .sector-text {
@@ -155,6 +184,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
             max-width: 150px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
         }
         
         #report_datetime {
@@ -162,13 +192,13 @@
             bottom: 10px;
             right: 10px;
             z-index: 1000;
-            background-color: rgba(255, 255, 255, 0.95);
+            background-color: rgba(0, 0, 0, 0.6);
             padding: 8px 12px;
             border-radius: 6px;
             font-size: 11px;
-            color: #333;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-            backdrop-filter: blur(5px);
+            color: #fff;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
         
         #title_button {
@@ -176,15 +206,14 @@
             top: 10px;
             right: 10px;
             z-index: 1000;
-            background-color: rgba(255, 255, 255, 0.95);
+            background-color: rgba(0, 0, 0, 0.6);
             padding: 8px 16px;
-            border: 1px solid #ddd;
             border-radius: 20px;
             font-size: 14px;
             font-weight: bold;
-            color: #333;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            backdrop-filter: blur(5px);
+            color: #fff;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
         
         .back-link {
@@ -192,35 +221,35 @@
             bottom: 10px;
             left: 10px;
             z-index: 1000;
-            background-color: rgba(255, 255, 255, 0.95);
+            background-color: rgba(0, 0, 0, 0.6);
             padding: 8px 16px;
             border-radius: 20px;
             font-size: 12px;
-            color: #333;
+            color: #fff;
             text-decoration: none;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             transition: all 0.3s ease;
         }
         
         .back-link:hover {
-            background-color: rgba(255, 255, 255, 0.98);
+            background-color: rgba(0, 0, 0, 0.8);
             transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            color: #fff;
         }
         
         .controls-title {
             text-align: center;
             font-size: 10px;
             font-weight: bold;
-            color: #333;
+            color: #fff;
             margin-bottom: 5px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
         }
         
         .divider {
             height: 1px;
-            background: linear-gradient(90deg, transparent, #ddd, transparent);
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
             margin: 12px 0;
         }
         
@@ -245,6 +274,59 @@
             text-decoration: none;
         }
         
+        /* Кнопка сворачивания */
+        .toggle-controls {
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            width: 30px;
+            height: 30px;
+            background: #ff4444;
+            border: 3px solid #fff;
+            border-radius: 50%;
+            color: white;
+            font-weight: 900;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(255, 68, 68, 0.5);
+            z-index: 1001;
+            transition: all 0.3s ease;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+        
+        .toggle-controls:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 16px rgba(255, 68, 68, 0.7);
+        }
+        
+        .toggle-controls.collapsed .minus {
+            display: none;
+        }
+        
+        .toggle-controls.collapsed .plus {
+            display: block;
+        }
+        
+        .toggle-controls .minus {
+            display: block;
+        }
+        
+        .toggle-controls .plus {
+            display: none;
+        }
+        
+        .toggle-controls.collapsed {
+            background: #4CAF50;
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.5);
+        }
+        
+        .toggle-controls.collapsed:hover {
+            box-shadow: 0 6px 16px rgba(76, 175, 80, 0.7);
+        }
+
         /* Адаптивность для мобильных устройств */
         @media (max-width: 768px) {
             #controls {
@@ -254,6 +336,11 @@
                 max-width: none;
                 width: calc(100% - 10px);
                 padding: 12px;
+            }
+            
+            #controls.collapsed {
+                padding: 8px;
+                width: auto;
             }
             
             .color-buttons {
@@ -312,6 +399,14 @@
                 text-align: center;
                 width: calc(100% - 10px);
             }
+            
+            .toggle-controls {
+                top: -12px;
+                right: -12px;
+                width: 25px;
+                height: 25px;
+                font-size: 16px;
+            }
         }
         
         @media (max-width: 480px) {
@@ -347,59 +442,69 @@
         #controls {
             animation: fadeIn 0.5s ease-out;
         }
+        
+        .filter-content {
+            transition: all 0.3s ease;
+        }
     </style>
 </head>
 <body>
     <div id="map"></div>
     <div id="controls">
-        <div class="filter-section">
-            <div class="filter-title">ЗАЯВКИ</div>
-            <div class="color-buttons">
-                <button id="red_button" class="color-red active" title="Просроченные заявки">
-                    <span class="button-text">10</span>
-                </button>
-                <button id="yellow_button" class="color-yellow active" title="Срочные заявки">
-                    <span class="button-text">21</span>
-                </button>
-                <button id="blue_button" class="color-blue active" title="Обычные заявки">
-                    <span class="button-text">45</span>
-                </button>
-                <button id="all_button" class="color-green active" title="Все заявки">
-                    <span class="button-text">76</span>
-                </button>
-            </div>
+        <div class="toggle-controls" id="toggleControls">
+            <span class="minus">−</span>
+            <span class="plus">+</span>
         </div>
-        
-        <div class="divider"></div>
-        
-        <div class="filter-section">
-            <div class="filter-title">ОТВ.</div>
-            <div class="sector-buttons">
-                <button id="all_sectors_button" class="sector-button active" title="Все Отв.">
-                    <span class="sector-text">Все Отв.</span>
-                </button>
-                
-                <button id="sector_1_button" class="sector-button active" title="Отв. Не указан">
-                    <span class="sector-text">Не указан</span>
-                </button>
-                
-                <button id="sector_2_button" class="sector-button active" title="Отв. Сектор_4">
-                    <span class="sector-text">Сектор_4</span>
-                </button>
-                
-                <button id="sector_3_button" class="sector-button active" title="Отв. Сектор_5">
-                    <span class="sector-text">Сектор_5</span>
-                </button>
-                
-                <button id="sector_4_button" class="sector-button active" title="Отв. Сектор_7">
-                    <span class="sector-text">Сектор_7</span>
-                </button>
-                
+        <div class="filter-content">
+            <div class="filter-section">
+                <div class="filter-title">ЗАЯВКИ</div>
+                <div class="color-buttons">
+                    <button id="red_button" class="color-red active" title="Просроченные заявки">
+                        <span class="button-text">10</span>
+                    </button>
+                    <button id="yellow_button" class="color-yellow active" title="Срочные заявки">
+                        <span class="button-text">21</span>
+                    </button>
+                    <button id="blue_button" class="color-blue active" title="Обычные заявки">
+                        <span class="button-text">45</span>
+                    </button>
+                    <button id="all_button" class="color-green active" title="Все заявки">
+                        <span class="button-text">76</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="divider"></div>
+            
+            <div class="filter-section">
+                <div class="filter-title">ОТВ.</div>
+                <div class="sector-buttons">
+                    <button id="all_sectors_button" class="sector-button active" title="Все Отв.">
+                        <span class="sector-text">Все Отв.</span>
+                    </button>
+                    
+                    <button id="sector_1_button" class="sector-button active" title="Отв. Не указан">
+                        <span class="sector-text">Не указан</span>
+                    </button>
+                    
+                    <button id="sector_2_button" class="sector-button active" title="Отв. Сектор_4">
+                        <span class="sector-text">Сектор_4</span>
+                    </button>
+                    
+                    <button id="sector_3_button" class="sector-button active" title="Отв. Сектор_5">
+                        <span class="sector-text">Сектор_5</span>
+                    </button>
+                    
+                    <button id="sector_4_button" class="sector-button active" title="Отв. Сектор_7">
+                        <span class="sector-text">Сектор_7</span>
+                    </button>
+                    
+                </div>
             </div>
         </div>
     </div>
     
-    <div id="report_datetime">Дата и время отчета: 21-11-2025 19:36:33</div>
+    <div id="report_datetime">Дата и время отчета: 21-11-2025 19:49:10</div>
     <div id="title_button">Саратов Восток</div>
     <a href="index.html" class="back-link">← Назад к списку филиалов</a>
 </body>
@@ -663,6 +768,15 @@ function init() {
         toggleSector('Сектор_7');
     });
     
+
+    // Кнопка сворачивания/разворачивания
+    var toggleControls = document.querySelector('#toggleControls');
+    var controls = document.querySelector('#controls');
+    
+    toggleControls.addEventListener('click', function() {
+        controls.classList.toggle('collapsed');
+        this.classList.toggle('collapsed');
+    });
 
     // Инициализация состояния кнопок
     updateAllButtonState();
