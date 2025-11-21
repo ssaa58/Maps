@@ -29,77 +29,106 @@
             z-index: 1;
         }
         
-        #controls {
-            position: fixed;
-            top: 10px;
-            left: 10px;
-            z-index: 1000;
-            background-color: rgba(0, 0, 0, 0.1);
-            padding: 15px;
-            border-radius: 12px;
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease;
+        /* Стили для ноутбуков */
+        @media (min-width: 769px) {
+            #controls {
+                position: fixed;
+                top: 20px;
+                left: 20px;
+                z-index: 1000;
+                background: transparent;
+                padding: 0;
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .filter-section {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                background: transparent;
+            }
+            
+            .filter-title {
+                font-size: 12px;
+                font-weight: bold;
+                color: rgba(255, 255, 255, 0.3);
+                text-align: center;
+                margin-bottom: 0;
+            }
+            
+            .color-buttons {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                align-items: center;
+                background: transparent;
+            }
+            
+            .sector-buttons {
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+                max-height: 200px;
+                overflow-y: auto;
+                padding-right: 5px;
+                background: transparent;
+            }
         }
         
-        #controls.collapsed {
-            background-color: rgba(0, 0, 0, 0.05);
-            padding: 10px;
+        /* Стили для мобильных устройств */
+        @media (max-width: 768px) {
+            #controls {
+                position: fixed;
+                top: 10px;
+                left: 10px;
+                z-index: 1000;
+                background: transparent;
+                padding: 0;
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .filter-section {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                background: transparent;
+            }
+            
+            .filter-title {
+                font-size: 11px;
+                font-weight: bold;
+                color: rgba(255, 255, 255, 0.3);
+                text-align: center;
+                margin-bottom: 0;
+            }
+            
+            .color-buttons {
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+                align-items: center;
+                background: transparent;
+            }
+            
+            .sector-buttons {
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
+                max-height: 150px;
+                overflow-y: auto;
+                background: transparent;
+            }
         }
         
-        #controls.collapsed .filter-content {
-            display: none;
-        }
-        
-        .filter-section {
-            margin-bottom: 15px;
-        }
-        
-        .filter-title {
-            font-size: 12px;
-            font-weight: bold;
-            color: #fff;
-            margin-bottom: 8px;
-            text-align: center;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
-        }
-        
-        .color-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-        
-        .sector-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            max-height: 200px;
-            overflow-y: auto;
-            padding-right: 5px;
-        }
-        
-        .sector-buttons::-webkit-scrollbar {
-            width: 4px;
-        }
-        
-        .sector-buttons::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 2px;
-        }
-        
-        .sector-buttons::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.5);
-            border-radius: 2px;
-        }
-        
+        /* Общие стили для кнопок */
         button {
             padding: 0;
-            border: 2px solid rgba(255, 255, 255, 0.6);
-            background-color: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            background-color: rgba(255, 255, 255, 0.15);
             color: white;
             cursor: pointer;
             font-size: 14px;
@@ -113,7 +142,7 @@
             align-items: center;
             justify-content: center;
             position: relative;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(5px);
         }
         
         .sector-button {
@@ -122,11 +151,11 @@
             border-radius: 18px;
             padding: 8px 12px;
             font-size: 11px;
-            background-color: rgba(255, 255, 255, 0.2);
-            color: #fff;
+            background-color: rgba(255, 255, 255, 0.15);
+            color: rgba(255, 255, 255, 0.8);
             border: 1px solid rgba(255, 255, 255, 0.4);
             min-height: 36px;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(5px);
         }
         
         button.active {
@@ -145,25 +174,17 @@
             border-color: rgba(255, 255, 255, 0.8);
         }
         
-        button.color-red:not(.active) { 
-            background-color: rgba(255, 255, 255, 0.15); 
-            color: rgba(255, 255, 255, 0.7); 
-            border-color: rgba(255, 255, 255, 0.4); 
+        button.color-red:not(.active):hover { 
+            background-color: rgba(255, 68, 68, 0.3); 
         }
-        button.color-yellow:not(.active) { 
-            background-color: rgba(255, 255, 255, 0.15); 
-            color: rgba(255, 255, 255, 0.7); 
-            border-color: rgba(255, 255, 255, 0.4); 
+        button.color-yellow:not(.active):hover { 
+            background-color: rgba(255, 204, 0, 0.3); 
         }
-        button.color-blue:not(.active) { 
-            background-color: rgba(255, 255, 255, 0.15); 
-            color: rgba(255, 255, 255, 0.7); 
-            border-color: rgba(255, 255, 255, 0.4); 
+        button.color-blue:not(.active):hover { 
+            background-color: rgba(68, 68, 255, 0.3); 
         }
-        button.color-green:not(.active) { 
-            background-color: rgba(255, 255, 255, 0.15); 
-            color: rgba(255, 255, 255, 0.7); 
-            border-color: rgba(255, 255, 255, 0.4); 
+        button.color-green:not(.active):hover { 
+            background-color: rgba(76, 175, 80, 0.3); 
         }
         
         .sector-button:not(.active):hover {
@@ -187,18 +208,18 @@
             text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
         }
         
+        /* Стили для прозрачных информационных элементов */
         #report_datetime {
             position: fixed;
-            bottom: 10px;
+            bottom: 60px;
             right: 10px;
             z-index: 1000;
-            background-color: rgba(0, 0, 0, 0.6);
-            padding: 8px 12px;
-            border-radius: 6px;
+            background: transparent;
+            padding: 6px 10px;
             font-size: 11px;
-            color: #fff;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.2);
+            text-align: right;
+            pointer-events: none;
         }
         
         #title_button {
@@ -206,16 +227,15 @@
             top: 10px;
             right: 10px;
             z-index: 1000;
-            background-color: rgba(0, 0, 0, 0.6);
-            padding: 8px 16px;
-            border-radius: 20px;
+            background: transparent;
+            padding: 6px 12px;
             font-size: 14px;
             font-weight: bold;
-            color: #fff;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.2);
+            pointer-events: none;
         }
         
+        /* Кнопка "Назад" - оставляем как есть */
         .back-link {
             position: fixed;
             bottom: 10px;
@@ -238,68 +258,32 @@
             color: #fff;
         }
         
-        .controls-title {
-            text-align: center;
-            font-size: 10px;
-            font-weight: bold;
-            color: #fff;
-            margin-bottom: 5px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
-        }
-        
-        .divider {
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
-            margin: 12px 0;
-        }
-        
-        .balloon-link {
-            display: inline-block;
-            background: #2196F3;
-            color: white;
-            text-decoration: none;
-            border: none;
-            padding: 10px 18px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 13px;
-            margin: 8px 5px;
-            text-align: center;
-            transition: background 0.3s ease;
-        }
-        
-        .balloon-link:hover {
-            background: #1976D2;
-            color: white;
-            text-decoration: none;
-        }
-        
-        /* Кнопка сворачивания */
+        /* Кнопка сворачивания - фиксированная позиция */
         .toggle-controls {
-            position: absolute;
-            top: -15px;
-            right: -15px;
-            width: 30px;
-            height: 30px;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 35px;
+            height: 35px;
             background: #ff4444;
             border: 3px solid #fff;
             border-radius: 50%;
             color: white;
             font-weight: 900;
-            font-size: 18px;
+            font-size: 20px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 12px rgba(255, 68, 68, 0.5);
+            box-shadow: 0 4px 15px rgba(255, 68, 68, 0.6);
             z-index: 1001;
             transition: all 0.3s ease;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
         }
         
         .toggle-controls:hover {
             transform: scale(1.1);
-            box-shadow: 0 6px 16px rgba(255, 68, 68, 0.7);
+            box-shadow: 0 6px 20px rgba(255, 68, 68, 0.8);
         }
         
         .toggle-controls.collapsed .minus {
@@ -320,33 +304,52 @@
         
         .toggle-controls.collapsed {
             background: #4CAF50;
-            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.5);
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.6);
         }
         
         .toggle-controls.collapsed:hover {
-            box-shadow: 0 6px 16px rgba(76, 175, 80, 0.7);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.8);
         }
-
+        
+        /* Состояние свернутых фильтров */
+        #controls.collapsed .filter-content {
+            display: none;
+        }
+        
+        .filter-content {
+            transition: all 0.3s ease;
+        }
+        
+        /* Скрываем заголовки секций когда свернуто */
+        #controls.collapsed .filter-title {
+            display: none;
+        }
+        
         /* Адаптивность для мобильных устройств */
         @media (max-width: 768px) {
+            .toggle-controls {
+                top: 15px;
+                left: 15px;
+                width: 30px;
+                height: 30px;
+                font-size: 16px;
+            }
+            
             #controls {
-                top: 5px;
-                left: 5px;
-                right: 5px;
-                max-width: none;
-                width: calc(100% - 10px);
-                padding: 12px;
+                top: 60px;
+                left: 15px;
             }
             
-            #controls.collapsed {
-                padding: 8px;
-                width: auto;
+            #title_button {
+                top: 15px;
+                right: 15px;
+                font-size: 12px;
             }
             
-            .color-buttons {
-                flex-direction: row;
-                justify-content: space-around;
-                gap: 5px;
+            #report_datetime {
+                bottom: 50px;
+                right: 15px;
+                font-size: 10px;
             }
             
             button {
@@ -354,82 +357,15 @@
                 height: 40px;
             }
             
-            .sector-buttons {
-                flex-direction: row;
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 4px;
-                max-height: 80px;
-            }
-            
             .sector-button {
                 font-size: 10px;
                 padding: 6px 10px;
                 min-height: 32px;
-                flex: 1;
-                min-width: 60px;
-                max-width: 100px;
             }
             
             .sector-text {
                 font-size: 9px;
-                max-width: 80px;
-            }
-            
-            #title_button {
-                top: auto;
-                bottom: 60px;
-                right: 5px;
-                font-size: 12px;
-                padding: 6px 12px;
-            }
-            
-            #report_datetime {
-                bottom: 60px;
-                left: 5px;
-                right: auto;
-                font-size: 10px;
-                padding: 6px 10px;
-            }
-            
-            .back-link {
-                bottom: 5px;
-                left: 5px;
-                right: 5px;
-                text-align: center;
-                width: calc(100% - 10px);
-            }
-            
-            .toggle-controls {
-                top: -12px;
-                right: -12px;
-                width: 25px;
-                height: 25px;
-                font-size: 16px;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            #controls {
-                padding: 10px;
-            }
-            
-            .filter-title {
-                font-size: 11px;
-            }
-            
-            button {
-                width: 36px;
-                height: 36px;
-            }
-            
-            .button-text {
-                font-size: 14px;
-            }
-            
-            .sector-button {
-                font-size: 9px;
-                padding: 5px 8px;
+                max-width: 120px;
             }
         }
         
@@ -443,19 +379,35 @@
             animation: fadeIn 0.5s ease-out;
         }
         
-        .filter-content {
-            transition: all 0.3s ease;
+        /* Скрываем скроллбар для секторов */
+        .sector-buttons::-webkit-scrollbar {
+            width: 3px;
+        }
+        
+        .sector-buttons::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+        }
+        
+        .sector-buttons::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 2px;
         }
     </style>
 </head>
 <body>
     <div id="map"></div>
+    
+    <!-- Кнопка сворачивания - всегда на одном месте -->
+    <div class="toggle-controls" id="toggleControls">
+        <span class="minus">−</span>
+        <span class="plus">+</span>
+    </div>
+    
+    <!-- Панель управления без фона -->
     <div id="controls">
-        <div class="toggle-controls" id="toggleControls">
-            <span class="minus">−</span>
-            <span class="plus">+</span>
-        </div>
         <div class="filter-content">
+            <!-- Секция заявок -->
             <div class="filter-section">
                 <div class="filter-title">ЗАЯВКИ</div>
                 <div class="color-buttons">
@@ -474,8 +426,7 @@
                 </div>
             </div>
             
-            <div class="divider"></div>
-            
+            <!-- Секция ответственных -->
             <div class="filter-section">
                 <div class="filter-title">ОТВ.</div>
                 <div class="sector-buttons">
@@ -492,8 +443,11 @@
         </div>
     </div>
     
-    <div id="report_datetime">Дата и время отчета: 21-11-2025 19:49:11</div>
+    <!-- Прозрачные информационные элементы -->
+    <div id="report_datetime">Дата и время отчета: 21-11-2025 20:06:45</div>
     <div id="title_button">Волгоград Восток</div>
+    
+    <!-- Кнопка "Назад" - без изменений -->
     <a href="index.html" class="back-link">← Назад к списку филиалов</a>
 </body>
 </html>
@@ -696,39 +650,6 @@ function init() {
             activeSectors['all'] = false;
         }
     }
-
-    // Обработчики для кнопок цветов
-    document.querySelector('#red_button').addEventListener('click', function () {
-        this.classList.toggle('active');
-        toggleColor('red');
-    });
-
-    document.querySelector('#yellow_button').addEventListener('click', function () {
-        this.classList.toggle('active');
-        toggleColor('yellow');
-    });
-
-    document.querySelector('#blue_button').addEventListener('click', function () {
-        this.classList.toggle('active');
-        toggleColor('blue');
-    });
-
-    document.querySelector('#all_button').addEventListener('click', function () {
-        toggleAll();
-    });
-
-    // Обработчики для кнопок секторов
-    document.querySelector('#all_sectors_button').addEventListener('click', function () {
-        toggleSector('all');
-    });
-
-    // Обработчики для конкретных секторов
-    
-    document.querySelector('#sector_1_button').addEventListener('click', function () {
-        this.classList.toggle('active');
-        toggleSector('Не указан');
-    });
-    
 
     // Кнопка сворачивания/разворачивания
     var toggleControls = document.querySelector('#toggleControls');
