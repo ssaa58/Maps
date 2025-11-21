@@ -75,10 +75,10 @@
             background: transparent;
         }
         
-        /* Обновленные стили для кнопок с черными границами */
+        /* Обновленные стили для кнопок с тонкими черными границами */
         button {
             padding: 0;
-            border: 3px solid #000000;
+            border: 1px solid #000000;
             background-color: rgba(255, 255, 255, 0.9);
             color: #333;
             cursor: pointer;
@@ -93,25 +93,27 @@
             align-items: center;
             justify-content: center;
             position: relative;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
         
+        /* Стили для кнопок ответственных с тонкими черными границами */
         .sector-button {
             width: auto;
             height: auto;
             border-radius: 18px;
             padding: 8px 12px;
             font-size: 11px;
-            background-color: rgba(255, 255, 255, 0.15);
-            color: rgba(255, 255, 255, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.4);
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #333;
+            border: 1px solid #000000;
             min-height: 36px;
-            backdrop-filter: blur(5px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
         }
         
         button.active {
-            border: 3px solid #000000;
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+            border: 1px solid #000000;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
             transform: scale(1.05);
         }
         
@@ -158,11 +160,12 @@
         .sector-button.active { 
             background-color: rgba(33, 150, 243, 0.9); 
             color: white;
-            border-color: rgba(255, 255, 255, 0.8);
+            border: 1px solid #000000;
         }
         
         .sector-button:not(.active):hover {
-            background-color: rgba(255, 255, 255, 0.25);
+            background-color: rgba(255, 255, 255, 0.95);
+            transform: scale(1.02);
         }
         
         .button-text {
@@ -179,7 +182,6 @@
             overflow: hidden;
             text-overflow: ellipsis;
             max-width: 150px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
         }
         
         /* Стили для прозрачных информационных элементов */
@@ -232,12 +234,12 @@
             color: #fff;
         }
         
-        /* Кнопка сворачивания - по центру над фильтрами заявок */
+        /* Кнопка сворачивания - исправленное позиционирование */
         .toggle-controls {
             width: 35px;
             height: 35px;
             background: #ff4444;
-            border: 3px solid #fff;
+            border: 2px solid #fff;
             border-radius: 50%;
             color: white;
             font-weight: 900;
@@ -246,16 +248,24 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 15px rgba(255, 68, 68, 0.6);
+            box-shadow: 0 3px 10px rgba(255, 68, 68, 0.6);
             z-index: 1001;
             transition: all 0.3s ease;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
             margin: 0 auto 10px auto;
+            position: relative;
+            left: 0;
+        }
+        
+        /* Фиксируем позицию кнопки при сворачивании */
+        #controls.collapsed .toggle-controls {
+            position: static;
+            margin: 0 auto;
         }
         
         .toggle-controls:hover {
             transform: scale(1.1);
-            box-shadow: 0 6px 20px rgba(255, 68, 68, 0.8);
+            box-shadow: 0 4px 15px rgba(255, 68, 68, 0.8);
         }
         
         .toggle-controls.collapsed .minus {
@@ -276,11 +286,11 @@
         
         .toggle-controls.collapsed {
             background: #4CAF50;
-            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.6);
+            box-shadow: 0 3px 10px rgba(76, 175, 80, 0.6);
         }
         
         .toggle-controls.collapsed:hover {
-            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.8);
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.8);
         }
         
         /* Состояние свернутых фильтров */
@@ -369,6 +379,34 @@
             background: rgba(255, 255, 255, 0.3);
             border-radius: 2px;
         }
+        
+        /* Стили для кликабельных номеров телефонов в балуне */
+        .phone-number {
+            color: #2196F3;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 2px 4px;
+            border-radius: 3px;
+            background-color: rgba(33, 150, 243, 0.1);
+            border: 1px solid rgba(33, 150, 243, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .phone-number:hover {
+            background-color: rgba(33, 150, 243, 0.2);
+            text-decoration: underline;
+        }
+        
+        /* Для мобильных устройств - улучшенные стили телефона */
+        @media (max-width: 768px) {
+            .phone-number {
+                display: inline-block;
+                padding: 4px 8px;
+                font-size: 14px;
+                margin: 2px 0;
+            }
+        }
     </style>
 </head>
 <body>
@@ -424,7 +462,7 @@
     </div>
     
     <!-- Прозрачные информационные элементы -->
-    <div id="report_datetime">Дата и время отчета: 21-11-2025 20:56:58</div>
+    <div id="report_datetime">Дата и время отчета: 21-11-2025 21:12:16</div>
     <div id="title_button">Владикавказ</div>
     
     <!-- Кнопка "Назад" - без изменений -->
@@ -460,8 +498,29 @@ function init() {
             zIndex = 3;
         }
         
+        // Обрабатываем номер телефона в балуне
+        var balloonContent = placemark.balloonContent;
+        
+        // Заменяем номера телефонов на кликабельные ссылки
+        balloonContent = balloonContent.replace(
+            /Номер телефона:\s*([+\d\s\-()]+)/g, 
+            function(match, phoneNumber) {
+                var cleanPhone = phoneNumber.trim().replace(/[^\d+]/g, '');
+                return 'Номер телефона: <a href="tel:' + cleanPhone + '" class="phone-number">' + phoneNumber.trim() + '</a>';
+            }
+        );
+        
+        // Также обрабатываем другие возможные форматы номеров
+        balloonContent = balloonContent.replace(
+            /Телефон:\s*([+\d\s\-()]+)/g, 
+            function(match, phoneNumber) {
+                var cleanPhone = phoneNumber.trim().replace(/[^\d+]/g, '');
+                return 'Телефон: <a href="tel:' + cleanPhone + '" class="phone-number">' + phoneNumber.trim() + '</a>';
+            }
+        );
+        
         var newPlacemark = new ymaps.Placemark(placemark.coords, {
-            balloonContent: placemark.balloonContent,
+            balloonContent: balloonContent,
             iconCaption: placemark.total_requests.toString()
         }, {
             preset: 'islands#dotIcon',
