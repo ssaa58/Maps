@@ -75,10 +75,10 @@
             background: transparent;
         }
         
-        /* Обновленные стили для кнопок с тонкими черными границами */
+        /* Обновленные стили для кнопок с черными границами */
         button {
             padding: 0;
-            border: 1px solid #000000;
+            border: 3px solid #000000;
             background-color: rgba(255, 255, 255, 0.9);
             color: #333;
             cursor: pointer;
@@ -93,27 +93,25 @@
             align-items: center;
             justify-content: center;
             position: relative;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
         
-        /* Стили для кнопок ответственных с тонкими черными границами */
         .sector-button {
             width: auto;
             height: auto;
             border-radius: 18px;
             padding: 8px 12px;
             font-size: 11px;
-            background-color: rgba(255, 255, 255, 0.9);
-            color: #333;
-            border: 1px solid #000000;
+            background-color: rgba(255, 255, 255, 0.15);
+            color: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.4);
             min-height: 36px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
         }
         
         button.active {
-            border: 1px solid #000000;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+            border: 3px solid #000000;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
             transform: scale(1.05);
         }
         
@@ -160,12 +158,11 @@
         .sector-button.active { 
             background-color: rgba(33, 150, 243, 0.9); 
             color: white;
-            border: 1px solid #000000;
+            border-color: rgba(255, 255, 255, 0.8);
         }
         
         .sector-button:not(.active):hover {
-            background-color: rgba(255, 255, 255, 0.95);
-            transform: scale(1.02);
+            background-color: rgba(255, 255, 255, 0.25);
         }
         
         .button-text {
@@ -182,6 +179,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
             max-width: 150px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
         }
         
         /* Стили для прозрачных информационных элементов */
@@ -234,12 +232,12 @@
             color: #fff;
         }
         
-        /* Кнопка сворачивания - исправленное позиционирование */
+        /* Кнопка сворачивания - по центру над фильтрами заявок */
         .toggle-controls {
             width: 35px;
             height: 35px;
             background: #ff4444;
-            border: 2px solid #fff;
+            border: 3px solid #fff;
             border-radius: 50%;
             color: white;
             font-weight: 900;
@@ -248,24 +246,16 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 3px 10px rgba(255, 68, 68, 0.6);
+            box-shadow: 0 4px 15px rgba(255, 68, 68, 0.6);
             z-index: 1001;
             transition: all 0.3s ease;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
             margin: 0 auto 10px auto;
-            position: relative;
-            left: 0;
-        }
-        
-        /* Фиксируем позицию кнопки при сворачивании */
-        #controls.collapsed .toggle-controls {
-            position: static;
-            margin: 0 auto;
         }
         
         .toggle-controls:hover {
             transform: scale(1.1);
-            box-shadow: 0 4px 15px rgba(255, 68, 68, 0.8);
+            box-shadow: 0 6px 20px rgba(255, 68, 68, 0.8);
         }
         
         .toggle-controls.collapsed .minus {
@@ -286,11 +276,11 @@
         
         .toggle-controls.collapsed {
             background: #4CAF50;
-            box-shadow: 0 3px 10px rgba(76, 175, 80, 0.6);
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.6);
         }
         
         .toggle-controls.collapsed:hover {
-            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.8);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.8);
         }
         
         /* Состояние свернутых фильтров */
@@ -307,33 +297,24 @@
             display: none;
         }
         
-        /* Адаптивность для мобильных устройств - ИСПРАВЛЕНА */
-        @media (max-width: 1024px) {
+        /* Адаптивность для мобильных устройств */
+        @media (max-width: 768px) {
             #controls {
                 top: 15px;
                 left: 15px;
                 gap: 12px;
-                max-width: 90vw; /* Ограничиваем ширину на мобильных */
             }
             
             #title_button {
                 top: 15px;
                 right: 15px;
                 font-size: 12px;
-                max-width: 40vw; /* Ограничиваем ширину названия филиала */
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
             }
             
             #report_datetime {
                 bottom: 50px;
                 right: 15px;
                 font-size: 10px;
-                max-width: 60vw; /* Ограничиваем ширину даты */
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
             }
             
             button {
@@ -341,21 +322,15 @@
                 height: 40px;
             }
             
-            .sector-buttons {
-                max-height: 150px; /* Уменьшаем высоту списка секторов */
-                max-width: 200px; /* Ограничиваем ширину списка секторов */
-            }
-            
             .sector-button {
                 font-size: 10px;
                 padding: 6px 10px;
                 min-height: 32px;
-                max-width: 180px; /* Ограничиваем ширину кнопок секторов */
             }
             
             .sector-text {
                 font-size: 9px;
-                max-width: 160px; /* Ограничиваем ширину текста секторов */
+                max-width: 120px;
             }
             
             .filter-title {
@@ -367,46 +342,6 @@
                 height: 30px;
                 font-size: 16px;
                 margin: 0 auto 8px auto;
-            }
-        }
-        
-        /* Особые стили для горизонтальной ориентации на мобильных */
-        @media (max-width: 1024px) and (orientation: landscape) {
-            #controls {
-                top: 10px;
-                left: 10px;
-                gap: 8px;
-                max-width: 85vw;
-            }
-            
-            .sector-buttons {
-                max-height: 120px; /* Еще меньше высота в ландшафте */
-                max-width: 180px;
-            }
-            
-            .sector-button {
-                font-size: 9px;
-                padding: 4px 8px;
-                min-height: 28px;
-                max-width: 160px;
-            }
-            
-            .sector-text {
-                font-size: 8px;
-                max-width: 140px;
-            }
-            
-            .color-buttons {
-                gap: 6px;
-            }
-            
-            button {
-                width: 36px;
-                height: 36px;
-            }
-            
-            .button-text {
-                font-size: 14px;
             }
         }
         
@@ -433,34 +368,6 @@
         .sector-buttons::-webkit-scrollbar-thumb {
             background: rgba(255, 255, 255, 0.3);
             border-radius: 2px;
-        }
-        
-        /* Стили для кликабельных номеров телефонов в балуне */
-        .phone-number {
-            color: #2196F3;
-            text-decoration: none;
-            font-weight: bold;
-            padding: 2px 4px;
-            border-radius: 3px;
-            background-color: rgba(33, 150, 243, 0.1);
-            border: 1px solid rgba(33, 150, 243, 0.3);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .phone-number:hover {
-            background-color: rgba(33, 150, 243, 0.2);
-            text-decoration: underline;
-        }
-        
-        /* Для мобильных устройств - улучшенные стили телефона */
-        @media (max-width: 768px) {
-            .phone-number {
-                display: inline-block;
-                padding: 4px 8px;
-                font-size: 14px;
-                margin: 2px 0;
-            }
         }
     </style>
 </head>
@@ -509,7 +416,7 @@
     </div>
     
     <!-- Прозрачные информационные элементы -->
-    <div id="report_datetime">Дата и время отчета: 21-11-2025 21:52:55</div>
+    <div id="report_datetime">Дата и время отчета: 21-11-2025 22:16:28</div>
     <div id="title_button">Волгоград Восток</div>
     
     <!-- Кнопка "Назад" - без изменений -->
@@ -541,29 +448,8 @@ function init() {
             zIndex = 3;
         }
         
-        // Обрабатываем номер телефона в балуне
-        var balloonContent = placemark.balloonContent;
-        
-        // Заменяем номера телефонов на кликабельные ссылки
-        balloonContent = balloonContent.replace(
-            /Номер телефона:\s*([+\d\s\-()]+)/g, 
-            function(match, phoneNumber) {
-                var cleanPhone = phoneNumber.trim().replace(/[^\d+]/g, '');
-                return 'Номер телефона: <a href="tel:' + cleanPhone + '" class="phone-number">' + phoneNumber.trim() + '</a>';
-            }
-        );
-        
-        // Также обрабатываем другие возможные форматы номеров
-        balloonContent = balloonContent.replace(
-            /Телефон:\s*([+\d\s\-()]+)/g, 
-            function(match, phoneNumber) {
-                var cleanPhone = phoneNumber.trim().replace(/[^\d+]/g, '');
-                return 'Телефон: <a href="tel:' + cleanPhone + '" class="phone-number">' + phoneNumber.trim() + '</a>';
-            }
-        );
-        
         var newPlacemark = new ymaps.Placemark(placemark.coords, {
-            balloonContent: balloonContent,
+            balloonContent: placemark.balloonContent,
             iconCaption: placemark.total_requests.toString()
         }, {
             preset: 'islands#dotIcon',
