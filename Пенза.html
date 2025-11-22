@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Пенза</title>
     <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
-    <style>
+        <style>
         * {
             margin: 0;
             padding: 0;
@@ -76,103 +76,93 @@
         }
         
         /* Обновленные стили для кнопок с тонкими границами */
-button {
-    padding: 0;
-    border: 1px solid #000000; /* Тонкая граница вместо 3px */
-    background-color: rgba(255, 255, 255, 0.9);
-    color: #333;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: bold;
-    border-radius: 50%;
-    transition: all 0.3s ease;
-    width: 44px;
-    height: 44px;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-}
-
-.sector-button {
-    width: auto;
-    height: auto;
-    border-radius: 8px; /* Прямоугольные углы вместо 18px */
-    padding: 8px 12px;
-    font-size: 11px;
-    background-color: rgba(255, 255, 255, 0.15);
-    color: rgba(255, 255, 255, 0.8);
-    border: 1px solid rgba(255, 255, 255, 0.4); /* Тонкая граница */
-    min-height: 36px;
-    backdrop-filter: blur(5px);
-}
-
-button.active {
-    border: 1px solid #000000; /* Тонкая граница для активных кнопок */
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
-    transform: scale(1.05);
-}
-
-button.color-red.active { 
-    background-color: rgba(255, 68, 68, 0.9); 
-    color: white;
-}
-button.color-yellow.active { 
-    background-color: rgba(255, 204, 0, 0.9); 
-    color: white;
-}
-button.color-blue.active { 
-    background-color: rgba(68, 68, 255, 0.9); 
-    color: white;
-}
-button.color-green.active { 
-    background-color: rgba(76, 175, 80, 0.9); 
-    color: white;
-}
-
-/* Стили для неактивных кнопок - белый круг с тонкой черной границей */
-button.color-red:not(.active) { 
-    background-color: rgba(255, 255, 255, 0.9); 
-    color: #666;
-    border: 1px solid #000000; /* Тонкая граница */
-}
-button.color-yellow:not(.active) { 
-    background-color: rgba(255, 255, 255, 0.9); 
-    color: #666;
-    border: 1px solid #000000; /* Тонкая граница */
-}
-button.color-blue:not(.active) { 
-    background-color: rgba(255, 255, 255, 0.9); 
-    color: #666;
-    border: 1px solid #000000; /* Тонкая граница */
-}
-button.color-green:not(.active) { 
-    background-color: rgba(255, 255, 255, 0.9); 
-    color: #666;
-    border: 1px solid #000000; /* Тонкая граница */
-}
-
-button:not(.active):hover {
-    background-color: rgba(255, 255, 255, 0.95);
-    transform: scale(1.02);
-}
-
-.sector-button.active { 
-    background-color: rgba(33, 150, 243, 0.9); 
-    color: white;
-    border: 1px solid rgba(255, 255, 255, 0.8); /* Тонкая граница */
-}
-
-.sector-button:not(.active):hover {
-    background-color: rgba(255, 255, 255, 0.25);
-}
+        button {
+            padding: 0;
+            border: 1px solid #000000;
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #333;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            width: 44px;
+            height: 44px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+        
+        .sector-button {
+            width: auto;
+            height: auto;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 11px;
+            background-color: rgba(255, 255, 255, 0.15);
+            color: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            min-height: 36px;
+            backdrop-filter: blur(5px);
+        }
+        
+        button.active {
+            border: 1px solid #000000;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+            transform: scale(1.05);
+        }
+        
+        button.color-red.active { 
+            background-color: rgba(255, 68, 68, 0.9); 
+            color: white;
+        }
+        button.color-yellow.active { 
+            background-color: rgba(255, 204, 0, 0.9); 
+            color: white;
+        }
+        button.color-blue.active { 
+            background-color: rgba(68, 68, 255, 0.9); 
+            color: white;
+        }
+        button.color-green.active { 
+            background-color: rgba(76, 175, 80, 0.9); 
+            color: white;
+        }
+        
+        /* Стили для неактивных кнопок - белый круг с тонкой черной границей */
+        button.color-red:not(.active) { 
+            background-color: rgba(255, 255, 255, 0.9); 
+            color: #666;
+            border: 1px solid #000000;
+        }
+        button.color-yellow:not(.active) { 
+            background-color: rgba(255, 255, 255, 0.9); 
+            color: #666;
+            border: 1px solid #000000;
+        }
+        button.color-blue:not(.active) { 
+            background-color: rgba(255, 255, 255, 0.9); 
+            color: #666;
+            border: 1px solid #000000;
+        }
+        button.color-green:not(.active) { 
+            background-color: rgba(255, 255, 255, 0.9); 
+            color: #666;
+            border: 1px solid #000000;
+        }
+        
+        button:not(.active):hover {
+            background-color: rgba(255, 255, 255, 0.95);
+            transform: scale(1.02);
+        }
         
         .sector-button.active { 
             background-color: rgba(33, 150, 243, 0.9); 
             color: white;
-            border-color: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.8);
         }
         
         .sector-button:not(.active):hover {
@@ -196,7 +186,7 @@ button:not(.active):hover {
             text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
         }
         
-        /* Стили для прозрачных информационных элементов */
+        /* Остальные стили без изменений */
         #report_datetime {
             position: fixed;
             bottom: 60px;
@@ -223,7 +213,6 @@ button:not(.active):hover {
             pointer-events: none;
         }
         
-        /* Кнопка "Назад" - без изменений */
         .back-link {
             position: fixed;
             bottom: 10px;
@@ -246,7 +235,6 @@ button:not(.active):hover {
             color: #fff;
         }
         
-        /* Кнопка сворачивания - по центру над фильтрами заявок */
         .toggle-controls {
             width: 35px;
             height: 35px;
@@ -297,7 +285,6 @@ button:not(.active):hover {
             box-shadow: 0 6px 20px rgba(76, 175, 80, 0.8);
         }
         
-        /* Состояние свернутых фильтров */
         #controls.collapsed .filter-content {
             display: none;
         }
@@ -306,12 +293,10 @@ button:not(.active):hover {
             transition: all 0.3s ease;
         }
         
-        /* Скрываем заголовки секций когда свернуто */
         #controls.collapsed .filter-title {
             display: none;
         }
         
-        /* Адаптивность для мобильных устройств */
         @media (max-width: 768px) {
             #controls {
                 top: 15px;
@@ -359,7 +344,6 @@ button:not(.active):hover {
             }
         }
         
-        /* Анимации */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-10px); }
             to { opacity: 1; transform: translateY(0); }
@@ -369,7 +353,6 @@ button:not(.active):hover {
             animation: fadeIn 0.5s ease-out;
         }
         
-        /* Скрываем скроллбар для секторов */
         .sector-buttons::-webkit-scrollbar {
             width: 3px;
         }
@@ -446,7 +429,7 @@ button:not(.active):hover {
     </div>
     
     <!-- Прозрачные информационные элементы -->
-    <div id="report_datetime">Дата и время отчета: 22-11-2025 15:41:17</div>
+    <div id="report_datetime">Дата и время отчета: 22-11-2025 15:47:51</div>
     <div id="title_button">Пенза</div>
     
     <!-- Кнопка "Назад" - без изменений -->
