@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Волгоград Восток</title>
     <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
-        <style>
+    <style>
         * {
             margin: 0;
             padding: 0;
@@ -75,7 +75,7 @@
             background: transparent;
         }
         
-        /* Обновленные стили для кнопок с тонкими границами */
+        /* Обновленные стили для кнопок с тонкими черными границами */
         button {
             padding: 0;
             border: 1px solid #000000;
@@ -104,7 +104,7 @@
             font-size: 11px;
             background-color: rgba(255, 255, 255, 0.15);
             color: rgba(255, 255, 255, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.4);
+            border: 1px solid #000000;
             min-height: 36px;
             backdrop-filter: blur(5px);
         }
@@ -162,7 +162,7 @@
         .sector-button.active { 
             background-color: rgba(33, 150, 243, 0.9); 
             color: white;
-            border: 1px solid rgba(255, 255, 255, 0.8);
+            border: 1px solid #000000;
         }
         
         .sector-button:not(.active):hover {
@@ -186,7 +186,7 @@
             text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
         }
         
-        /* Остальные стили без изменений */
+        /* Стили для прозрачных информационных элементов */
         #report_datetime {
             position: fixed;
             bottom: 60px;
@@ -213,6 +213,7 @@
             pointer-events: none;
         }
         
+        /* Кнопка "Назад" - без изменений */
         .back-link {
             position: fixed;
             bottom: 10px;
@@ -235,6 +236,7 @@
             color: #fff;
         }
         
+        /* Кнопка сворачивания - по центру над фильтрами заявок */
         .toggle-controls {
             width: 35px;
             height: 35px;
@@ -285,6 +287,7 @@
             box-shadow: 0 6px 20px rgba(76, 175, 80, 0.8);
         }
         
+        /* Состояние свернутых фильтров */
         #controls.collapsed .filter-content {
             display: none;
         }
@@ -293,10 +296,12 @@
             transition: all 0.3s ease;
         }
         
+        /* Скрываем заголовки секций когда свернуто */
         #controls.collapsed .filter-title {
             display: none;
         }
         
+        /* Адаптивность для мобильных устройств */
         @media (max-width: 768px) {
             #controls {
                 top: 15px;
@@ -344,6 +349,7 @@
             }
         }
         
+        /* Анимации */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-10px); }
             to { opacity: 1; transform: translateY(0); }
@@ -353,6 +359,7 @@
             animation: fadeIn 0.5s ease-out;
         }
         
+        /* Скрываем скроллбар для секторов */
         .sector-buttons::-webkit-scrollbar {
             width: 3px;
         }
@@ -413,7 +420,7 @@
     </div>
     
     <!-- Прозрачные информационные элементы -->
-    <div id="report_datetime">Дата и время отчета: 22-11-2025 15:47:52</div>
+    <div id="report_datetime">Дата и время отчета: 22-11-2025 16:03:46</div>
     <div id="title_button">Волгоград Восток</div>
     
     <!-- Кнопка "Назад" - без изменений -->
