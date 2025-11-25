@@ -75,6 +75,30 @@
             background: transparent;
         }
         
+        /* Стили для выпадающего меню магазинов */
+        .shop-select-container {
+            background: transparent;
+            margin-bottom: 10px;
+        }
+        
+        .shop-select {
+            width: 100%;
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid #000000;
+            background-color: rgba(255, 255, 255, 0.15);
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 11px;
+            backdrop-filter: blur(5px);
+            cursor: pointer;
+        }
+        
+        .shop-select option {
+            background-color: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 8px;
+        }
+        
         /* Обновленные стили для кнопок с тонкими черными границами */
         button {
             padding: 0;
@@ -347,6 +371,11 @@
                 font-size: 16px;
                 margin: 0 auto 8px auto;
             }
+            
+            .shop-select {
+                font-size: 10px;
+                padding: 6px 10px;
+            }
         }
         
         /* Анимации */
@@ -387,6 +416,21 @@
         </div>
         
         <div class="filter-content">
+            <!-- Секция выбора магазина -->
+            <div class="filter-section">
+                <div class="filter-title">МАГАЗИН</div>
+                <div class="shop-select-container">
+                    <select id="shop_select" class="shop-select">
+                        <option value="all">Все магазины</option>
+                        
+                        <option value="Камышин 1 5 микрорайон">Камышин 1 5 микрорайон</option>
+                        
+                        <option value="Михайловка 1 Поперечная">Михайловка 1 Поперечная</option>
+                        
+                    </select>
+                </div>
+            </div>
+            
             <!-- Секция заявок -->
             <div class="filter-section">
                 <div class="filter-title">ЗАЯВКИ</div>
@@ -420,7 +464,7 @@
     </div>
     
     <!-- Прозрачные информационные элементы -->
-    <div id="report_datetime">Дата и время отчета: 25-11-2025 06:47:36</div>
+    <div id="report_datetime">Дата и время отчета: 25-11-2025 22:03:36</div>
     <div id="title_button">Волгоград Восток</div>
     
     <!-- Кнопка "Назад" - без изменений -->
@@ -440,8 +484,17 @@ function init() {
     var allPlacemarks = [];
     var placemarksByColor = { 'red': [], 'yellow': [], 'blue': [] };
     var placemarksBySector = {};
+    var placemarksByShop = {};
 
     // Инициализируем секторы
+    
+
+    // Инициализируем магазины
+    placemarksByShop['all'] = [];
+    
+    placemarksByShop['Камышин 1 5 микрорайон'] = [];
+    
+    placemarksByShop['Михайловка 1 Поперечная'] = [];
     
 
     placemarks.forEach(function (placemark) {
@@ -463,6 +516,7 @@ function init() {
         
         newPlacemark.properties.set('color', placemark.color);
         newPlacemark.properties.set('sector', placemark.sector);
+        newPlacemark.properties.set('shop', placemark.podrazdelenie);
         newPlacemark.properties.set('zIndex', zIndex);
         
         allPlacemarks.push(newPlacemark);
@@ -480,6 +534,14 @@ function init() {
                 placemarksBySector[sector].push(newPlacemark);
             });
         }
+        
+        // Группировка по магазину
+        var shop = placemark.podrazdelenie;
+        if (!placemarksByShop[shop]) {
+            placemarksByShop[shop] = [];
+        }
+        placemarksByShop[shop].push(newPlacemark);
+        placemarksByShop['all'].push(newPlacemark);
     });
 
     var activeColors = { 'red': true, 'yellow': true, 'blue': true };
@@ -487,6 +549,7 @@ function init() {
         
         'all': true
     };
+    var activeShop = 'all';
 
     function addPlacemarks() {
         myMap.geoObjects.removeAll();
@@ -498,6 +561,7 @@ function init() {
         sortedPlacemarks.forEach(function (placemark) {
             var color = placemark.properties.get('color');
             var sector = placemark.properties.get('sector');
+            var shop = placemark.properties.get('shop');
             
             // Проверяем активность цвета
             var colorActive = activeColors[color];
@@ -509,7 +573,10 @@ function init() {
                 sectorActive = sectors.some(function(s) { return activeSectors[s]; });
             }
             
-            if (colorActive && sectorActive) {
+            // Проверяем активность магазина
+            var shopActive = (activeShop === 'all' || activeShop === shop);
+            
+            if (colorActive && sectorActive && shopActive) {
                 myMap.geoObjects.add(placemark);
             }
         });
@@ -629,6 +696,12 @@ function init() {
         }
     }
 
+    // Функция для фильтрации по магазину
+    function filterByShop(shop) {
+        activeShop = shop;
+        addPlacemarks();
+    }
+
     // Кнопка сворачивания/разворачивания
     var toggleControls = document.querySelector('#toggleControls');
     var controls = document.querySelector('#controls');
@@ -665,6 +738,11 @@ function init() {
 
     // Обработчики для конкретных секторов
     
+
+    // Обработчик для выпадающего меню магазинов
+    document.querySelector('#shop_select').addEventListener('change', function () {
+        filterByShop(this.value);
+    });
 
     // Инициализация состояния кнопок
     updateAllButtonState();
