@@ -76,30 +76,32 @@
         }
         
         /* Стили для выпадающего меню магазинов */
-        .shop-select-container {
-            background: transparent;
-            margin-bottom: 10px;
-        }
-        
-        .shop-select {
-            width: 100%;
-            padding: 8px 12px;
-            border-radius: 8px;
-            border: 1px solid #000000;
-            background-color: rgba(255, 255, 255, 0.95);
-            color: #000000;
-            font-size: 11px;
-            backdrop-filter: blur(5px);
-            cursor: pointer;
-            font-weight: bold;
-        }
-        
-        .shop-select option {
-            background-color: white;
-            color: black;
-            padding: 8px;
-            font-size: 11px;
-        }
+.shop-select-container {
+    background: transparent;
+    margin-bottom: 10px;
+}
+
+.shop-select {
+    width: 100%;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #000000;
+    background-color: rgba(255, 255, 255, 0.95);
+    color: #000000;
+    font-size: 11px;
+    backdrop-filter: blur(5px);
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.shop-select option {
+    background-color: white;
+    color: black;
+    padding: 4px 8px;
+    font-size: 11px;
+    line-height: 1.2;
+    height: 24px;
+}
         
         /* Обновленные стили для кнопок с черными цифрами */
         button {
@@ -329,91 +331,105 @@
         
         /* Адаптивность для мобильных устройств */
         @media (max-width: 768px) {
-            #controls {
-                top: 15px;
-                left: 15px;
-                gap: 12px;
-                max-width: 90vw;
-            }
-            
-            #title_button {
-                top: 15px;
-                right: 15px;
-                font-size: 12px;
-            }
-            
-            #report_datetime {
-                bottom: 50px;
-                right: 15px;
-                font-size: 10px;
-            }
-            
-            button {
-                width: 40px;
-                height: 40px;
-            }
-            
-            .sector-button {
-                font-size: 10px;
-                padding: 6px 10px;
-                min-height: 32px;
-            }
-            
-            .sector-text {
-                font-size: 9px;
-                max-width: 120px;
-            }
-            
-            .filter-title {
-                font-size: 11px;
-            }
-            
-            .toggle-controls {
-                width: 30px;
-                height: 30px;
-                font-size: 16px;
-                margin: 0 auto 8px auto;
-            }
-            
-            .shop-select {
-                font-size: 10px;
-                padding: 6px 10px;
-                max-width: 100%;
-            }
-            
-            .shop-select-container {
-                max-width: 100%;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            #controls {
-                top: 10px;
-                left: 10px;
-                gap: 10px;
-                max-width: 95vw;
-            }
-            
-            .shop-select {
-                font-size: 9px;
-                padding: 5px 8px;
-            }
-            
-            button {
-                width: 36px;
-                height: 36px;
-            }
-            
-            .button-text {
-                font-size: 14px;
-            }
-            
-            .sector-button {
-                font-size: 9px;
-                padding: 5px 8px;
-                min-height: 30px;
-            }
-        }
+    #controls {
+        top: 15px;
+        left: 15px;
+        gap: 12px;
+        max-width: 90vw;
+    }
+    
+    #title_button {
+        top: 15px;
+        right: 15px;
+        font-size: 12px;
+    }
+    
+    #report_datetime {
+        bottom: 50px;
+        right: 15px;
+        font-size: 10px;
+    }
+    
+    button {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .sector-button {
+        font-size: 10px;
+        padding: 6px 10px;
+        min-height: 32px;
+    }
+    
+    .sector-text {
+        font-size: 9px;
+        max-width: 120px;
+    }
+    
+    .filter-title {
+        font-size: 11px;
+    }
+    
+    .toggle-controls {
+        width: 30px;
+        height: 30px;
+        font-size: 16px;
+        margin: 0 auto 8px auto;
+    }
+    
+    .shop-select {
+        font-size: 10px;
+        padding: 6px 10px;
+        max-width: 100%;
+    }
+    
+    .shop-select option {
+        font-size: 10px;
+        padding: 2px 6px;
+        line-height: 1.1;
+        height: 20px;
+    }
+    
+    .shop-select-container {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    #controls {
+        top: 10px;
+        left: 10px;
+        gap: 10px;
+        max-width: 95vw;
+    }
+    
+    .shop-select {
+        font-size: 9px;
+        padding: 5px 8px;
+    }
+    
+    .shop-select option {
+        font-size: 9px;
+        padding: 1px 4px;
+        line-height: 1;
+        height: 18px;
+    }
+    
+    button {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .button-text {
+        font-size: 14px;
+    }
+    
+    .sector-button {
+        font-size: 9px;
+        padding: 5px 8px;
+        min-height: 30px;
+    }
+}
         
         /* Анимации */
         @keyframes fadeIn {
@@ -501,7 +517,7 @@
     </div>
     
     <!-- Прозрачные информационные элементы -->
-    <div id="report_datetime">Дата и время отчета: 25-11-2025 22:23:48</div>
+    <div id="report_datetime">Дата и время отчета: 25-11-2025 22:41:33</div>
     <div id="title_button">Волгоград Восток</div>
     
     <!-- Кнопка "Назад" - без изменений -->
@@ -517,7 +533,7 @@ function init() {
         controls: ['zoomControl']
     });
 
-    var placemarks = [{"coords": [50.091, 45.3568], "balloonContent": "<b>Подразделение:</b> Камышин 1 5 микрорайон<br><b>Отв.:</b> Не указан<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00008086155<br><b>Ответственный:</b> Трудов Алексей Владимирович<br><b>Выполнить до:</b> 27.11.2025<br><b>Описание:</b> Тема: СГИ Камышин 1 5 микрорайон (993401) НТЦ..112 SCADA-XO \nОписание: Сигнал: Авария холодильного оборудования: НТЦ..112; Наименование аварии: Compressor 3A safety cut out; \n\nВременная метка сигнала: 24.11.25 22:19:37::546; \n\nЗначение: true (вкл) ; \n\nСработавшее состояние: Дискретное значение(лог. 1); \n\nПредыдущее состояние: Норма(не было срабатываний); \n\nЗадержка срабатывания: 300 сек.; \n\nВремя срабатывания: 24.11.25 22:19:42::711.\n<br><b>Направление:</b> Холодильное оборудование<br><b>Осталось дней:</b> 2<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=45.3568,50.091&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "yellow", "days_left": 2, "total_requests": 1, "red_count": 0, "yellow_count": 1, "blue_count": 0, "sector": "Не указан", "podrazdelenie": "Камышин 1 5 микрорайон", "address": ""}, {"coords": [50.070299, 43.215768], "balloonContent": "<b>Подразделение:</b> Михайловка 1 Поперечная<br><b>Отв.:</b> Не указан<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00008086196<br><b>Ответственный:</b> Дронов Данила Евгеньевич<br><b>Выполнить до:</b> 24.11.2025<br><b>Описание:</b> ВНИМАНИЕ! Повторная заявка, низкое качество выполнения ремонта по предшествующим заявкам.\n\nТема: СГИ Михайловка 1 Поперечная (993412) БШ_Мороженое..14 SCADA-XO \nОписание: Сигнал: Авария холодильного оборудования: БШ_Мороженое..14; Наименование аварии: A1. Высокая температура; \n\nВременная метка сигнала: 24.11.25 13:37:09::322; \n\nЗначение: true (вкл) ; \n\nСработавшее состояние: Дискретное значение(лог. 1); \n\nПредыдущее состояние: Норма(не было срабатываний); \n\nЗадержка срабатывания: 3000 сек.; \n\nВремя срабатывания: 24.11.25 13:37:09::837.\n<br><b>Направление:</b> Холодильное оборудование<br><b>Осталось дней:</b> -2<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=43.215768,50.070299&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "red", "days_left": -2, "total_requests": 1, "red_count": 1, "yellow_count": 0, "blue_count": 0, "sector": "Не указан", "podrazdelenie": "Михайловка 1 Поперечная", "address": ""}];
+    var placemarks = [{"coords": [50.091, 45.3568], "balloonContent": "<b>Подразделение:</b> Камышин 1 5 микрорайон<br><b>Отв.:</b> Не указан<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00008086155<br><b>Ответственный:</b> Трудов Алексей Владимирович<br><b>Выполнить до:</b> 27.11.2025<br><b>Описание:</b> Тема: СГИ Камышин 1 5 микрорайон (993401) НТЦ..112 SCADA-XO \nОписание: Сигнал: Авария холодильного оборудования: НТЦ..112; Наименование аварии: Compressor 3A safety cut out; \n\nВременная метка сигнала: 24.11.25 22:19:37::546; \n\nЗначение: true (вкл) ; \n\nСработавшее состояние: Дискретное значение(лог. 1); \n\nПредыдущее состояние: Норма(не было срабатываний); \n\nЗадержка срабатывания: 300 сек.; \n\nВремя срабатывания: 24.11.25 22:19:42::711.\n<br><b>Направление:</b> Холодильное оборудование<br><b>Осталось дней:</b> 1<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=45.3568,50.091&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "yellow", "days_left": 1, "total_requests": 1, "red_count": 0, "yellow_count": 1, "blue_count": 0, "sector": "Не указан", "podrazdelenie": "Камышин 1 5 микрорайон", "address": ""}, {"coords": [50.070299, 43.215768], "balloonContent": "<b>Подразделение:</b> Михайловка 1 Поперечная<br><b>Отв.:</b> Не указан<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00008086196<br><b>Ответственный:</b> Дронов Данила Евгеньевич<br><b>Выполнить до:</b> 24.11.2025<br><b>Описание:</b> ВНИМАНИЕ! Повторная заявка, низкое качество выполнения ремонта по предшествующим заявкам.\n\nТема: СГИ Михайловка 1 Поперечная (993412) БШ_Мороженое..14 SCADA-XO \nОписание: Сигнал: Авария холодильного оборудования: БШ_Мороженое..14; Наименование аварии: A1. Высокая температура; \n\nВременная метка сигнала: 24.11.25 13:37:09::322; \n\nЗначение: true (вкл) ; \n\nСработавшее состояние: Дискретное значение(лог. 1); \n\nПредыдущее состояние: Норма(не было срабатываний); \n\nЗадержка срабатывания: 3000 сек.; \n\nВремя срабатывания: 24.11.25 13:37:09::837.\n<br><b>Направление:</b> Холодильное оборудование<br><b>Осталось дней:</b> -2<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=43.215768,50.070299&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "red", "days_left": -2, "total_requests": 1, "red_count": 1, "yellow_count": 0, "blue_count": 0, "sector": "Не указан", "podrazdelenie": "Михайловка 1 Поперечная", "address": ""}];
     var allPlacemarks = [];
     var placemarksByColor = { 'red': [], 'yellow': [], 'blue': [] };
     var placemarksBySector = {};
