@@ -76,35 +76,39 @@
         }
         
         /* Стили для выпадающего меню магазинов */
-        .shop-select-container {
-            background: transparent;
-            margin-bottom: 10px;
-        }
+.shop-select-container {
+    background: transparent;
+    margin-bottom: 10px;
+}
+
+.shop-select {
+    width: 100%;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #000000;
+    background-color: rgba(255, 255, 255, 0.95);
+    color: #000000;
+    font-size: 11px;
+    backdrop-filter: blur(5px);
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.shop-select option {
+    background-color: white;
+    color: black;
+    padding: 4px 8px;
+    font-size: 11px;
+    line-height: 1.2;
+    height: 24px;
+}
         
-        .shop-select {
-            width: 100%;
-            padding: 8px 12px;
-            border-radius: 8px;
-            border: 1px solid #000000;
-            background-color: rgba(255, 255, 255, 0.15);
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 11px;
-            backdrop-filter: blur(5px);
-            cursor: pointer;
-        }
-        
-        .shop-select option {
-            background-color: rgba(0, 0, 0, 0.9);
-            color: white;
-            padding: 8px;
-        }
-        
-        /* Обновленные стили для кнопок с тонкими черными границами */
+        /* Обновленные стили для кнопок с черными цифрами */
         button {
             padding: 0;
             border: 1px solid #000000;
             background-color: rgba(255, 255, 255, 0.9);
-            color: #333;
+            color: #000000;
             cursor: pointer;
             font-size: 14px;
             font-weight: bold;
@@ -156,25 +160,25 @@
             color: white;
         }
         
-        /* Стили для неактивных кнопок - белый круг с тонкой черной границей */
+        /* Стили для неактивных кнопок - белый круг с тонкой черной границей и черными цифрами */
         button.color-red:not(.active) { 
             background-color: rgba(255, 255, 255, 0.9); 
-            color: #666;
+            color: #000000;
             border: 1px solid #000000;
         }
         button.color-yellow:not(.active) { 
             background-color: rgba(255, 255, 255, 0.9); 
-            color: #666;
+            color: #000000;
             border: 1px solid #000000;
         }
         button.color-blue:not(.active) { 
             background-color: rgba(255, 255, 255, 0.9); 
-            color: #666;
+            color: #000000;
             border: 1px solid #000000;
         }
         button.color-green:not(.active) { 
             background-color: rgba(255, 255, 255, 0.9); 
-            color: #666;
+            color: #000000;
             border: 1px solid #000000;
         }
         
@@ -197,7 +201,7 @@
             font-size: 16px;
             font-weight: bold;
             pointer-events: none;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
         }
         
         .sector-text {
@@ -325,139 +329,107 @@
             display: none;
         }
         
-        /* Стили для балуна на мобильных устройствах */
-        @media (max-width: 768px) {
-            .ymaps-2-1-79-balloon {
-                max-width: 280px !important;
-                width: 85vw !important;
-                margin: 10px !important;
-            }
-            
-            .ymaps-2-1-79-balloon__content {
-                max-width: 100% !important;
-                margin-right: 0 !important;
-                padding: 15px 20px 15px 15px !important;
-                box-sizing: border-box !important;
-                font-size: 14px !important;
-            }
-            
-            .ymaps-2-1-79-balloon__close {
-                right: 5px !important;
-                top: 5px !important;
-                z-index: 1000 !important;
-            }
-            
-            .ymaps-2-1-79-balloon__close-button {
-                width: 25px !important;
-                height: 25px !important;
-                background: white !important;
-                border-radius: 50% !important;
-                box-shadow: 0 2px 5px rgba(0,0,0,0.3) !important;
-                border: 1px solid #ccc !important;
-            }
-            
-            .ymaps-2-1-79-balloon__tail {
-                display: none !important;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .ymaps-2-1-79-balloon {
-                max-width: 250px !important;
-                width: 90vw !important;
-            }
-            
-            .ymaps-2-1-79-balloon__content {
-                padding: 12px 18px 12px 12px !important;
-                font-size: 13px !important;
-            }
-            
-            .ymaps-2-1-79-balloon__close {
-                right: 3px !important;
-                top: 3px !important;
-            }
-            
-            .ymaps-2-1-79-balloon__close-button {
-                width: 22px !important;
-                height: 22px !important;
-            }
-        }
-        
         /* Адаптивность для мобильных устройств */
         @media (max-width: 768px) {
-            #controls {
-                top: 15px;
-                left: 15px;
-                gap: 12px;
-            }
-            
-            #title_button {
-                top: 15px;
-                right: 15px;
-                font-size: 12px;
-            }
-            
-            #report_datetime {
-                bottom: 50px;
-                right: 15px;
-                font-size: 10px;
-            }
-            
-            button {
-                width: 40px;
-                height: 40px;
-            }
-            
-            .sector-button {
-                font-size: 10px;
-                padding: 6px 10px;
-                min-height: 32px;
-            }
-            
-            .sector-text {
-                font-size: 9px;
-                max-width: 120px;
-            }
-            
-            .filter-title {
-                font-size: 11px;
-            }
-            
-            .toggle-controls {
-                width: 30px;
-                height: 30px;
-                font-size: 16px;
-                margin: 0 auto 8px auto;
-            }
-            
-            .shop-select {
-                font-size: 10px;
-                padding: 6px 10px;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .container {
-                padding: 15px;
-            }
-            
-            h1 {
-                font-size: 20px;
-            }
-            
-            .summary-link {
-                padding: 12px;
-                font-size: 14px;
-            }
-            
-            .filial-link {
-                font-size: 15px;
-            }
-            
-            .update-time {
-                font-size: 12px;
-            }
-        }
+    #controls {
+        top: 15px;
+        left: 15px;
+        gap: 12px;
+        max-width: 90vw;
+    }
+    
+    #title_button {
+        top: 15px;
+        right: 15px;
+        font-size: 12px;
+    }
+    
+    #report_datetime {
+        bottom: 50px;
+        right: 15px;
+        font-size: 10px;
+    }
+    
+    button {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .sector-button {
+        font-size: 10px;
+        padding: 6px 10px;
+        min-height: 32px;
+    }
+    
+    .sector-text {
+        font-size: 9px;
+        max-width: 120px;
+    }
+    
+    .filter-title {
+        font-size: 11px;
+    }
+    
+    .toggle-controls {
+        width: 30px;
+        height: 30px;
+        font-size: 16px;
+        margin: 0 auto 8px auto;
+    }
+    
+    .shop-select {
+        font-size: 10px;
+        padding: 6px 10px;
+        max-width: 100%;
+    }
+    
+    .shop-select option {
+        font-size: 10px;
+        padding: 2px 6px;
+        line-height: 1.1;
+        height: 20px;
+    }
+    
+    .shop-select-container {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    #controls {
+        top: 10px;
+        left: 10px;
+        gap: 10px;
+        max-width: 95vw;
+    }
+    
+    .shop-select {
+        font-size: 9px;
+        padding: 5px 8px;
+    }
+    
+    .shop-select option {
+        font-size: 9px;
+        padding: 1px 4px;
+        line-height: 1;
+        height: 18px;
+    }
+    
+    button {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .button-text {
+        font-size: 14px;
+    }
+    
+    .sector-button {
+        font-size: 9px;
+        padding: 5px 8px;
+        min-height: 30px;
+    }
+}
         
         /* Анимации */
         @keyframes fadeIn {
@@ -545,7 +517,7 @@
     </div>
     
     <!-- Прозрачные информационные элементы -->
-    <div id="report_datetime">Дата и время отчета: 26-11-2025 21:46:56</div>
+    <div id="report_datetime">Дата и время отчета: 26-11-2025 21:54:09</div>
     <div id="title_button">Волгоград Восток</div>
     
     <!-- Кнопка "Назад" - без изменений -->
@@ -559,11 +531,6 @@ function init() {
         center: [48.708, 44.5133],
         zoom: 10,
         controls: ['zoomControl']
-    }, {
-        // Настройки балуна для мобильных
-        balloonPanelMaxMapArea: 0,
-        balloonMaxWidth: window.innerWidth > 768 ? 400 : 300,
-        balloonMinWidth: 200
     });
 
     var placemarks = [{"coords": [50.05234, 43.235586], "balloonContent": "<b>Подразделение:</b> Парадигма<br><b>Отв.:</b> Не указан<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00008092100<br><b>Ответственный:</b> Дронов Данила Евгеньевич<br><b>Выполнить до:</b> 28.11.2025<br><b>Описание:</b> Тема: Холодильное оборудование \nОписание: Добрый день. Необходимо выполнить запрос, руководствуясь следующими данными:\nОбъект ремонта, с которым возникли проблемы: Горка холодильная\nПроблема: Требуется замена лампы\nОписание проблемы: Заменить лампу в колбасной горке\nСотрудник магазина: Да\nФилиал: АО Тандер Волгоградский филиал\nОбъект: Парадигма МД ВлФ\nФИО: Людмила\nНомер телефона: <a href=\"tel:89375614981\" style=\"color: #2196F3; font-weight: bold; text-decoration: none; background: #f0f8ff; padding: 2px 6px; border-radius: 4px; border: 1px solid #2196F3;\">📞 +79375614981</a><br><b>Направление:</b> Холодильное оборудование<br><b>Осталось дней:</b> 1<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=43.235586,50.05234&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "yellow", "days_left": 1, "total_requests": 1, "red_count": 0, "yellow_count": 1, "blue_count": 0, "sector": "Не указан", "podrazdelenie": "Парадигма", "address": ""}, {"coords": [50.068493, 43.251704], "balloonContent": "<b>Подразделение:</b> Подвластный<br><b>Отв.:</b> Не указан<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00008093544<br><b>Ответственный:</b> Дронов Данила Евгеньевич<br><b>Выполнить до:</b> 26.11.2025<br><b>Описание:</b> Тема: Холодильное оборудование \nОписание: Добрый день. Необходимо выполнить запрос, руководствуясь следующими данными:\nОбъект ремонта, с которым возникли проблемы: Горка холодильная\nПроблема: Не соблюдается температурный режим\nОписание проблемы: Холодильная горка не холодит\nСотрудник магазина: Да\nФилиал: АО Тандер Волгоградский филиал\nОбъект: Подвластный МД ВлФ\nФИО: Семёнова Н.В.\nНомер телефона: <a href=\"tel:89375505611\" style=\"color: #2196F3; font-weight: bold; text-decoration: none; background: #f0f8ff; padding: 2px 6px; border-radius: 4px; border: 1px solid #2196F3;\">📞 +79375505611</a><br><b>Направление:</b> Холодильное оборудование<br><b>Осталось дней:</b> -1<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=43.251704,50.068493&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "red", "days_left": -1, "total_requests": 1, "red_count": 1, "yellow_count": 0, "blue_count": 0, "sector": "Не указан", "podrazdelenie": "Подвластный", "address": ""}];
@@ -786,6 +753,11 @@ function init() {
     function filterByShop(shop) {
         activeShop = shop;
         addPlacemarks();
+        
+        // Автоматически закрываем выпадающее меню на мобильных устройствах
+        if (window.innerWidth <= 768) {
+            document.activeElement.blur();
+        }
     }
 
     // Кнопка сворачивания/разворачивания
@@ -828,6 +800,14 @@ function init() {
     // Обработчик для выпадающего меню магазинов
     document.querySelector('#shop_select').addEventListener('change', function () {
         filterByShop(this.value);
+    });
+
+    // Обработчик для закрытия выпадающего меню при клике вне его
+    document.addEventListener('click', function(event) {
+        var shopSelect = document.querySelector('#shop_select');
+        if (window.innerWidth <= 768 && event.target !== shopSelect && !shopSelect.contains(event.target)) {
+            shopSelect.blur();
+        }
     });
 
     // Инициализация состояния кнопок
