@@ -29,97 +29,100 @@
             z-index: 1;
         }
         
-        /* Панель управления - компактная */
+        /* Панель управления - всегда видима */
         #controls {
             position: fixed;
-            top: 15px;
-            left: 15px;
+            top: 35px;    /* ОТСТУП ОТ НИЗА ВСЕГО БЛОКА КНОПОК */
+            left: 40px;
             z-index: 1000;
             background: transparent;
             padding: 0;
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            max-width: 220px;
+            gap: 15px;
+            max-width: 300px;
         }
         
         .filter-section {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            background: transparent;
-        }
-        
-        .filter-title {
-            font-size: 10px;
-            font-weight: bold;
-            color: rgba(255, 255, 255, 0.3);
-            text-align: center;
-            margin-bottom: 0;
-        }
+    display: flex;
+    flex-direction: column;
+    gap: 1px;           /* Уменьшаем расстояние между элементами */
+    background: transparent;
+    margin-bottom: 1px; /* Уменьшаем отступ между секциями */
+}
+
+.filter-title {
+    font-size: 11px;    /* Немного уменьшаем шрифт */
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.3);
+    text-align: center;
+    margin-bottom: 2px; /* Уменьшаем отступ снизу */
+}
         
         .color-buttons {
             display: flex;
             flex-direction: row;
-            gap: 6px;
+            gap: 8px;
             align-items: center;
             justify-content: center;
             background: transparent;
         }
         
-        /* Компактные стили для выпадающих меню */
+        /* Стили для выпадающих меню */
+        
         .select-container {
             background: transparent;
-            margin-bottom: 6px;
-        }
-        
-        .shop-select, .direction-select, .sector-select {
-            width: 100%;
-            padding: 6px 8px;
-            border-radius: 6px;
-            border: 1px solid #000000;
-            background-color: rgba(255, 255, 255, 0.95);
-            color: #000000;
-            font-size: 10px;
-            backdrop-filter: blur(5px);
-            cursor: pointer;
-            font-weight: bold;
-            height: 32px;
+    margin-bottom: 1px;  /* Уменьшаем отступ снизу */
+    max-width: 170px;    /* Добавляем максимальную ширину */
+}
+
+.shop-select, .direction-select, .sector-select {
+    width: 100%;
+    padding: 6px 4px;    /* padding: ВЫСОТА КНОПКИ - ОТСТУП НАДПИСИ ОТ ЛЕВОГО КРАЯ ВНУТРИ КНОПКИ */
+    border-radius: 16px;  /* СКРУГЛЕНИЕ КНОПОК */
+    border: 1px solid #000000;
+    background-color: rgba(255, 255, 255, 0.95);
+    color: #000000;
+    font-size: 14px;     /* РАЗМЕР ШРИФТА В КНОПКАХ ФИЛЬТРОВ */
+    backdrop-filter: blur(5px);
+    cursor: pointer;
+    font-weight: bold;
+    max-width: 170px;    /* ОГРАНИЧИТЕЛЬ ШИРИНЫ КНОПОК */
         }
         
         .shop-select option, .direction-select option, .sector-select option {
             background-color: white;
             color: black;
-            padding: 4px 6px;
-            font-size: 10px;
+            padding: 4px 8px;
+            font-size: 11px;
             line-height: 1.2;
-            height: 24px;
+            height: 14px;
         }
         
-        /* Компактные кнопки */
+        /* Обновленные стили для кнопок с черными цифрами */
         button {
             padding: 0;
             border: 1px solid #000000;
             background-color: rgba(255, 255, 255, 0.9);
             color: #000000;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 14px;
             font-weight: bold;
             border-radius: 50%;
             transition: all 0.3s ease;
-            width: 36px;
-            height: 36px;
+            width: 44px;
+            height: 44px;
             text-align: center;
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
         
         button.active {
             border: 1px solid #000000;
-            box-shadow: 0 0 12px rgba(255, 255, 255, 0.8);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
             transform: scale(1.05);
         }
         
@@ -140,7 +143,7 @@
             color: white;
         }
         
-        /* Стили для неактивных кнопок */
+        /* Стили для неактивных кнопок - белый круг с тонкой черной границей и черными цифрами */
         button.color-red:not(.active) { 
             background-color: rgba(255, 255, 255, 0.9); 
             color: #000000;
@@ -168,21 +171,21 @@
         }
         
         .button-text {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
             pointer-events: none;
             text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
         }
-        # здесь font-size это размер цифр в круглых кнопках
-        /* Компактные информационные элементы */
+        
+        /* Стили для прозрачных информационных элементов */
         #report_datetime {
             position: fixed;
-            bottom: 50px;
+            bottom: 60px;
             right: 10px;
             z-index: 1000;
             background: transparent;
-            padding: 4px 8px;
-            font-size: 9px;
+            padding: 6px 10px;
+            font-size: 11px;
             color: rgba(255, 255, 255, 0.2);
             text-align: right;
             pointer-events: none;
@@ -194,23 +197,23 @@
             right: 10px;
             z-index: 1000;
             background: transparent;
-            padding: 4px 8px;
-            font-size: 12px;
+            padding: 6px 12px;
+            font-size: 14px;
             font-weight: bold;
             color: rgba(255, 255, 255, 0.2);
             pointer-events: none;
         }
         
-        /* Компактная кнопка "Назад" */
+        /* Кнопка "Назад" - без изменений */
         .back-link {
             position: fixed;
             bottom: 10px;
             left: 10px;
             z-index: 1000;
             background-color: rgba(0, 0, 0, 0.6);
-            padding: 6px 12px;
-            border-radius: 16px;
-            font-size: 10px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
             color: #fff;
             text-decoration: none;
             backdrop-filter: blur(10px);
@@ -224,30 +227,30 @@
             color: #fff;
         }
         
-        /* Компактная кнопка сворачивания */
+        /* Кнопка сворачивания - по центру над фильтрами заявок */
         .toggle-controls {
-            width: 28px;
-            height: 28px;
+            width: 50px; 
+            height: 50px;
             background: #ff4444;
-            border: 2px solid #fff;
+            border: 3px solid #fff;
             border-radius: 50%;
             color: white;
             font-weight: 900;
-            font-size: 16px;
+            font-size: 20px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 3px 10px rgba(255, 68, 68, 0.6);
+            box-shadow: 0 4px 15px rgba(255, 68, 68, 0.6);
             z-index: 1001;
             transition: all 0.3s ease;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
-            margin: 0 auto 6px auto;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+            margin: 0 auto 10px auto;
         }
         
         .toggle-controls:hover {
             transform: scale(1.1);
-            box-shadow: 0 4px 12px rgba(255, 68, 68, 0.8);
+            box-shadow: 0 6px 20px rgba(255, 68, 68, 0.8);
         }
         
         .toggle-controls.collapsed .minus {
@@ -268,11 +271,11 @@
         
         .toggle-controls.collapsed {
             background: #4CAF50;
-            box-shadow: 0 3px 10px rgba(76, 175, 80, 0.6);
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.6);
         }
         
         .toggle-controls.collapsed:hover {
-            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.8);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.8);
         }
         
         /* Состояние свернутых фильтров */
@@ -292,104 +295,93 @@
         /* Адаптивность для мобильных устройств */
         @media (max-width: 768px) {
             #controls {
-                top: 10px;
-                left: 10px;
-                gap: 6px;
-                max-width: 180px;
+                top: 15px;
+                left: 15px;
+                gap: 12px;
+                max-width: 90vw;
             }
             
             #title_button {
-                top: 8px;
-                right: 8px;
-                font-size: 10px;
+                top: 15px;
+                right: 15px;
+                font-size: 12px;
             }
             
             #report_datetime {
-                bottom: 40px;
-                right: 8px;
-                font-size: 8px;
+                bottom: 50px;
+                right: 15px;
+                font-size: 10px;
             }
             
             button {
-                width: 32px;
-                height: 32px;
+                width: 40px;
+                height: 40px;
             }
             
             .filter-title {
-                font-size: 18px;
+                font-size: 11px;
             }
             
             .toggle-controls {
-                width: 24px;
-                height: 24px;
-                font-size: 14px;
-                margin: 0 auto 4px auto;
+                width: 30px;
+                height: 30px;
+                font-size: 16px;
+                margin: 0 auto 8px auto;
             }
             
             .shop-select, .direction-select, .sector-select {
-                font-size: 9px;
-                padding: 5px 6px;
-                height: 28px;
+                font-size: 10px;
+                padding: 6px 10px;
+                max-width: 100%;
             }
             
             .shop-select option, .direction-select option, .sector-select option {
-                font-size: 9px;
-                padding: 3px 5px;
+                font-size: 10px;
+                padding: 2px 6px;
                 line-height: 1.1;
-                height: 22px;
+                height: 20px;
             }
             
             .select-container {
-                margin-bottom: 4px;
+                max-width: 100%;
             }
             
             .color-buttons {
-                gap: 4px;
-            }
-            
-            .button-text {
-                font-size: 16px;
+                gap: 6px;
             }
         }
 
         @media (max-width: 480px) {
             #controls {
-                top: 8px;
-                left: 8px;
-                gap: 4px;
-                max-width: 160px;
+                top: 10px;
+                left: 10px;
+                gap: 10px;
+                max-width: 95vw;
             }
             
             .shop-select, .direction-select, .sector-select {
-                font-size: 12px;
-                padding: 4px 5px;
-                height: 26px;
+                font-size: 9px;
+                padding: 5px 8px;
             }
             
             .shop-select option, .direction-select option, .sector-select option {
-                font-size: 12px;
-                padding: 2px 4px;
+                font-size: 9px;
+                padding: 1px 4px;
                 line-height: 1;
-                height: 20px;
+                height: 18px;
             }
             
             button {
-                width: 28px;
-                height: 28px;
+                width: 36px;
+                height: 36px;
             }
             
             .button-text {
-                font-size: 11px;
+                font-size: 14px;
             }
             
             .color-buttons {
-                gap: 3px;
-            }
-            
-            .back-link {
-                padding: 4px 10px;
-                font-size: 9px;
-                border-radius: 14px;
+                gap: 4px;
             }
         }
         
@@ -407,9 +399,9 @@
 <body>
     <div id="map"></div>
     
-    <!-- Компактная панель управления -->
+    <!-- Панель управления -->
     <div id="controls">
-        <!-- Кнопка сворачивания -->
+        <!-- Кнопка сворачивания - по центру над фильтрами заявок -->
         <div class="toggle-controls" id="toggleControls">
             <span class="minus">−</span>
             <span class="plus">+</span>
@@ -483,7 +475,7 @@
                 </div>
             </div>
             
-            <!-- Секция заявок - компактные кнопки в ряд -->
+            <!-- Секция заявок - кнопки в ряд -->
             <div class="filter-section">
                 <div class="filter-title">ЗАЯВКИ</div>
                 <div class="color-buttons">
@@ -504,11 +496,11 @@
         </div>
     </div>
     
-    <!-- Компактные информационные элементы -->
-    <div id="report_datetime">Дата и время отчета: 29-11-2025 19:45:16</div>
+    <!-- Прозрачные информационные элементы -->
+    <div id="report_datetime">Дата и время отчета: 30-11-2025 00:13:29</div>
     <div id="title_button">Волгоград Восток</div>
     
-    <!-- Компактная кнопка "Назад" -->
+    <!-- Кнопка "Назад" - без изменений -->
     <a href="index.html" class="back-link">← Назад к списку филиалов</a>
 </body>
 </html>
@@ -521,7 +513,7 @@ function init() {
         controls: ['zoomControl']
     });
 
-    var placemarks = [{"coords": [50.091, 45.3568], "balloonContent": "<b>Подразделение:</b> Камышин 1 5 микрорайон<br><b>Отв.:</b> Не указан<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00008115246<br><b>Ответственный:</b> Трудов Алексей Владимирович<br><b>Выполнить до:</b> 01.12.2025<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b> Тема: СГИ Камышин 1 5 микрорайон (993401) НТЦ..112 SCADA-XO \nОписание: Сигнал: Авария холодильного оборудования: НТЦ..112; Наименование аварии: Compressor 2A safety cut out; \n\nВременная метка сигнала: 28.11.25 20:03:34::842; \n\nЗначение: true (вкл) ; \n\nСработавшее состояние: Дискретное значение(лог. 1); \n\nПредыдущее состояние: Норма(не было срабатываний); \n\nЗадержка срабатывания: 300 сек.; \n\nВремя срабатывания: 28.11.25 20:03:39::950.\n<br><b>Осталось дней:</b> 2<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=45.3568,50.091&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "yellow", "days_left": 2, "total_requests": 1, "red_count": 0, "yellow_count": 1, "blue_count": 0, "sector": "Не указан", "podrazdelenie": "Камышин 1 5 микрорайон", "address": ""}];
+    var placemarks = [{"coords": [50.091, 45.3568], "balloonContent": "<b>Подразделение:</b> Камышин 1 5 микрорайон<br><b>Отв.:</b> Не указан<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00008115246<br><b>Ответственный:</b> Трудов Алексей Владимирович<br><b>Выполнить до:</b> 01.12.2025<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b> Тема: СГИ Камышин 1 5 микрорайон (993401) НТЦ..112 SCADA-XO \nОписание: Сигнал: Авария холодильного оборудования: НТЦ..112; Наименование аварии: Compressor 2A safety cut out; \n\nВременная метка сигнала: 28.11.25 20:03:34::842; \n\nЗначение: true (вкл) ; \n\nСработавшее состояние: Дискретное значение(лог. 1); \n\nПредыдущее состояние: Норма(не было срабатываний); \n\nЗадержка срабатывания: 300 сек.; \n\nВремя срабатывания: 28.11.25 20:03:39::950.\n<br><b>Осталось дней:</b> 1<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=45.3568,50.091&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "yellow", "days_left": 1, "total_requests": 1, "red_count": 0, "yellow_count": 1, "blue_count": 0, "sector": "Не указан", "podrazdelenie": "Камышин 1 5 микрорайон", "address": ""}];
     var allPlacemarks = [];
     var placemarksByColor = { 'red': [], 'yellow': [], 'blue': [] };
     var placemarksBySector = {};
