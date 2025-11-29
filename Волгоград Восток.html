@@ -40,6 +40,7 @@
             display: flex;
             flex-direction: column;
             gap: 15px;
+            max-width: 300px;
         }
         
         .filter-section {
@@ -59,19 +60,10 @@
         
         .color-buttons {
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
             gap: 8px;
             align-items: center;
-            background: transparent;
-        }
-        
-        .sector-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            max-height: 200px;
-            overflow-y: auto;
-            padding-right: 5px;
+            justify-content: center;
             background: transparent;
         }
         
@@ -81,7 +73,7 @@
             margin-bottom: 10px;
         }
         
-        .shop-select, .direction-select {
+        .shop-select, .direction-select, .sector-select {
             width: 100%;
             padding: 8px 12px;
             border-radius: 8px;
@@ -94,7 +86,7 @@
             font-weight: bold;
         }
         
-        .shop-select option, .direction-select option {
+        .shop-select option, .direction-select option, .sector-select option {
             background-color: white;
             color: black;
             padding: 4px 8px;
@@ -122,19 +114,6 @@
             justify-content: center;
             position: relative;
             box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-        }
-        
-        .sector-button {
-            width: auto;
-            height: auto;
-            border-radius: 8px;
-            padding: 8px 12px;
-            font-size: 11px;
-            background-color: rgba(255, 255, 255, 0.15);
-            color: rgba(255, 255, 255, 0.8);
-            border: 1px solid #000000;
-            min-height: 36px;
-            backdrop-filter: blur(5px);
         }
         
         button.active {
@@ -187,31 +166,11 @@
             transform: scale(1.02);
         }
         
-        .sector-button.active { 
-            background-color: rgba(33, 150, 243, 0.9); 
-            color: white;
-            border: 1px solid #000000;
-        }
-        
-        .sector-button:not(.active):hover {
-            background-color: rgba(255, 255, 255, 0.25);
-        }
-        
         .button-text {
             font-size: 16px;
             font-weight: bold;
             pointer-events: none;
             text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
-        }
-        
-        .sector-text {
-            font-size: 10px;
-            pointer-events: none;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 150px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
         }
         
         /* Стили для прозрачных информационных элементов */
@@ -355,17 +314,6 @@
                 height: 40px;
             }
             
-            .sector-button {
-                font-size: 10px;
-                padding: 6px 10px;
-                min-height: 32px;
-            }
-            
-            .sector-text {
-                font-size: 9px;
-                max-width: 120px;
-            }
-            
             .filter-title {
                 font-size: 11px;
             }
@@ -377,13 +325,13 @@
                 margin: 0 auto 8px auto;
             }
             
-            .shop-select, .direction-select {
+            .shop-select, .direction-select, .sector-select {
                 font-size: 10px;
                 padding: 6px 10px;
                 max-width: 100%;
             }
             
-            .shop-select option, .direction-select option {
+            .shop-select option, .direction-select option, .sector-select option {
                 font-size: 10px;
                 padding: 2px 6px;
                 line-height: 1.1;
@@ -392,6 +340,10 @@
             
             .select-container {
                 max-width: 100%;
+            }
+            
+            .color-buttons {
+                gap: 6px;
             }
         }
 
@@ -403,12 +355,12 @@
                 max-width: 95vw;
             }
             
-            .shop-select, .direction-select {
+            .shop-select, .direction-select, .sector-select {
                 font-size: 9px;
                 padding: 5px 8px;
             }
             
-            .shop-select option, .direction-select option {
+            .shop-select option, .direction-select option, .sector-select option {
                 font-size: 9px;
                 padding: 1px 4px;
                 line-height: 1;
@@ -424,10 +376,8 @@
                 font-size: 14px;
             }
             
-            .sector-button {
-                font-size: 9px;
-                padding: 5px 8px;
-                min-height: 30px;
+            .color-buttons {
+                gap: 4px;
             }
         }
         
@@ -439,21 +389,6 @@
         
         #controls {
             animation: fadeIn 0.5s ease-out;
-        }
-        
-        /* Скрываем скроллбар для секторов */
-        .sector-buttons::-webkit-scrollbar {
-            width: 3px;
-        }
-        
-        .sector-buttons::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 2px;
-        }
-        
-        .sector-buttons::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 2px;
         }
     </style>
 </head>
@@ -525,7 +460,18 @@
                 </div>
             </div>
             
-            <!-- Секция заявок -->
+            <!-- Секция выбора ответственного -->
+            <div class="filter-section">
+                <div class="filter-title">ОТВЕТСТВЕННЫЙ</div>
+                <div class="select-container">
+                    <select id="sector_select" class="sector-select">
+                        <option value="all">Все ответственные</option>
+                        
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Секция заявок - кнопки в ряд -->
             <div class="filter-section">
                 <div class="filter-title">ЗАЯВКИ</div>
                 <div class="color-buttons">
@@ -543,22 +489,11 @@
                     </button>
                 </div>
             </div>
-            
-            <!-- Секция ответственных -->
-            <div class="filter-section">
-                <div class="filter-title">ОТВ.</div>
-                <div class="sector-buttons">
-                    <button id="all_sectors_button" class="sector-button active" title="Все Отв.">
-                        <span class="sector-text">Все Отв.</span>
-                    </button>
-                    
-                </div>
-            </div>
         </div>
     </div>
     
     <!-- Прозрачные информационные элементы -->
-    <div id="report_datetime">Дата и время отчета: 29-11-2025 17:16:19</div>
+    <div id="report_datetime">Дата и время отчета: 29-11-2025 17:25:10</div>
     <div id="title_button">Волгоград Восток</div>
     
     <!-- Кнопка "Назад" - без изменений -->
@@ -793,62 +728,6 @@ function init() {
         addPlacemarks();
     }
 
-    // Функции для секторов
-    function toggleSector(sector) {
-        if (sector === 'all') {
-            var allSectorsButton = document.querySelector('#all_sectors_button');
-            var isActive = allSectorsButton.classList.contains('active');
-            
-            if (isActive) {
-                // Выключаем все секторы
-                Object.keys(activeSectors).forEach(function(sec) {
-                    if (sec !== 'all') {
-                        activeSectors[sec] = false;
-                        var button = document.querySelector('[id*="sector_"][title*="' + sec + '"]');
-                        if (button) button.classList.remove('active');
-                    }
-                });
-                activeSectors['all'] = false;
-                allSectorsButton.classList.remove('active');
-            } else {
-                // Включаем все секторы
-                Object.keys(activeSectors).forEach(function(sec) {
-                    if (sec !== 'all') {
-                        activeSectors[sec] = true;
-                        var button = document.querySelector('[id*="sector_"][title*="' + sec + '"]');
-                        if (button) button.classList.add('active');
-                    }
-                });
-                activeSectors['all'] = true;
-                allSectorsButton.classList.add('active');
-            }
-        } else {
-            activeSectors[sector] = !activeSectors[sector];
-            updateAllSectorsButtonState();
-        }
-        
-        addPlacemarks();
-    }
-
-    function updateAllSectorsButtonState() {
-        var allSectorsActive = true;
-        
-        Object.keys(activeSectors).forEach(function(sector) {
-            if (sector !== 'all' && !activeSectors[sector]) {
-                allSectorsActive = false;
-            }
-        });
-        
-        var allSectorsButton = document.querySelector('#all_sectors_button');
-        if (allSectorsActive) {
-            allSectorsButton.classList.add('active');
-            activeSectors['all'] = true;
-        } else {
-            allSectorsButton.classList.remove('active');
-            activeSectors['all'] = false;
-        }
-    }
-
     // Функция для фильтрации по магазину
     function filterByShop(shop) {
         activeShop = shop;
@@ -863,6 +742,31 @@ function init() {
     // Функция для фильтрации по направлению
     function filterByDirection(direction) {
         activeDirection = direction;
+        addPlacemarks();
+        
+        // Автоматически закрываем выпадающее меню на мобильных устройствах
+        if (window.innerWidth <= 768) {
+            document.activeElement.blur();
+        }
+    }
+
+    // Функция для фильтрации по ответственному
+    function filterBySector(sector) {
+        // Сбрасываем все секторы
+        Object.keys(activeSectors).forEach(function(sec) {
+            activeSectors[sec] = false;
+        });
+        
+        if (sector === 'all') {
+            // Включаем все секторы
+            Object.keys(activeSectors).forEach(function(sec) {
+                activeSectors[sec] = true;
+            });
+        } else {
+            // Включаем только выбранный сектор
+            activeSectors[sector] = true;
+        }
+        
         addPlacemarks();
         
         // Автоматически закрываем выпадающее меню на мобильных устройствах
@@ -900,14 +804,6 @@ function init() {
         toggleAll();
     });
 
-    // Обработчики для кнопок секторов
-    document.querySelector('#all_sectors_button').addEventListener('click', function () {
-        toggleSector('all');
-    });
-
-    // Обработчики для конкретных секторов
-    
-
     // Обработчик для выпадающего меню магазинов
     document.querySelector('#shop_select').addEventListener('change', function () {
         filterByShop(this.value);
@@ -918,10 +814,16 @@ function init() {
         filterByDirection(this.value);
     });
 
+    // Обработчик для выпадающего меню ответственных
+    document.querySelector('#sector_select').addEventListener('change', function () {
+        filterBySector(this.value);
+    });
+
     // Обработчик для закрытия выпадающих меню при клике вне их
     document.addEventListener('click', function(event) {
         var shopSelect = document.querySelector('#shop_select');
         var directionSelect = document.querySelector('#direction_select');
+        var sectorSelect = document.querySelector('#sector_select');
         
         if (window.innerWidth <= 768) {
             if (event.target !== shopSelect && !shopSelect.contains(event.target)) {
@@ -930,12 +832,14 @@ function init() {
             if (event.target !== directionSelect && !directionSelect.contains(event.target)) {
                 directionSelect.blur();
             }
+            if (event.target !== sectorSelect && !sectorSelect.contains(event.target)) {
+                sectorSelect.blur();
+            }
         }
     });
 
     // Инициализация состояния кнопок
     updateAllButtonState();
-    updateAllSectorsButtonState();
 
     // Адаптация карты при изменении размера окна
     window.addEventListener('resize', function() {
