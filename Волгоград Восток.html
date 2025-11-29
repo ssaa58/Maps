@@ -75,33 +75,33 @@
             background: transparent;
         }
         
-        /* Стили для выпадающего меню магазинов */
-.shop-select-container {
-    background: transparent;
-    margin-bottom: 10px;
-}
-
-.shop-select {
-    width: 100%;
-    padding: 8px 12px;
-    border-radius: 8px;
-    border: 1px solid #000000;
-    background-color: rgba(255, 255, 255, 0.95);
-    color: #000000;
-    font-size: 11px;
-    backdrop-filter: blur(5px);
-    cursor: pointer;
-    font-weight: bold;
-}
-
-.shop-select option {
-    background-color: white;
-    color: black;
-    padding: 4px 8px;
-    font-size: 11px;
-    line-height: 1.2;
-    height: 24px;
-}
+        /* Стили для выпадающих меню */
+        .select-container {
+            background: transparent;
+            margin-bottom: 10px;
+        }
+        
+        .shop-select, .direction-select {
+            width: 100%;
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid #000000;
+            background-color: rgba(255, 255, 255, 0.95);
+            color: #000000;
+            font-size: 11px;
+            backdrop-filter: blur(5px);
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .shop-select option, .direction-select option {
+            background-color: white;
+            color: black;
+            padding: 4px 8px;
+            font-size: 11px;
+            line-height: 1.2;
+            height: 24px;
+        }
         
         /* Обновленные стили для кнопок с черными цифрами */
         button {
@@ -331,105 +331,105 @@
         
         /* Адаптивность для мобильных устройств */
         @media (max-width: 768px) {
-    #controls {
-        top: 15px;
-        left: 15px;
-        gap: 12px;
-        max-width: 90vw;
-    }
-    
-    #title_button {
-        top: 15px;
-        right: 15px;
-        font-size: 12px;
-    }
-    
-    #report_datetime {
-        bottom: 50px;
-        right: 15px;
-        font-size: 10px;
-    }
-    
-    button {
-        width: 40px;
-        height: 40px;
-    }
-    
-    .sector-button {
-        font-size: 10px;
-        padding: 6px 10px;
-        min-height: 32px;
-    }
-    
-    .sector-text {
-        font-size: 9px;
-        max-width: 120px;
-    }
-    
-    .filter-title {
-        font-size: 11px;
-    }
-    
-    .toggle-controls {
-        width: 30px;
-        height: 30px;
-        font-size: 16px;
-        margin: 0 auto 8px auto;
-    }
-    
-    .shop-select {
-        font-size: 10px;
-        padding: 6px 10px;
-        max-width: 100%;
-    }
-    
-    .shop-select option {
-        font-size: 10px;
-        padding: 2px 6px;
-        line-height: 1.1;
-        height: 20px;
-    }
-    
-    .shop-select-container {
-        max-width: 100%;
-    }
-}
+            #controls {
+                top: 15px;
+                left: 15px;
+                gap: 12px;
+                max-width: 90vw;
+            }
+            
+            #title_button {
+                top: 15px;
+                right: 15px;
+                font-size: 12px;
+            }
+            
+            #report_datetime {
+                bottom: 50px;
+                right: 15px;
+                font-size: 10px;
+            }
+            
+            button {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .sector-button {
+                font-size: 10px;
+                padding: 6px 10px;
+                min-height: 32px;
+            }
+            
+            .sector-text {
+                font-size: 9px;
+                max-width: 120px;
+            }
+            
+            .filter-title {
+                font-size: 11px;
+            }
+            
+            .toggle-controls {
+                width: 30px;
+                height: 30px;
+                font-size: 16px;
+                margin: 0 auto 8px auto;
+            }
+            
+            .shop-select, .direction-select {
+                font-size: 10px;
+                padding: 6px 10px;
+                max-width: 100%;
+            }
+            
+            .shop-select option, .direction-select option {
+                font-size: 10px;
+                padding: 2px 6px;
+                line-height: 1.1;
+                height: 20px;
+            }
+            
+            .select-container {
+                max-width: 100%;
+            }
+        }
 
-@media (max-width: 480px) {
-    #controls {
-        top: 10px;
-        left: 10px;
-        gap: 10px;
-        max-width: 95vw;
-    }
-    
-    .shop-select {
-        font-size: 9px;
-        padding: 5px 8px;
-    }
-    
-    .shop-select option {
-        font-size: 9px;
-        padding: 1px 4px;
-        line-height: 1;
-        height: 18px;
-    }
-    
-    button {
-        width: 36px;
-        height: 36px;
-    }
-    
-    .button-text {
-        font-size: 14px;
-    }
-    
-    .sector-button {
-        font-size: 9px;
-        padding: 5px 8px;
-        min-height: 30px;
-    }
-}
+        @media (max-width: 480px) {
+            #controls {
+                top: 10px;
+                left: 10px;
+                gap: 10px;
+                max-width: 95vw;
+            }
+            
+            .shop-select, .direction-select {
+                font-size: 9px;
+                padding: 5px 8px;
+            }
+            
+            .shop-select option, .direction-select option {
+                font-size: 9px;
+                padding: 1px 4px;
+                line-height: 1;
+                height: 18px;
+            }
+            
+            button {
+                width: 36px;
+                height: 36px;
+            }
+            
+            .button-text {
+                font-size: 14px;
+            }
+            
+            .sector-button {
+                font-size: 9px;
+                padding: 5px 8px;
+                min-height: 30px;
+            }
+        }
         
         /* Анимации */
         @keyframes fadeIn {
@@ -472,11 +472,54 @@
             <!-- Секция выбора магазина -->
             <div class="filter-section">
                 <div class="filter-title">МАГАЗИН</div>
-                <div class="shop-select-container">
+                <div class="select-container">
                     <select id="shop_select" class="shop-select">
                         <option value="all">Все магазины</option>
                         
                         <option value="Камышин 1 5 микрорайон">Камышин 1 5 микрорайон</option>
+                        
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Секция выбора направления -->
+            <div class="filter-section">
+                <div class="filter-title">НАПРАВЛЕНИЕ</div>
+                <div class="select-container">
+                    <select id="direction_select" class="direction-select">
+                        <option value="all">Все направления</option>
+                        
+                        <option value="Автоматические двери">Автоматические двери</option>
+                        
+                        <option value="Водоснабжение и водоотведение">Водоснабжение и водоотведение</option>
+                        
+                        <option value="Грузовой подъемник">Грузовой подъемник</option>
+                        
+                        <option value="Здания и сооружения">Здания и сооружения</option>
+                        
+                        <option value="Касса">Касса</option>
+                        
+                        <option value="Кофемашина">Кофемашина</option>
+                        
+                        <option value="Очистные сооружения">Очистные сооружения</option>
+                        
+                        <option value="Подъездные пути">Подъездные пути</option>
+                        
+                        <option value="РИМ">РИМ</option>
+                        
+                        <option value="Система вентиляции">Система вентиляции</option>
+                        
+                        <option value="Система теплоснабжения">Система теплоснабжения</option>
+                        
+                        <option value="Стеллажное оборудование">Стеллажное оборудование</option>
+                        
+                        <option value="Табачное оборудование">Табачное оборудование</option>
+                        
+                        <option value="Технологическое оборудование">Технологическое оборудование</option>
+                        
+                        <option value="Холодильное оборудование">Холодильное оборудование</option>
+                        
+                        <option value="Электроснабжение">Электроснабжение</option>
                         
                     </select>
                 </div>
@@ -515,7 +558,7 @@
     </div>
     
     <!-- Прозрачные информационные элементы -->
-    <div id="report_datetime">Дата и время отчета: 29-11-2025 15:27:54</div>
+    <div id="report_datetime">Дата и время отчета: 29-11-2025 16:58:55</div>
     <div id="title_button">Волгоград Восток</div>
     
     <!-- Кнопка "Назад" - без изменений -->
@@ -531,11 +574,12 @@ function init() {
         controls: ['zoomControl']
     });
 
-    var placemarks = [{"coords": [50.091, 45.3568], "balloonContent": "<b>Подразделение:</b> Камышин 1 5 микрорайон<br><b>Отв.:</b> Не указан<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00008115246<br><b>Ответственный:</b> Трудов Алексей Владимирович<br><b>Выполнить до:</b> 01.12.2025<br><b>Описание:</b> Тема: СГИ Камышин 1 5 микрорайон (993401) НТЦ..112 SCADA-XO \nОписание: Сигнал: Авария холодильного оборудования: НТЦ..112; Наименование аварии: Compressor 2A safety cut out; \n\nВременная метка сигнала: 28.11.25 20:03:34::842; \n\nЗначение: true (вкл) ; \n\nСработавшее состояние: Дискретное значение(лог. 1); \n\nПредыдущее состояние: Норма(не было срабатываний); \n\nЗадержка срабатывания: 300 сек.; \n\nВремя срабатывания: 28.11.25 20:03:39::950.\n<br><b>Направление:</b> Холодильное оборудование<br><b>Осталось дней:</b> 2<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=45.3568,50.091&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "yellow", "days_left": 2, "total_requests": 1, "red_count": 0, "yellow_count": 1, "blue_count": 0, "sector": "Не указан", "podrazdelenie": "Камышин 1 5 микрорайон", "address": ""}];
+    var placemarks = [{"coords": [50.091, 45.3568], "balloonContent": "<b>Подразделение:</b> Камышин 1 5 микрорайон<br><b>Отв.:</b> Не указан<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00008115246<br><b>Ответственный:</b> Трудов Алексей Владимирович<br><b>Выполнить до:</b> 01.12.2025<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b> Тема: СГИ Камышин 1 5 микрорайон (993401) НТЦ..112 SCADA-XO \nОписание: Сигнал: Авария холодильного оборудования: НТЦ..112; Наименование аварии: Compressor 2A safety cut out; \n\nВременная метка сигнала: 28.11.25 20:03:34::842; \n\nЗначение: true (вкл) ; \n\nСработавшее состояние: Дискретное значение(лог. 1); \n\nПредыдущее состояние: Норма(не было срабатываний); \n\nЗадержка срабатывания: 300 сек.; \n\nВремя срабатывания: 28.11.25 20:03:39::950.\n<br><b>Осталось дней:</b> 2<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=45.3568,50.091&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "yellow", "days_left": 2, "total_requests": 1, "red_count": 0, "yellow_count": 1, "blue_count": 0, "sector": "Не указан", "podrazdelenie": "Камышин 1 5 микрорайон", "address": ""}];
     var allPlacemarks = [];
     var placemarksByColor = { 'red': [], 'yellow': [], 'blue': [] };
     var placemarksBySector = {};
     var placemarksByShop = {};
+    var placemarksByDirection = {};
 
     // Инициализируем секторы
     
@@ -544,6 +588,42 @@ function init() {
     placemarksByShop['all'] = [];
     
     placemarksByShop['Камышин 1 5 микрорайон'] = [];
+    
+
+    // Инициализируем направления
+    placemarksByDirection['all'] = [];
+    
+    placemarksByDirection['Автоматические двери'] = [];
+    
+    placemarksByDirection['Водоснабжение и водоотведение'] = [];
+    
+    placemarksByDirection['Грузовой подъемник'] = [];
+    
+    placemarksByDirection['Здания и сооружения'] = [];
+    
+    placemarksByDirection['Касса'] = [];
+    
+    placemarksByDirection['Кофемашина'] = [];
+    
+    placemarksByDirection['Очистные сооружения'] = [];
+    
+    placemarksByDirection['Подъездные пути'] = [];
+    
+    placemarksByDirection['РИМ'] = [];
+    
+    placemarksByDirection['Система вентиляции'] = [];
+    
+    placemarksByDirection['Система теплоснабжения'] = [];
+    
+    placemarksByDirection['Стеллажное оборудование'] = [];
+    
+    placemarksByDirection['Табачное оборудование'] = [];
+    
+    placemarksByDirection['Технологическое оборудование'] = [];
+    
+    placemarksByDirection['Холодильное оборудование'] = [];
+    
+    placemarksByDirection['Электроснабжение'] = [];
     
 
     placemarks.forEach(function (placemark) {
@@ -591,6 +671,18 @@ function init() {
         }
         placemarksByShop[shop].push(newPlacemark);
         placemarksByShop['all'].push(newPlacemark);
+        
+        // Группировка по направлению - анализируем содержимое балуна
+        var balloonContent = placemark.balloonContent;
+        var directionMatch = balloonContent.match(/<b>Направление:<\/b>\s*([^<]+)<br>/);
+        if (directionMatch && directionMatch[1]) {
+            var direction = directionMatch[1].trim();
+            if (!placemarksByDirection[direction]) {
+                placemarksByDirection[direction] = [];
+            }
+            placemarksByDirection[direction].push(newPlacemark);
+        }
+        placemarksByDirection['all'].push(newPlacemark);
     });
 
     var activeColors = { 'red': true, 'yellow': true, 'blue': true };
@@ -599,6 +691,7 @@ function init() {
         'all': true
     };
     var activeShop = 'all';
+    var activeDirection = 'all';
 
     function addPlacemarks() {
         myMap.geoObjects.removeAll();
@@ -625,7 +718,18 @@ function init() {
             // Проверяем активность магазина
             var shopActive = (activeShop === 'all' || activeShop === shop);
             
-            if (colorActive && sectorActive && shopActive) {
+            // Проверяем активность направления - анализируем содержимое балуна
+            var directionActive = (activeDirection === 'all');
+            if (!directionActive) {
+                var balloonContent = placemark.properties.get('balloonContent');
+                var directionMatch = balloonContent.match(/<b>Направление:<\/b>\s*([^<]+)<br>/);
+                if (directionMatch && directionMatch[1]) {
+                    var direction = directionMatch[1].trim();
+                    directionActive = (direction === activeDirection);
+                }
+            }
+            
+            if (colorActive && sectorActive && shopActive && directionActive) {
                 myMap.geoObjects.add(placemark);
             }
         });
@@ -756,6 +860,17 @@ function init() {
         }
     }
 
+    // Функция для фильтрации по направлению
+    function filterByDirection(direction) {
+        activeDirection = direction;
+        addPlacemarks();
+        
+        // Автоматически закрываем выпадающее меню на мобильных устройствах
+        if (window.innerWidth <= 768) {
+            document.activeElement.blur();
+        }
+    }
+
     // Кнопка сворачивания/разворачивания
     var toggleControls = document.querySelector('#toggleControls');
     var controls = document.querySelector('#controls');
@@ -798,11 +913,23 @@ function init() {
         filterByShop(this.value);
     });
 
-    // Обработчик для закрытия выпадающего меню при клике вне его
+    // Обработчик для выпадающего меню направлений
+    document.querySelector('#direction_select').addEventListener('change', function () {
+        filterByDirection(this.value);
+    });
+
+    // Обработчик для закрытия выпадающих меню при клике вне их
     document.addEventListener('click', function(event) {
         var shopSelect = document.querySelector('#shop_select');
-        if (window.innerWidth <= 768 && event.target !== shopSelect && !shopSelect.contains(event.target)) {
-            shopSelect.blur();
+        var directionSelect = document.querySelector('#direction_select');
+        
+        if (window.innerWidth <= 768) {
+            if (event.target !== shopSelect && !shopSelect.contains(event.target)) {
+                shopSelect.blur();
+            }
+            if (event.target !== directionSelect && !directionSelect.contains(event.target)) {
+                directionSelect.blur();
+            }
         }
     });
 
