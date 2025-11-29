@@ -32,8 +32,8 @@
         /* Панель управления - всегда видима */
         #controls {
             position: fixed;
-            top: 20px;
-            left: 20px;
+            top: 35px;
+            left: 40px;
             z-index: 1000;
             background: transparent;
             padding: 0;
@@ -46,9 +46,9 @@
         .filter-section {
     display: flex;
     flex-direction: column;
-    gap: 4px;           /* Уменьшаем расстояние между элементами */
+    gap: 1px;           /* Уменьшаем расстояние между элементами */
     background: transparent;
-    margin-bottom: 8px; /* Уменьшаем отступ между секциями */
+    margin-bottom: 1px; /* Уменьшаем отступ между секциями */
 }
 
 .filter-title {
@@ -78,8 +78,8 @@
 
 .shop-select, .direction-select, .sector-select {
     width: 100%;
-    padding: 6px 8px;    /* Уменьшаем padding */
-    border-radius: 6px;  /* Немного уменьшаем скругление */
+    padding: 6px 4px;    /* padding: ВЫСОТА КНОПКИ - ОТСТУП НАДПИСИ ОТ ЛЕВОГО КРАЯ ВНУТРИ КНОПКИ */
+    border-radius: 16px;  /* СКРУГЛЕНИЕ КНОПОК */
     border: 1px solid #000000;
     background-color: rgba(255, 255, 255, 0.95);
     color: #000000;
@@ -96,7 +96,7 @@
             padding: 4px 8px;
             font-size: 11px;
             line-height: 1.2;
-            height: 24px;
+            height: 14px;
         }
         
         /* Обновленные стили для кнопок с черными цифрами */
@@ -635,7 +635,7 @@
     </div>
     
     <!-- Прозрачные информационные элементы -->
-    <div id="report_datetime">Дата и время отчета: 29-11-2025 23:28:08</div>
+    <div id="report_datetime">Дата и время отчета: 29-11-2025 23:48:24</div>
     <div id="title_button">Самара Запад</div>
     
     <!-- Кнопка "Назад" - без изменений -->
