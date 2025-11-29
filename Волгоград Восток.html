@@ -29,29 +29,29 @@
             z-index: 1;
         }
         
-        /* Панель управления - всегда видима */
+        /* Панель управления - компактная */
         #controls {
             position: fixed;
-            top: 20px;
-            left: 20px;
+            top: 15px;
+            left: 15px;
             z-index: 1000;
             background: transparent;
             padding: 0;
             display: flex;
             flex-direction: column;
-            gap: 15px;
-            max-width: 300px;
+            gap: 8px;
+            max-width: 220px;
         }
         
         .filter-section {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 4px;
             background: transparent;
         }
         
         .filter-title {
-            font-size: 12px;
+            font-size: 10px;
             font-weight: bold;
             color: rgba(255, 255, 255, 0.3);
             text-align: center;
@@ -61,64 +61,65 @@
         .color-buttons {
             display: flex;
             flex-direction: row;
-            gap: 8px;
+            gap: 6px;
             align-items: center;
             justify-content: center;
             background: transparent;
         }
         
-        /* Стили для выпадающих меню */
+        /* Компактные стили для выпадающих меню */
         .select-container {
             background: transparent;
-            margin-bottom: 10px;
+            margin-bottom: 6px;
         }
         
         .shop-select, .direction-select, .sector-select {
             width: 100%;
-            padding: 8px 12px;
-            border-radius: 8px;
+            padding: 6px 8px;
+            border-radius: 6px;
             border: 1px solid #000000;
             background-color: rgba(255, 255, 255, 0.95);
             color: #000000;
-            font-size: 11px;
+            font-size: 10px;
             backdrop-filter: blur(5px);
             cursor: pointer;
             font-weight: bold;
+            height: 32px;
         }
         
         .shop-select option, .direction-select option, .sector-select option {
             background-color: white;
             color: black;
-            padding: 4px 8px;
-            font-size: 11px;
+            padding: 4px 6px;
+            font-size: 10px;
             line-height: 1.2;
             height: 24px;
         }
         
-        /* Обновленные стили для кнопок с черными цифрами */
+        /* Компактные кнопки */
         button {
             padding: 0;
             border: 1px solid #000000;
             background-color: rgba(255, 255, 255, 0.9);
             color: #000000;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 12px;
             font-weight: bold;
             border-radius: 50%;
             transition: all 0.3s ease;
-            width: 44px;
-            height: 44px;
+            width: 36px;
+            height: 36px;
             text-align: center;
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
         }
         
         button.active {
             border: 1px solid #000000;
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+            box-shadow: 0 0 12px rgba(255, 255, 255, 0.8);
             transform: scale(1.05);
         }
         
@@ -139,7 +140,7 @@
             color: white;
         }
         
-        /* Стили для неактивных кнопок - белый круг с тонкой черной границей и черными цифрами */
+        /* Стили для неактивных кнопок */
         button.color-red:not(.active) { 
             background-color: rgba(255, 255, 255, 0.9); 
             color: #000000;
@@ -167,21 +168,21 @@
         }
         
         .button-text {
-            font-size: 16px;
+            font-size: 20px;
             font-weight: bold;
             pointer-events: none;
             text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
         }
         
-        /* Стили для прозрачных информационных элементов */
+        /* Компактные информационные элементы */
         #report_datetime {
             position: fixed;
-            bottom: 60px;
+            bottom: 50px;
             right: 10px;
             z-index: 1000;
             background: transparent;
-            padding: 6px 10px;
-            font-size: 11px;
+            padding: 4px 8px;
+            font-size: 9px;
             color: rgba(255, 255, 255, 0.2);
             text-align: right;
             pointer-events: none;
@@ -193,23 +194,23 @@
             right: 10px;
             z-index: 1000;
             background: transparent;
-            padding: 6px 12px;
-            font-size: 14px;
+            padding: 4px 8px;
+            font-size: 12px;
             font-weight: bold;
             color: rgba(255, 255, 255, 0.2);
             pointer-events: none;
         }
         
-        /* Кнопка "Назад" - без изменений */
+        /* Компактная кнопка "Назад" */
         .back-link {
             position: fixed;
             bottom: 10px;
             left: 10px;
             z-index: 1000;
             background-color: rgba(0, 0, 0, 0.6);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 12px;
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 10px;
             color: #fff;
             text-decoration: none;
             backdrop-filter: blur(10px);
@@ -223,30 +224,30 @@
             color: #fff;
         }
         
-        /* Кнопка сворачивания - по центру над фильтрами заявок */
+        /* Компактная кнопка сворачивания */
         .toggle-controls {
-            width: 35px;
-            height: 35px;
+            width: 28px;
+            height: 28px;
             background: #ff4444;
-            border: 3px solid #fff;
+            border: 2px solid #fff;
             border-radius: 50%;
             color: white;
             font-weight: 900;
-            font-size: 20px;
+            font-size: 16px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 15px rgba(255, 68, 68, 0.6);
+            box-shadow: 0 3px 10px rgba(255, 68, 68, 0.6);
             z-index: 1001;
             transition: all 0.3s ease;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
-            margin: 0 auto 10px auto;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+            margin: 0 auto 6px auto;
         }
         
         .toggle-controls:hover {
             transform: scale(1.1);
-            box-shadow: 0 6px 20px rgba(255, 68, 68, 0.8);
+            box-shadow: 0 4px 12px rgba(255, 68, 68, 0.8);
         }
         
         .toggle-controls.collapsed .minus {
@@ -267,11 +268,11 @@
         
         .toggle-controls.collapsed {
             background: #4CAF50;
-            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.6);
+            box-shadow: 0 3px 10px rgba(76, 175, 80, 0.6);
         }
         
         .toggle-controls.collapsed:hover {
-            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.8);
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.8);
         }
         
         /* Состояние свернутых фильтров */
@@ -291,93 +292,104 @@
         /* Адаптивность для мобильных устройств */
         @media (max-width: 768px) {
             #controls {
-                top: 15px;
-                left: 15px;
-                gap: 12px;
-                max-width: 90vw;
+                top: 10px;
+                left: 10px;
+                gap: 6px;
+                max-width: 180px;
             }
             
             #title_button {
-                top: 15px;
-                right: 15px;
-                font-size: 12px;
+                top: 8px;
+                right: 8px;
+                font-size: 10px;
             }
             
             #report_datetime {
-                bottom: 50px;
-                right: 15px;
-                font-size: 10px;
+                bottom: 40px;
+                right: 8px;
+                font-size: 8px;
             }
             
             button {
-                width: 40px;
-                height: 40px;
+                width: 32px;
+                height: 32px;
             }
             
             .filter-title {
-                font-size: 11px;
+                font-size: 12px;
             }
             
             .toggle-controls {
-                width: 30px;
-                height: 30px;
-                font-size: 16px;
-                margin: 0 auto 8px auto;
+                width: 24px;
+                height: 24px;
+                font-size: 14px;
+                margin: 0 auto 4px auto;
             }
             
             .shop-select, .direction-select, .sector-select {
-                font-size: 10px;
-                padding: 6px 10px;
-                max-width: 100%;
+                font-size: 9px;
+                padding: 5px 6px;
+                height: 28px;
             }
             
             .shop-select option, .direction-select option, .sector-select option {
-                font-size: 10px;
-                padding: 2px 6px;
+                font-size: 9px;
+                padding: 3px 5px;
                 line-height: 1.1;
-                height: 20px;
+                height: 22px;
             }
             
             .select-container {
-                max-width: 100%;
+                margin-bottom: 4px;
             }
             
             .color-buttons {
-                gap: 6px;
+                gap: 4px;
+            }
+            
+            .button-text {
+                font-size: 16px;
             }
         }
 
         @media (max-width: 480px) {
             #controls {
-                top: 10px;
-                left: 10px;
-                gap: 10px;
-                max-width: 95vw;
+                top: 8px;
+                left: 8px;
+                gap: 4px;
+                max-width: 160px;
             }
             
             .shop-select, .direction-select, .sector-select {
-                font-size: 9px;
-                padding: 5px 8px;
+                font-size: 12px;
+                padding: 4px 5px;
+                height: 26px;
             }
             
             .shop-select option, .direction-select option, .sector-select option {
-                font-size: 9px;
-                padding: 1px 4px;
+                font-size: 12px;
+                padding: 2px 4px;
                 line-height: 1;
-                height: 18px;
+                height: 20px;
             }
             
             button {
-                width: 36px;
-                height: 36px;
+                width: 28px;
+                height: 28px;
             }
             
             .button-text {
-                font-size: 14px;
+                font-size: 11px;
             }
             
             .color-buttons {
-                gap: 4px;
+                gap: 3px;
+            }
+            
+            .back-link {
+                padding: 4px 10px;
+                font-size: 9px;
+                border-radius: 14px;
             }
         }
         
@@ -395,9 +407,9 @@
 <body>
     <div id="map"></div>
     
-    <!-- Панель управления -->
+    <!-- Компактная панель управления -->
     <div id="controls">
-        <!-- Кнопка сворачивания - по центру над фильтрами заявок -->
+        <!-- Кнопка сворачивания -->
         <div class="toggle-controls" id="toggleControls">
             <span class="minus">−</span>
             <span class="plus">+</span>
@@ -471,7 +483,7 @@
                 </div>
             </div>
             
-            <!-- Секция заявок - кнопки в ряд -->
+            <!-- Секция заявок - компактные кнопки в ряд -->
             <div class="filter-section">
                 <div class="filter-title">ЗАЯВКИ</div>
                 <div class="color-buttons">
@@ -492,11 +504,11 @@
         </div>
     </div>
     
-    <!-- Прозрачные информационные элементы -->
-    <div id="report_datetime">Дата и время отчета: 29-11-2025 19:38:15</div>
+    <!-- Компактные информационные элементы -->
+    <div id="report_datetime">Дата и время отчета: 29-11-2025 19:40:58</div>
     <div id="title_button">Волгоград Восток</div>
     
-    <!-- Кнопка "Назад" - без изменений -->
+    <!-- Компактная кнопка "Назад" -->
     <a href="index.html" class="back-link">← Назад к списку филиалов</a>
 </body>
 </html>
