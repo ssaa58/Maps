@@ -296,9 +296,9 @@
         @media (max-width: 768px) {
             #controls {
                 top: 15px;
-                left: 15px;
-                gap: 6px;  /* ИЗМЕНИТЬ С 12px НА 6px */
-                max-width: 90vw;
+                left: 25px;                                         /* ИЗМЕНИТЬ С 15px НА 25px - сместит блок правее */
+                gap: 12px;  /* ИЗМЕНИТЬ С 12px НА 6px */
+                max-width: 80vw;                                    /* УМЕНЬШИТЬ ШИРИНУ БЛОКА */
             }
             
             #title_button {
@@ -319,7 +319,7 @@
             }
             
             .filter-title {
-                font-size: 11px;
+                font-size: 11px;                                                  /* УВЕЛИЧИТЬ С 11px НА 13px */
             }
             
             .toggle-controls {
@@ -336,54 +336,63 @@
             }
             
             .shop-select option, .direction-select option, .sector-select option {
-                font-size: 13px;    /* УВЕЛИЧИТЬ С 10px НА 13px */
-                padding: 5px 8px;   /* УВЕЛИЧИТЬ PADDING */
-                line-height: 1.3;   /* УВЕЛИЧИТЬ С 1.1 НА 1.3 */
-                height: 22px;       /* УВЕЛИЧИТЬ С 20px НА 22px */
+                font-size: 13px;                                                            /* УВЕЛИЧИТЬ С 10px НА 13px */
+                padding: 6px 8px;                                                          /* УВЕЛИЧИТЬ PADDING */
+                line-height: 1.3;                                                        /* УВЕЛИЧИТЬ С 1.1 НА 1.3 */
+                height: 22px;                                                            /* УВЕЛИЧИТЬ С 20px НА 22px */
             }
             
             .select-container {
-                max-width: 100%;
+                max-width: 150px;                                                     /* ДОБАВИТЬ: ОГРАНИЧИТЬ ШИРИНУ КОНТЕЙНЕРА */
             }
             
             .color-buttons {
-                gap: 3px;
+                gap: 6px;
             }
         }
 
         @media (max-width: 480px) {
-            #controls {
-                top: 10px;
-                left: 10px;
-                gap: 10px;
-                max-width: 95vw;
-            }
-            
-            .shop-select, .direction-select, .sector-select {
-                font-size: 12px;
-                padding: 5px 8px;
-            }
-            
-            .shop-select option, .direction-select option, .sector-select option {
-                font-size: 12px;
-                padding: 1px 4px;
-                line-height: 1;
-                height: 18px;
-            }
-            
-            button {
-                width: 36px;
-                height: 36px;
-            }
-            
-            .button-text {
-                font-size: 14px;
-            }
-            
-            .color-buttons {
-                gap: 4px;
-            }
-        }
+    #controls {
+        top: 10px;
+        left: 20px;                                                         /* ИЗМЕНИТЬ С 10px НА 20px - сместит блок правее */
+        gap: 10px;
+        max-width: 90vw;                                                                /* УМЕНЬШИТЬ ШИРИНУ БЛОКА */
+    }
+    
+    .shop-select, .direction-select, .sector-select {
+        font-size: 13px;                                                          /* УВЕЛИЧИТЬ С 9px НА 13px */
+        padding: 7px 8px;                                                                 /* УВЕЛИЧИТЬ PADDING */
+        max-width: 140px;                                                 /* ДОБАВИТЬ: УМЕНЬШИТЬ ШИРИНУ КНОПОК */
+    }
+    
+    .shop-select option, .direction-select option, .sector-select option {
+        font-size: 12px;                                                         /* УВЕЛИЧИТЬ С 9px НА 12px */
+        padding: 5px 6px;                                                         /* УВЕЛИЧИТЬ PADDING */
+        line-height: 1.2;                                                           /* УВЕЛИЧИТЬ С 1 НА 1.2 */
+        height: 20px;                                                              /* УВЕЛИЧИТЬ С 18px НА 20px */
+    }
+    
+    .select-container {
+        max-width: 140px;                                                   /* ДОБАВИТЬ: ОГРАНИЧИТЬ ШИРИНУ КОНТЕЙНЕРА */
+    }
+    
+    button {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .button-text {
+        font-size: 14px;
+    }
+    
+    .color-buttons {
+        gap: 4px;
+    }
+    
+    .filter-title {
+        font-size: 12px;                                                         /* УВЕЛИЧИТЬ ДЛЯ МАЛЕНЬКИХ ЭКРАНОВ */
+    }
+}
         
         /* Анимации */
         @keyframes fadeIn {
@@ -569,7 +578,7 @@
     </div>
     
     <!-- Прозрачные информационные элементы -->
-    <div id="report_datetime">Дата и время отчета: 30-11-2025 07:07:57</div>
+    <div id="report_datetime">Дата и время отчета: 30-11-2025 07:38:17</div>
     <div id="title_button">Пенза</div>
     
     <!-- Кнопка "Назад" - без изменений -->
