@@ -513,7 +513,7 @@
     </div>
     
     <!-- Прозрачные информационные элементы -->
-    <div id="report_datetime">Дата и время отчета: 05-12-2025 15:40:54</div>
+    <div id="report_datetime">Дата и время отчета: 05-12-2025 15:44:02</div>
     <div id="title_button">Владикавказ</div>
     
     <!-- Кнопка "Назад" - без изменений -->
@@ -763,7 +763,7 @@ function init() {
     // Функция для обновления видимости названий магазинов
     function updateShopNamesVisibility() {
         var currentZoom = myMap.getZoom();
-        var shouldShowNames = currentZoom >= 13; // Показывать названия при зуме 13 и выше
+        var shouldShowNames = currentZoom >= 11; // Показывать названия при зуме 11 и выше
         
         myMap.geoObjects.each(function(geoObject) {
             if (geoObject instanceof ymaps.Placemark) {
