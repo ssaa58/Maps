@@ -703,7 +703,7 @@
     </div>
     
     <!-- Прозрачные информационные элементы -->
-    <div id="report_datetime">Дата и время отчета: 05-12-2025 15:44:02</div>
+    <div id="report_datetime">Дата и время отчета: 05-12-2025 15:48:47</div>
     <div id="title_button">Пятигорск</div>
     
     <!-- Кнопка "Назад" - без изменений -->
@@ -1141,7 +1141,7 @@ function init() {
     // Функция для обновления видимости названий магазинов
     function updateShopNamesVisibility() {
         var currentZoom = myMap.getZoom();
-        var shouldShowNames = currentZoom >= 11; // Показывать названия при зуме 11 и выше
+        var shouldShowNames = currentZoom >= 10; // ПОКАЗЫВАТЬ ПРИ ЗУМЕ ВЫШЕ 11
         
         myMap.geoObjects.each(function(geoObject) {
             if (geoObject instanceof ymaps.Placemark) {
