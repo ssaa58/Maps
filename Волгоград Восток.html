@@ -425,6 +425,8 @@
                         
                         <option value="Камышин 1 5 микрорайон">Камышин 1 5 микрорайон</option>
                         
+                        <option value="Михайловка 1 Поперечная">Михайловка 1 Поперечная</option>
+                        
                     </select>
                 </div>
             </div>
@@ -442,17 +444,25 @@
                         
                         <option value="Ворота">Ворота</option>
                         
+                        <option value="Грузовой подъемник">Грузовой подъемник</option>
+                        
                         <option value="Здания и сооружения">Здания и сооружения</option>
                         
                         <option value="Касса">Касса</option>
                         
                         <option value="Кофемашина">Кофемашина</option>
                         
+                        <option value="Очистные сооружения">Очистные сооружения</option>
+                        
+                        <option value="Подъездные пути">Подъездные пути</option>
+                        
                         <option value="Пресс вторсырья">Пресс вторсырья</option>
                         
                         <option value="РИМ">РИМ</option>
                         
                         <option value="Роллеты">Роллеты</option>
+                        
+                        <option value="Самоходное и складское оборудование">Самоходное и складское оборудование</option>
                         
                         <option value="Система вентиляции">Система вентиляции</option>
                         
@@ -497,10 +507,10 @@
                         <span class="button-text">0</span>
                     </button>
                     <button id="yellow_button" class="color-yellow active" title="Срочные заявки">
-                        <span class="button-text">1</span>
+                        <span class="button-text">2</span>
                     </button>
                     <button id="blue_button" class="color-blue active" title="Обычные заявки">
-                        <span class="button-text">1</span>
+                        <span class="button-text">0</span>
                     </button>
                     <button id="all_button" class="color-green active" title="Все заявки">
                         <span class="button-text">2</span>
@@ -511,7 +521,7 @@
     </div>
     
     <!-- Прозрачные информационные элементы -->
-    <div id="report_datetime">Дата и время отчета: 02-03-2026 05:57:31</div>
+    <div id="report_datetime">Дата и время отчета: 03-03-2026 07:07:34</div>
     <div id="title_button">Волгоград Восток</div>
     
     <!-- Кнопка "Назад" - без изменений -->
@@ -527,7 +537,7 @@ function init() {
         controls: ['zoomControl']
     });
 
-    var placemarksData = [{"coords": [50.091, 45.3568], "balloonContent": "<b>Подразделение:</b> Камышин 1 5 микрорайон<br><b>Отв.:</b> Не указан<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00009030681<br><b>Ответственный:</b> Трудов Алексей Владимирович<br><b>Выполнить до:</b> 05.03.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b> Тема: СГИ Камышин 1 5 микрорайон (993401) НТЦ..112 SCADA-XO \nОписание: Сигнал: Авария холодильного оборудования: НТЦ..112; Наименование аварии: Compressor 2A safety cut out; \n\nВременная метка сигнала: 02.03.26 01:24:13::604; \n\nЗначение: true (вкл) ; \n\nСработавшее состояние: Дискретное значение(лог. 1); \n\nПредыдущее состояние: Норма(не было срабатываний); \n\nЗадержка срабатывания: 300 сек.; \n\nВремя срабатывания: 02.03.26 01:24:34::694.\n<br><b>Осталось дней:</b> 2<br><hr><b>Подразделение:</b> Камышин 1 5 микрорайон<br><b>Отв.:</b> Не указан<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00008760812<br><b>Ответственный:</b> Трудов Алексей Владимирович<br><b>Выполнить до:</b> 30.03.2026<br><b>Направление:</b> Система вентиляции<br><b>Описание:</b> Техническое обслуживание тепловых электрических завес с электрическим нагревом на всех объектах ГМ, МС До 30.03.2026г Организовать  второе плановое выполнение ТО тепловых электрических завес с электрическим нагревом согласно заявки.\nПредоставить в сканированном виде отчёт о выполнении ТО с указанием ответственных и срока фактического выполнения с приложением:\n- Приложение 1. Перечень мероприятий по подготовке тепловых завес с  электрическим нагревом), с указанием срока фактического выполнения;\n- Приложение 2. Фотоотчет - при закрытии задачи обязательно вложить фото каждой завесы «до выполнения ТО» и «после выполнения ТО» .<br><b>Осталось дней:</b> 27<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=45.3568,50.091&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "yellow", "days_left": 2, "total_requests": 2, "red_count": 0, "yellow_count": 1, "blue_count": 1, "sector": "Не указан", "podrazdelenie": "Камышин 1 5 микрорайон", "address": ""}];
+    var placemarksData = [{"coords": [50.091, 45.3568], "balloonContent": "<b>Подразделение:</b> Камышин 1 5 микрорайон<br><b>Отв.:</b> Не указан<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00009042592<br><b>Ответственный:</b> Трудов Алексей Владимирович<br><b>Выполнить до:</b> 04.03.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b> Тема: СГИ Камышин 1 5 микрорайон (993401) Г_Фреш..48 SCADA-XO \nОписание: Сигнал: Авария холодильного оборудования: Г_Фреш..48; Наименование аварии: Е27. Неисправность датчика температуры S5; \n\nВременная метка сигнала: 03.03.26 03:18:16::264; \n\nЗначение: true (вкл) ; \n\nСработавшее состояние: Дискретное значение(лог. 1); \n\nПредыдущее состояние: Норма(не было срабатываний); \n\nЗадержка срабатывания: 300 сек.; \n\nВремя срабатывания: 03.03.26 03:18:37::577.\n<br><b>Осталось дней:</b> 0<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=45.3568,50.091&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "yellow", "days_left": 0, "total_requests": 1, "red_count": 0, "yellow_count": 1, "blue_count": 0, "sector": "Не указан", "podrazdelenie": "Камышин 1 5 микрорайон", "address": ""}, {"coords": [50.070299, 43.215768], "balloonContent": "<b>Подразделение:</b> Михайловка 1 Поперечная<br><b>Отв.:</b> Не указан<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00009042458<br><b>Ответственный:</b> Дронов Данила Евгеньевич<br><b>Выполнить до:</b> 04.03.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b> Тема: СГИ Михайловка 1 Поперечная (993412) Г_Майонез..50 SCADA-XO \nОписание: Сигнал: Авария холодильного оборудования: Г_Майонез..50; Наименование аварии: Е27. Неисправность датчика температуры S5; \n\nВременная метка сигнала: 03.03.26 00:34:15::848; \n\nЗначение: true (вкл) ; \n\nСработавшее состояние: Дискретное значение(лог. 1); \n\nПредыдущее состояние: Норма(не было срабатываний); \n\nЗадержка срабатывания: 300 сек.; \n\nВремя срабатывания: 03.03.26 00:34:16::536.\n<br><b>Осталось дней:</b> 0<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=43.215768,50.070299&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "yellow", "days_left": 0, "total_requests": 1, "red_count": 0, "yellow_count": 1, "blue_count": 0, "sector": "Не указан", "podrazdelenie": "Михайловка 1 Поперечная", "address": ""}];
     var allPlacemarks = [];
     var placemarksByColor = { 'red': [], 'yellow': [], 'blue': [] };
     var placemarksBySector = {};
@@ -542,6 +552,8 @@ function init() {
     
     placemarksByShop['Камышин 1 5 микрорайон'] = [];
     
+    placemarksByShop['Михайловка 1 Поперечная'] = [];
+    
 
     // Инициализируем направления
     placemarksByDirection['all'] = [];
@@ -552,17 +564,25 @@ function init() {
     
     placemarksByDirection['Ворота'] = [];
     
+    placemarksByDirection['Грузовой подъемник'] = [];
+    
     placemarksByDirection['Здания и сооружения'] = [];
     
     placemarksByDirection['Касса'] = [];
     
     placemarksByDirection['Кофемашина'] = [];
     
+    placemarksByDirection['Очистные сооружения'] = [];
+    
+    placemarksByDirection['Подъездные пути'] = [];
+    
     placemarksByDirection['Пресс вторсырья'] = [];
     
     placemarksByDirection['РИМ'] = [];
     
     placemarksByDirection['Роллеты'] = [];
+    
+    placemarksByDirection['Самоходное и складское оборудование'] = [];
     
     placemarksByDirection['Система вентиляции'] = [];
     
