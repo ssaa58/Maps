@@ -74,7 +74,7 @@
             max-width: 170px;
         }
 
-        .shop-select, .direction-select, .sector-select {
+        .shop-select, .sector-select {
             width: 100%;
             padding: 6px 4px;
             border-radius: 16px;
@@ -88,7 +88,7 @@
             max-width: 170px;
         }
         
-        .shop-select option, .direction-select option, .sector-select option {
+        .shop-select option, .sector-select option {
             background-color: white;
             color: black;
             padding: 4px 8px;
@@ -97,34 +97,158 @@
             height: 14px;
         }
         
-        /* Стили для мультиселекта */
-        .direction-select[multiple] {
-            height: auto;
-            min-height: 100px;
-            max-height: 200px;
-            overflow-y: auto;
-            padding: 4px;
-            background-color: rgba(255, 255, 255, 0.98);
-            border-radius: 12px;
+        /* Стили для кнопки направления */
+        .direction-button-container {
+            position: relative;
+            max-width: 170px;
         }
         
-        .direction-select[multiple] option {
-            padding: 6px 8px;
-            margin: 2px 0;
-            border-radius: 8px;
-            background-color: white;
+        .direction-button {
+            width: 100%;
+            padding: 8px 12px;
+            border-radius: 20px;
+            border: 1px solid #000000;
+            background-color: rgba(255, 255, 255, 0.95);
+            color: #000000;
+            font-size: 14px;
+            font-weight: bold;
+            backdrop-filter: blur(5px);
             cursor: pointer;
-            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
         }
         
-        .direction-select[multiple] option:hover {
-            background-color: #e3f2fd;
+        .direction-button:hover {
+            background-color: rgba(255, 255, 255, 1);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
         }
         
-        .direction-select[multiple] option:checked {
+        .direction-button.active {
             background-color: #2196F3;
             color: white;
+            border-color: #2196F3;
+        }
+        
+        .direction-button .arrow {
+            font-size: 12px;
+            transition: transform 0.3s ease;
+        }
+        
+        .direction-button .arrow.open {
+            transform: rotate(180deg);
+        }
+        
+        .direction-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            margin-top: 5px;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #ddd;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            max-height: 300px;
+            overflow-y: auto;
+            display: none;
+            z-index: 1002;
+            padding: 8px;
+        }
+        
+        .direction-dropdown.show {
+            display: block;
+        }
+        
+        .direction-option {
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 8px;
+            margin: 2px 0;
+            transition: all 0.2s ease;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .direction-option:hover {
+            background-color: #f0f0f0;
+        }
+        
+        .direction-option.selected {
+            background-color: #e3f2fd;
+            color: #2196F3;
+            font-weight: 500;
+        }
+        
+        .direction-option .checkbox {
+            width: 16px;
+            height: 16px;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            display: inline-block;
+            position: relative;
+        }
+        
+        .direction-option.selected .checkbox {
+            background-color: #2196F3;
+            border-color: #2196F3;
+        }
+        
+        .direction-option.selected .checkbox::after {
+            content: '✓';
+            position: absolute;
+            color: white;
+            font-size: 12px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .direction-select-actions {
+            display: flex;
+            gap: 8px;
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 8px;
+        }
+        
+        .direction-action-btn {
+            flex: 1;
+            padding: 6px;
+            border: none;
+            border-radius: 16px;
+            background-color: #f0f0f0;
+            cursor: pointer;
+            font-size: 11px;
             font-weight: bold;
+            transition: all 0.2s ease;
+        }
+        
+        .direction-action-btn:hover {
+            background-color: #e0e0e0;
+        }
+        
+        .direction-action-btn.select-all {
+            background-color: #4CAF50;
+            color: white;
+        }
+        
+        .direction-action-btn.select-all:hover {
+            background-color: #45a049;
+        }
+        
+        .direction-action-btn.deselect-all {
+            background-color: #f44336;
+            color: white;
+        }
+        
+        .direction-action-btn.deselect-all:hover {
+            background-color: #da190b;
         }
         
         /* Обновленные стили для кнопок с черными цифрами */
@@ -357,27 +481,35 @@
                 margin: 0 auto 8px auto;
             }
             
-            .shop-select, .direction-select, .sector-select {
+            .shop-select, .sector-select {
                 font-size: 14px;
                 padding: 7px 8px;
                 max-width: 100%;
             }
             
-            .shop-select option, .direction-select option, .sector-select option {
+            .shop-select option, .sector-select option {
                 font-size: 13px;
                 padding: 6px 8px;
                 line-height: 1.3;
                 height: 22px;
             }
             
-            .direction-select[multiple] {
-                min-height: 80px;
-                max-height: 150px;
+            .direction-button-container {
+                max-width: 150px;
             }
             
-            .direction-select[multiple] option {
-                padding: 5px 6px;
-                font-size: 11px;
+            .direction-button {
+                padding: 6px 10px;
+                font-size: 13px;
+            }
+            
+            .direction-dropdown {
+                max-height: 250px;
+            }
+            
+            .direction-option {
+                padding: 6px 10px;
+                font-size: 12px;
             }
             
             .select-container {
@@ -397,27 +529,35 @@
                 max-width: 90vw;
             }
             
-            .shop-select, .direction-select, .sector-select {
+            .shop-select, .sector-select {
                 font-size: 13px;
                 padding: 7px 8px;
                 max-width: 140px;
             }
             
-            .shop-select option, .direction-select option, .sector-select option {
+            .shop-select option, .sector-select option {
                 font-size: 12px;
                 padding: 5px 6px;
                 line-height: 1.2;
                 height: 20px;
             }
             
-            .direction-select[multiple] {
-                min-height: 70px;
-                max-height: 130px;
+            .direction-button-container {
+                max-width: 140px;
             }
             
-            .direction-select[multiple] option {
-                padding: 4px 5px;
-                font-size: 10px;
+            .direction-button {
+                padding: 5px 8px;
+                font-size: 12px;
+            }
+            
+            .direction-dropdown {
+                max-height: 200px;
+            }
+            
+            .direction-option {
+                padding: 5px 8px;
+                font-size: 11px;
             }
             
             .select-container {
@@ -480,53 +620,121 @@
                 </div>
             </div>
             
-            <!-- Секция выбора направления - МУЛЬТИСЕЛЕКТ -->
+            <!-- Секция выбора направления - КНОПКА С ВЫПАДАЮЩИМ МЕНЮ -->
             <div class="filter-section">
                 <div class="filter-title">ВСЕ НАПРАВЛЕНИЯ</div>
-                <div class="select-container">
-                    <select id="direction_select" class="direction-select" multiple size="5">
+                <div class="direction-button-container">
+                    <div class="direction-button" id="directionButton">
+                        <span id="selectedDirectionsCount">Все (20)</span>
+                        <span class="arrow" id="directionArrow">▼</span>
+                    </div>
+                    <div class="direction-dropdown" id="directionDropdown">
+                        <div class="direction-select-actions">
+                            <button class="direction-action-btn select-all" id="selectAllDirections">Выбрать все</button>
+                            <button class="direction-action-btn deselect-all" id="deselectAllDirections">Сбросить все</button>
+                        </div>
                         
-                        <option value="Автоматические двери" selected>Автоматические двери</option>
+                        <div class="direction-option selected" data-direction="Автоматические двери">
+                            <span class="checkbox"></span>
+                            <span>Автоматические двери</span>
+                        </div>
                         
-                        <option value="Водоснабжение и водоотведение" selected>Водоснабжение и водоотведение</option>
+                        <div class="direction-option selected" data-direction="Водоснабжение и водоотведение">
+                            <span class="checkbox"></span>
+                            <span>Водоснабжение и водоотведение</span>
+                        </div>
                         
-                        <option value="Ворота" selected>Ворота</option>
+                        <div class="direction-option selected" data-direction="Ворота">
+                            <span class="checkbox"></span>
+                            <span>Ворота</span>
+                        </div>
                         
-                        <option value="Здания и сооружения" selected>Здания и сооружения</option>
+                        <div class="direction-option selected" data-direction="Здания и сооружения">
+                            <span class="checkbox"></span>
+                            <span>Здания и сооружения</span>
+                        </div>
                         
-                        <option value="Касса" selected>Касса</option>
+                        <div class="direction-option selected" data-direction="Касса">
+                            <span class="checkbox"></span>
+                            <span>Касса</span>
+                        </div>
                         
-                        <option value="Кофемашина" selected>Кофемашина</option>
+                        <div class="direction-option selected" data-direction="Кофемашина">
+                            <span class="checkbox"></span>
+                            <span>Кофемашина</span>
+                        </div>
                         
-                        <option value="Подъездные пути" selected>Подъездные пути</option>
+                        <div class="direction-option selected" data-direction="Подъездные пути">
+                            <span class="checkbox"></span>
+                            <span>Подъездные пути</span>
+                        </div>
                         
-                        <option value="Пресс вторсырья" selected>Пресс вторсырья</option>
+                        <div class="direction-option selected" data-direction="Пресс вторсырья">
+                            <span class="checkbox"></span>
+                            <span>Пресс вторсырья</span>
+                        </div>
                         
-                        <option value="РИМ" selected>РИМ</option>
+                        <div class="direction-option selected" data-direction="РИМ">
+                            <span class="checkbox"></span>
+                            <span>РИМ</span>
+                        </div>
                         
-                        <option value="Роллеты" selected>Роллеты</option>
+                        <div class="direction-option selected" data-direction="Роллеты">
+                            <span class="checkbox"></span>
+                            <span>Роллеты</span>
+                        </div>
                         
-                        <option value="Система вентиляции" selected>Система вентиляции</option>
+                        <div class="direction-option selected" data-direction="Система вентиляции">
+                            <span class="checkbox"></span>
+                            <span>Система вентиляции</span>
+                        </div>
                         
-                        <option value="Система кондиционирования" selected>Система кондиционирования</option>
+                        <div class="direction-option selected" data-direction="Система кондиционирования">
+                            <span class="checkbox"></span>
+                            <span>Система кондиционирования</span>
+                        </div>
                         
-                        <option value="Система теплоснабжения" selected>Система теплоснабжения</option>
+                        <div class="direction-option selected" data-direction="Система теплоснабжения">
+                            <span class="checkbox"></span>
+                            <span>Система теплоснабжения</span>
+                        </div>
                         
-                        <option value="Стеллажное оборудование" selected>Стеллажное оборудование</option>
+                        <div class="direction-option selected" data-direction="Стеллажное оборудование">
+                            <span class="checkbox"></span>
+                            <span>Стеллажное оборудование</span>
+                        </div>
                         
-                        <option value="Табачное оборудование" selected>Табачное оборудование</option>
+                        <div class="direction-option selected" data-direction="Табачное оборудование">
+                            <span class="checkbox"></span>
+                            <span>Табачное оборудование</span>
+                        </div>
                         
-                        <option value="Тамбур-шлюз" selected>Тамбур-шлюз</option>
+                        <div class="direction-option selected" data-direction="Тамбур-шлюз">
+                            <span class="checkbox"></span>
+                            <span>Тамбур-шлюз</span>
+                        </div>
                         
-                        <option value="Технологическое оборудование" selected>Технологическое оборудование</option>
+                        <div class="direction-option selected" data-direction="Технологическое оборудование">
+                            <span class="checkbox"></span>
+                            <span>Технологическое оборудование</span>
+                        </div>
                         
-                        <option value="Уборка и вывоз снега" selected>Уборка и вывоз снега</option>
+                        <div class="direction-option selected" data-direction="Уборка и вывоз снега">
+                            <span class="checkbox"></span>
+                            <span>Уборка и вывоз снега</span>
+                        </div>
                         
-                        <option value="Холодильное оборудование" selected>Холодильное оборудование</option>
+                        <div class="direction-option selected" data-direction="Холодильное оборудование">
+                            <span class="checkbox"></span>
+                            <span>Холодильное оборудование</span>
+                        </div>
                         
-                        <option value="Электроснабжение" selected>Электроснабжение</option>
+                        <div class="direction-option selected" data-direction="Электроснабжение">
+                            <span class="checkbox"></span>
+                            <span>Электроснабжение</span>
+                        </div>
                         
-                    </select>
+                    </div>
                 </div>
             </div>
             
@@ -565,7 +773,7 @@
     </div>
     
     <!-- Прозрачные информационные элементы -->
-    <div id="report_datetime">Дата и время отчета: 04-03-2026 20:19:26</div>
+    <div id="report_datetime">Дата и время отчета: 04-03-2026 20:39:30</div>
     <div id="title_button">Владикавказ</div>
     
     <!-- Кнопка "Назад" - без изменений -->
@@ -790,6 +998,73 @@ function init() {
     
     activeSectors['all'] = true;
 
+    // Функция для обновления текста на кнопке направлений
+    function updateDirectionButtonText() {
+        var selectedCount = Object.values(activeDirections).filter(v => v).length;
+        var totalCount = 20;
+        var buttonText = document.getElementById('selectedDirectionsCount');
+        
+        if (selectedCount === totalCount) {
+            buttonText.textContent = `Все (${totalCount})`;
+        } else if (selectedCount === 0) {
+            buttonText.textContent = 'Ничего не выбрано';
+        } else {
+            buttonText.textContent = `Выбрано: ${selectedCount}`;
+        }
+    }
+
+    // Функция для обновления классов опций
+    function updateDirectionOptions() {
+        var options = document.querySelectorAll('.direction-option');
+        options.forEach(function(option) {
+            var direction = option.getAttribute('data-direction');
+            if (activeDirections[direction]) {
+                option.classList.add('selected');
+            } else {
+                option.classList.remove('selected');
+            }
+        });
+    }
+
+    // Функция для фильтрации по направлениям
+    function filterByDirections() {
+        addPlacemarks();
+        updateDirectionButtonText();
+    }
+
+    // Функция для проверки, соответствует ли метка выбранным направлениям
+    function isDirectionActive(placemark) {
+        // Получаем направление из метки
+        var balloonContent = placemark.properties.get('balloonContent');
+        var tempDiv = document.createElement('div');
+        tempDiv.innerHTML = balloonContent;
+        var directionElements = tempDiv.querySelectorAll('b');
+        var foundDirection = null;
+        
+        for (var i = 0; i < directionElements.length; i++) {
+            if (directionElements[i].textContent === 'Направление:') {
+                var nextElement = directionElements[i].nextSibling;
+                while (nextElement && nextElement.nodeType !== 1) {
+                    nextElement = nextElement.nextSibling;
+                }
+                if (nextElement && nextElement.tagName === 'BR') {
+                    var textContent = '';
+                    var node = directionElements[i].nextSibling;
+                    while (node && node.nodeName !== 'BR') {
+                        if (node.nodeType === 3) {
+                            textContent += node.textContent;
+                        }
+                        node = node.nextSibling;
+                    }
+                    foundDirection = textContent.trim();
+                }
+                break;
+            }
+        }
+        
+        return foundDirection ? activeDirections[foundDirection] : false;
+    }
+
     function addPlacemarks() {
         myMap.geoObjects.removeAll();
 
@@ -918,95 +1193,6 @@ function init() {
         }
     }
 
-    // Функция для фильтрации по направлениям (мультивыбор из select)
-    function filterByDirections() {
-        var select = document.getElementById('direction_select');
-        var selectedOptions = Array.from(select.selectedOptions).map(opt => opt.value);
-        
-        // Сбрасываем все направления
-        
-        activeDirections['Автоматические двери'] = false;
-        
-        activeDirections['Водоснабжение и водоотведение'] = false;
-        
-        activeDirections['Ворота'] = false;
-        
-        activeDirections['Здания и сооружения'] = false;
-        
-        activeDirections['Касса'] = false;
-        
-        activeDirections['Кофемашина'] = false;
-        
-        activeDirections['Подъездные пути'] = false;
-        
-        activeDirections['Пресс вторсырья'] = false;
-        
-        activeDirections['РИМ'] = false;
-        
-        activeDirections['Роллеты'] = false;
-        
-        activeDirections['Система вентиляции'] = false;
-        
-        activeDirections['Система кондиционирования'] = false;
-        
-        activeDirections['Система теплоснабжения'] = false;
-        
-        activeDirections['Стеллажное оборудование'] = false;
-        
-        activeDirections['Табачное оборудование'] = false;
-        
-        activeDirections['Тамбур-шлюз'] = false;
-        
-        activeDirections['Технологическое оборудование'] = false;
-        
-        activeDirections['Уборка и вывоз снега'] = false;
-        
-        activeDirections['Холодильное оборудование'] = false;
-        
-        activeDirections['Электроснабжение'] = false;
-        
-        
-        // Активируем выбранные направления
-        selectedOptions.forEach(function(direction) {
-            activeDirections[direction] = true;
-        });
-        
-        addPlacemarks();
-    }
-
-    // Функция для проверки, соответствует ли метка выбранным направлениям
-    function isDirectionActive(placemark) {
-        // Получаем направление из метки
-        var balloonContent = placemark.properties.get('balloonContent');
-        var tempDiv = document.createElement('div');
-        tempDiv.innerHTML = balloonContent;
-        var directionElements = tempDiv.querySelectorAll('b');
-        var foundDirection = null;
-        
-        for (var i = 0; i < directionElements.length; i++) {
-            if (directionElements[i].textContent === 'Направление:') {
-                var nextElement = directionElements[i].nextSibling;
-                while (nextElement && nextElement.nodeType !== 1) {
-                    nextElement = nextElement.nextSibling;
-                }
-                if (nextElement && nextElement.tagName === 'BR') {
-                    var textContent = '';
-                    var node = directionElements[i].nextSibling;
-                    while (node && node.nodeName !== 'BR') {
-                        if (node.nodeType === 3) {
-                            textContent += node.textContent;
-                        }
-                        node = node.nextSibling;
-                    }
-                    foundDirection = textContent.trim();
-                }
-                break;
-            }
-        }
-        
-        return foundDirection ? activeDirections[foundDirection] : false;
-    }
-
     // Функция для фильтрации по ответственному
     function filterBySector(sector) {
         // Сбрасываем все секторы
@@ -1066,28 +1252,145 @@ function init() {
         filterByShop(this.value);
     });
 
-    // Обработчик для мультиселекта направлений
-    document.querySelector('#direction_select').addEventListener('change', function () {
-        filterByDirections();
-    });
-
     // Обработчик для выпадающего меню ответственных
     document.querySelector('#sector_select').addEventListener('change', function () {
         filterBySector(this.value);
     });
 
+    // Обработчики для кнопки направлений
+    var directionButton = document.getElementById('directionButton');
+    var directionDropdown = document.getElementById('directionDropdown');
+    var directionArrow = document.getElementById('directionArrow');
+
+    directionButton.addEventListener('click', function(e) {
+        e.stopPropagation();
+        directionDropdown.classList.toggle('show');
+        directionArrow.classList.toggle('open');
+    });
+
+    // Обработчики для опций направлений
+    document.querySelectorAll('.direction-option').forEach(function(option) {
+        option.addEventListener('click', function(e) {
+            e.stopPropagation();
+            var direction = this.getAttribute('data-direction');
+            activeDirections[direction] = !activeDirections[direction];
+            this.classList.toggle('selected');
+            filterByDirections();
+        });
+    });
+
+    // Обработчик для кнопки "Выбрать все"
+    document.getElementById('selectAllDirections').addEventListener('click', function(e) {
+        e.stopPropagation();
+        
+        activeDirections['Автоматические двери'] = true;
+        
+        activeDirections['Водоснабжение и водоотведение'] = true;
+        
+        activeDirections['Ворота'] = true;
+        
+        activeDirections['Здания и сооружения'] = true;
+        
+        activeDirections['Касса'] = true;
+        
+        activeDirections['Кофемашина'] = true;
+        
+        activeDirections['Подъездные пути'] = true;
+        
+        activeDirections['Пресс вторсырья'] = true;
+        
+        activeDirections['РИМ'] = true;
+        
+        activeDirections['Роллеты'] = true;
+        
+        activeDirections['Система вентиляции'] = true;
+        
+        activeDirections['Система кондиционирования'] = true;
+        
+        activeDirections['Система теплоснабжения'] = true;
+        
+        activeDirections['Стеллажное оборудование'] = true;
+        
+        activeDirections['Табачное оборудование'] = true;
+        
+        activeDirections['Тамбур-шлюз'] = true;
+        
+        activeDirections['Технологическое оборудование'] = true;
+        
+        activeDirections['Уборка и вывоз снега'] = true;
+        
+        activeDirections['Холодильное оборудование'] = true;
+        
+        activeDirections['Электроснабжение'] = true;
+        
+        updateDirectionOptions();
+        filterByDirections();
+    });
+
+    // Обработчик для кнопки "Сбросить все"
+    document.getElementById('deselectAllDirections').addEventListener('click', function(e) {
+        e.stopPropagation();
+        
+        activeDirections['Автоматические двери'] = false;
+        
+        activeDirections['Водоснабжение и водоотведение'] = false;
+        
+        activeDirections['Ворота'] = false;
+        
+        activeDirections['Здания и сооружения'] = false;
+        
+        activeDirections['Касса'] = false;
+        
+        activeDirections['Кофемашина'] = false;
+        
+        activeDirections['Подъездные пути'] = false;
+        
+        activeDirections['Пресс вторсырья'] = false;
+        
+        activeDirections['РИМ'] = false;
+        
+        activeDirections['Роллеты'] = false;
+        
+        activeDirections['Система вентиляции'] = false;
+        
+        activeDirections['Система кондиционирования'] = false;
+        
+        activeDirections['Система теплоснабжения'] = false;
+        
+        activeDirections['Стеллажное оборудование'] = false;
+        
+        activeDirections['Табачное оборудование'] = false;
+        
+        activeDirections['Тамбур-шлюз'] = false;
+        
+        activeDirections['Технологическое оборудование'] = false;
+        
+        activeDirections['Уборка и вывоз снега'] = false;
+        
+        activeDirections['Холодильное оборудование'] = false;
+        
+        activeDirections['Электроснабжение'] = false;
+        
+        updateDirectionOptions();
+        filterByDirections();
+    });
+
+    // Закрытие выпадающего меню при клике вне его
+    document.addEventListener('click', function(event) {
+        if (!directionButton.contains(event.target) && !directionDropdown.contains(event.target)) {
+            directionDropdown.classList.remove('show');
+            directionArrow.classList.remove('open');
+        }
+    });
+
     // Обработчик для закрытия выпадающих меню при клике вне их
     document.addEventListener('click', function(event) {
         var shopSelect = document.querySelector('#shop_select');
-        var directionSelect = document.querySelector('#direction_select');
         var sectorSelect = document.querySelector('#sector_select');
         
         if (window.innerWidth <= 768) {
             if (event.target !== shopSelect && !shopSelect.contains(event.target)) {
                 shopSelect.blur();
-            }
-            if (event.target !== directionSelect && !directionSelect.contains(event.target)) {
-                directionSelect.blur();
             }
             if (event.target !== sectorSelect && !sectorSelect.contains(event.target)) {
                 sectorSelect.blur();
@@ -1097,6 +1400,7 @@ function init() {
 
     // Инициализация состояния кнопок
     updateAllButtonState();
+    updateDirectionButtonText();
 
     // Адаптация карты при изменении размера окна
     window.addEventListener('resize', function() {
