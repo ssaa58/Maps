@@ -2,235 +2,235 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Заявки ТОИР - Все филиалы</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f5f5f5;
-            min-height: 100vh;
-        }
-        
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-        }
-        
-        h1 {
-            color: #333;
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 28px;
-        }
-        
-        .summary-link {
-            display: block;
-            text-align: center;
-            margin: 25px 0;
-            padding: 18px;
-            background: linear-gradient(135deg, #28a745, #20c997);
-            color: white;
-            text-decoration: none;
-            border-radius: 12px;
-            font-weight: bold;
-            font-size: 18px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
-        }
-        
-        .summary-link:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-        }
-        
-        .filial-list {
-            list-style: none;
-            padding: 0;
-            display: grid;
-            gap: 15px;
-        }
-        
-        .filial-item {
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            border-left: 5px solid #2196F3;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        
-        .filial-item:hover {
-            background: #e3f2fd;
-            transform: translateX(5px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-        
-        .filial-link {
-            text-decoration: none;
-            color: #333;
-            font-weight: bold;
-            font-size: 18px;
-            display: block;
-            margin-bottom: 8px;
-        }
-        
-        .filial-link:hover {
-            color: #2196F3;
-        }
-        
-        .update-time {
-            font-size: 13px;
-            color: #666;
-        }
-        
-        .header-info {
-            text-align: center;
-            margin-bottom: 30px;
-            padding: 25px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        
-        .header-info p {
-            font-size: 16px;
-            margin: 8px 0;
-            opacity: 0.9;
-        }
-        
-        /* Адаптивность для мобильных */
-        @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-            
-            .container {
-                padding: 20px;
-                border-radius: 10px;
-            }
-            
-            h1 {
-                font-size: 24px;
-                margin-bottom: 20px;
-            }
-            
-            .summary-link {
-                padding: 15px;
-                font-size: 16px;
-                margin: 20px 0;
-            }
-            
-            .filial-item {
-                padding: 15px;
-            }
-            
-            .filial-link {
-                font-size: 16px;
-            }
-            
-            .header-info {
-                padding: 20px;
-                margin-bottom: 20px;
-            }
-            
-            .header-info p {
-                font-size: 14px;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .container {
-                padding: 15px;
-            }
-            
-            h1 {
-                font-size: 20px;
-            }
-            
-            .summary-link {
-                padding: 12px;
-                font-size: 14px;
-            }
-            
-            .filial-link {
-                font-size: 15px;
-            }
-            
-            .update-time {
-                font-size: 12px;
-            }
-        }
-    </style>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Заявки ТОИР - Все филиалы</title>
+   <style>
+       * {
+           margin: 0;
+           padding: 0;
+           box-sizing: border-box;
+       }
+       
+       body {
+           font-family: Arial, sans-serif;
+           margin: 0;
+           padding: 20px;
+           background-color: #f5f5f5;
+           min-height: 100vh;
+       }
+       
+       .container {
+           max-width: 800px;
+           margin: 0 auto;
+           background: white;
+           padding: 30px;
+           border-radius: 15px;
+           box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+       }
+       
+       h1 {
+           color: #333;
+           text-align: center;
+           margin-bottom: 30px;
+           font-size: 28px;
+       }
+       
+       .summary-link {
+           display: block;
+           text-align: center;
+           margin: 25px 0;
+           padding: 18px;
+           background: linear-gradient(135deg, #28a745, #20c997);
+           color: white;
+           text-decoration: none;
+           border-radius: 12px;
+           font-weight: bold;
+           font-size: 18px;
+           transition: all 0.3s ease;
+           box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+       }
+       
+       .summary-link:hover {
+           transform: translateY(-3px);
+           box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+       }
+       
+       .filial-list {
+           list-style: none;
+           padding: 0;
+           display: grid;
+           gap: 15px;
+       }
+       
+       .filial-item {
+           padding: 20px;
+           background: #f8f9fa;
+           border-radius: 10px;
+           border-left: 5px solid #2196F3;
+           transition: all 0.3s ease;
+           box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+       }
+       
+       .filial-item:hover {
+           background: #e3f2fd;
+           transform: translateX(5px);
+           box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+       }
+       
+       .filial-link {
+           text-decoration: none;
+           color: #333;
+           font-weight: bold;
+           font-size: 18px;
+           display: block;
+           margin-bottom: 8px;
+       }
+       
+       .filial-link:hover {
+           color: #2196F3;
+       }
+       
+       .update-time {
+           font-size: 13px;
+           color: #666;
+       }
+       
+       .header-info {
+           text-align: center;
+           margin-bottom: 30px;
+           padding: 25px;
+           background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+           color: white;
+           border-radius: 12px;
+           box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+       }
+       
+       .header-info p {
+           font-size: 16px;
+           margin: 8px 0;
+           opacity: 0.9;
+       }
+       
+       /* Адаптивность для мобильных */
+       @media (max-width: 768px) {
+           body {
+               padding: 10px;
+           }
+           
+           .container {
+               padding: 20px;
+               border-radius: 10px;
+           }
+           
+           h1 {
+               font-size: 24px;
+               margin-bottom: 20px;
+           }
+           
+           .summary-link {
+               padding: 15px;
+               font-size: 16px;
+               margin: 20px 0;
+           }
+           
+           .filial-item {
+               padding: 15px;
+           }
+           
+           .filial-link {
+               font-size: 16px;
+           }
+           
+           .header-info {
+               padding: 20px;
+               margin-bottom: 20px;
+           }
+           
+           .header-info p {
+               font-size: 14px;
+           }
+       }
+       
+       @media (max-width: 480px) {
+           .container {
+               padding: 15px;
+           }
+           
+           h1 {
+               font-size: 20px;
+           }
+           
+           .summary-link {
+               padding: 12px;
+               font-size: 14px;
+           }
+           
+           .filial-link {
+               font-size: 15px;
+           }
+           
+           .update-time {
+               font-size: 12px;
+           }
+       }
+   </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header-info">
-            <h1>🗺️ Заявки ТОИР - Все филиалы</h1>
-            <p>📅 Дата генерации: 28.03.2026 05:57</p>
-        </div>
-        
-        <a href="summary_report.html" class="summary-link">
-            📊 Сводный отчет
-        </a>
-        
-        <ul class="filial-list">
-            
-            <li class="filial-item">
-                <a href="Волгоград Восток.html" class="filial-link">📍 Волгоград Восток</a>
-                <div class="update-time">Файл: Волгоград Восток.html</div>
-            </li>
-            
-            <li class="filial-item">
-                <a href="Самара Запад.html" class="filial-link">📍 Самара Запад</a>
-                <div class="update-time">Файл: Самара Запад.html</div>
-            </li>
-            
-            <li class="filial-item">
-                <a href="Пятигорск.html" class="filial-link">📍 Пятигорск</a>
-                <div class="update-time">Файл: Пятигорск.html</div>
-            </li>
-            
-            <li class="filial-item">
-                <a href="Пенза.html" class="filial-link">📍 Пенза</a>
-                <div class="update-time">Файл: Пенза.html</div>
-            </li>
-            
-            <li class="filial-item">
-                <a href="Владикавказ.html" class="filial-link">📍 Владикавказ</a>
-                <div class="update-time">Файл: Владикавказ.html</div>
-            </li>
-            
-            <li class="filial-item">
-                <a href="Саратов Восток.html" class="filial-link">📍 Саратов Восток</a>
-                <div class="update-time">Файл: Саратов Восток.html</div>
-            </li>
-            
-            <li class="filial-item">
-                <a href="Тольятти.html" class="filial-link">📍 Тольятти</a>
-                <div class="update-time">Файл: Тольятти.html</div>
-            </li>
-            
-            <li class="filial-item">
-                <a href="Саратов Запад.html" class="filial-link">📍 Саратов Запад</a>
-                <div class="update-time">Файл: Саратов Запад.html</div>
-            </li>
-            
-        </ul>
-    </div>
+   <div class="container">
+       <div class="header-info">
+           <h1>🗺️ Заявки ТОИР - Все филиалы</h1>
+           <p>📅 Дата генерации: 28.03.2026 23:21</p>
+       </div>
+       
+       <a href="summary_report.html" class="summary-link">
+           📊 Сводный отчет
+       </a>
+       
+       <ul class="filial-list">
+           
+           <li class="filial-item">
+               <a href="Волгоград Восток.html" class="filial-link">📍 Волгоград Восток</a>
+               <div class="update-time">Файл: Волгоград Восток.html</div>
+           </li>
+           
+           <li class="filial-item">
+               <a href="Самара Запад.html" class="filial-link">📍 Самара Запад</a>
+               <div class="update-time">Файл: Самара Запад.html</div>
+           </li>
+           
+           <li class="filial-item">
+               <a href="Пенза.html" class="filial-link">📍 Пенза</a>
+               <div class="update-time">Файл: Пенза.html</div>
+           </li>
+           
+           <li class="filial-item">
+               <a href="Пятигорск.html" class="filial-link">📍 Пятигорск</a>
+               <div class="update-time">Файл: Пятигорск.html</div>
+           </li>
+           
+           <li class="filial-item">
+               <a href="Владикавказ.html" class="filial-link">📍 Владикавказ</a>
+               <div class="update-time">Файл: Владикавказ.html</div>
+           </li>
+           
+           <li class="filial-item">
+               <a href="Саратов Восток.html" class="filial-link">📍 Саратов Восток</a>
+               <div class="update-time">Файл: Саратов Восток.html</div>
+           </li>
+           
+           <li class="filial-item">
+               <a href="Тольятти.html" class="filial-link">📍 Тольятти</a>
+               <div class="update-time">Файл: Тольятти.html</div>
+           </li>
+           
+           <li class="filial-item">
+               <a href="Саратов Запад.html" class="filial-link">📍 Саратов Запад</a>
+               <div class="update-time">Файл: Саратов Запад.html</div>
+           </li>
+           
+       </ul>
+   </div>
 </body>
 </html>
-    
+   
