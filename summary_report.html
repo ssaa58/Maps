@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -5,107 +6,361 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Сводный отчет по филиалам</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f5f5f5; }
-        .container { max-width: 1600px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        h1 { color: #333; text-align: center; margin-bottom: 30px; }
-        .summary-header { display: grid; grid-template-columns: repeat(10, 1fr); gap: 10px; margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px; }
-        .summary-header-item { text-align: center; padding: 10px; }
-        .summary-header-value { font-size: 24px; color: #007bff; margin-bottom: 5px; }
-        .summary-header-label { font-size: 14px; color: #666; }
-        .summary-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 14px; }
-        .summary-table th, .summary-table td { padding: 12px; text-align: center; border: 1px solid #ddd; }
-        .summary-table th { background-color: #f8f9fa; font-weight: bold; }
-        .overdue { color: #dc3545; font-weight: bold; }
-        .resolved { color: #28a745; font-weight: bold; }
-        .returned { color: #ffc107; font-weight: bold; }
-        .cancelled { color: #dc3545; font-weight: bold; }
-        .filial-link { color: #007bff; text-decoration: none; font-weight: bold; }
-        .nav-links { text-align: center; margin: 20px 0; }
-        .nav-links a { display: inline-block; margin: 0 10px; padding: 10px 20px; background: #007bff; color: white; text-decoration: none; border-radius: 5px; }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .summary-header {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+        .summary-header-item {
+            text-align: center;
+            padding: 10px;
+        }
+        .summary-header-value {
+            font-size: 24px;
+            color: #007bff;
+            margin-bottom: 5px;
+        }
+        .summary-header-label {
+            font-size: 14px;
+            color: #666;
+        }
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        .summary-table th,
+        .summary-table td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        .summary-table th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+            color: #333;
+        }
+        .summary-table tr:hover {
+            background-color: #f5f5f5;
+        }
+        .overdue {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        .resolved {
+            color: #28a745;
+            font-weight: bold;
+        }
+        .returned {
+            color: #ffc107;
+            font-weight: bold;
+        }
+        .cancelled {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        .high-count {
+            background-color: #fff3cd;
+        }
+        .nav-links {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .nav-links a {
+            display: inline-block;
+            margin: 0 10px;
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .nav-links a:hover {
+            background: #0056b3;
+        }
+        .filial-link {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .filial-link:hover {
+            text-decoration: underline;
+        }
+        .total-row {
+            background-color: #e8f4fd;
+            font-weight: bold;
+        }
+        .sla-good {
+            color: #28a745;
+            font-weight: bold;
+        }
+        .sla-bad {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        .sla-unknown {
+            color: #6c757d;
+            font-style: italic;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>📊 Сводный отчет по филиалам</h1>
+        
         <div class="summary-header">
-            <div class="summary-header-item"><div class="summary-header-value">8</div><div class="summary-header-label">Филиалов</div></div>
-            <div class="summary-header-item"><div class="summary-header-value">7082</div><div class="summary-header-label">Всего заявок</div></div>
-            <div class="summary-header-item"><div class="summary-header-value">6597</div><div class="summary-header-label">Задач ГК</div></div>
-            <div class="summary-header-item"><div class="summary-header-value">419</div><div class="summary-header-label">Заявок BMC</div></div>
-            <div class="summary-header-item"><div class="summary-header-value">61</div><div class="summary-header-label">Заявок ТОИР</div></div>
-            <div class="summary-header-item"><div class="summary-header-value">33</div><div class="summary-header-label">Просрочено</div></div>
-            <div class="summary-header-item"><div class="summary-header-value">6876</div><div class="summary-header-label">Решено</div></div>
-            <div class="summary-header-item"><div class="summary-header-value">143</div><div class="summary-header-label">Возвращено</div></div>
-            <div class="summary-header-item"><div class="summary-header-value">140</div><div class="summary-header-label">Отменено</div></div>
-            <div class="summary-header-item"><div class="summary-header-value">8/8</div><div class="summary-header-label">SLA указано</div></div>
+            <div class="summary-header-item">
+                <div class="summary-header-value">8</div>
+                <div class="summary-header-label">Филиалов</div>
+            </div>
+            <div class="summary-header-item">
+                <div class="summary-header-value">7082</div>
+                <div class="summary-header-label">Всего заявок</div>
+            </div>
+            <div class="summary-header-item">
+                <div class="summary-header-value">6597</div>
+                <div class="summary-header-label">Задач ГК</div>
+            </div>
+            <div class="summary-header-item">
+                <div class="summary-header-value">419</div>
+                <div class="summary-header-label">Заявок BMC</div>
+            </div>
+            <div class="summary-header-item">
+                <div class="summary-header-value">61</div>
+                <div class="summary-header-label">Заявок ТОИР</div>
+            </div>
+            <div class="summary-header-item">
+                <div class="summary-header-value">34</div>
+                <div class="summary-header-label">Просрочено</div>
+            </div>
+            <div class="summary-header-item">
+                <div class="summary-header-value">6876</div>
+                <div class="summary-header-label">Решено</div>
+            </div>
+            <div class="summary-header-item">
+                <div class="summary-header-value">143</div>
+                <div class="summary-header-label">Возвращено</div>
+            </div>
+            <div class="summary-header-item">
+                <div class="summary-header-value">140</div>
+                <div class="summary-header-label">Отменено</div>
+            </div>
+            <div class="summary-header-item">
+                <div class="summary-header-value">8/8</div>
+                <div class="summary-header-label">SLA указано</div>
+            </div>
         </div>
+        
         <table class="summary-table">
-            <thead><tr><th>Филиал</th><th>Всего заявок</th><th>Задача ГК</th><th>BMC</th><th>ТОИР</th><th>Просрочено</th><th>Решено</th><th>Возвращено</th><th>Отменено</th><th>SLA</th></tr></thead>
+            <thead>
+                <tr>
+                    <th>Филиал</th>
+                    <th>Всего заявок</th>
+                    <th>Задача ГК</th>
+                    <th>BMC</th>
+                    <th>ТОИР</th>
+                    <th>Просрочено</th>
+                    <th>Решено</th>
+                    <th>Возвращено</th>
+                    <th>Отменено</th>
+                    <th>SLA</th>
+                  </tr>
+            </thead>
             <tbody>
                 
-                <tr>
-                    <td><a href="Саратов Запад.html" class="filial-link">Саратов Запад</a></td>
-                    <td>1758</td><td>1678</td><td>73</td><td>7</td>
-                    <td class="overdue">1</td><td class="resolved">1760</td><td class="returned">46</td>
-                    <td class="cancelled">37</td><td>95,30%</td>
+                <tr class="high-count">
+                    <td>
+                        
+                        <a href="Саратов Запад.html" class="filial-link">Саратов Запад</a>
+                        
+                    </td>
+                    <td>1758</td>
+                    <td>1678</td>
+                    <td>73</td>
+                    <td>7</td>
+                    <td class="overdue">1</td>
+                    <td class="resolved">1760</td>
+                    <td class="returned">46</td>
+                    <td class="cancelled">37</td>
+                    <td class="sla-good">
+                        95,30%
+                    </td>
                 </tr>
                 
-                <tr>
-                    <td><a href="Саратов Восток.html" class="filial-link">Саратов Восток</a></td>
-                    <td>1480</td><td>1413</td><td>63</td><td>4</td>
-                    <td class="overdue">0</td><td class="resolved">1398</td><td class="returned">48</td>
-                    <td class="cancelled">23</td><td>97,24%</td>
+                <tr class="high-count">
+                    <td>
+                        
+                        <a href="Саратов Восток.html" class="filial-link">Саратов Восток</a>
+                        
+                    </td>
+                    <td>1480</td>
+                    <td>1413</td>
+                    <td>63</td>
+                    <td>4</td>
+                    <td class="overdue">1</td>
+                    <td class="resolved">1398</td>
+                    <td class="returned">48</td>
+                    <td class="cancelled">23</td>
+                    <td class="sla-good">
+                        97,24%
+                    </td>
                 </tr>
                 
-                <tr>
-                    <td><a href="Пятигорск.html" class="filial-link">Пятигорск</a></td>
-                    <td>1335</td><td>1223</td><td>76</td><td>36</td>
-                    <td class="overdue">27</td><td class="resolved">1277</td><td class="returned">6</td>
-                    <td class="cancelled">22</td><td>97,31%</td>
+                <tr class="high-count">
+                    <td>
+                        
+                        <a href="Пятигорск.html" class="filial-link">Пятигорск</a>
+                        
+                    </td>
+                    <td>1335</td>
+                    <td>1223</td>
+                    <td>76</td>
+                    <td>36</td>
+                    <td class="overdue">27</td>
+                    <td class="resolved">1277</td>
+                    <td class="returned">6</td>
+                    <td class="cancelled">22</td>
+                    <td class="sla-good">
+                        97,31%
+                    </td>
                 </tr>
                 
-                <tr>
-                    <td><a href="Пенза.html" class="filial-link">Пенза</a></td>
-                    <td>913</td><td>805</td><td>100</td><td>8</td>
-                    <td class="overdue">1</td><td class="resolved">817</td><td class="returned">23</td>
-                    <td class="cancelled">19</td><td>96,88%</td>
+                <tr class="high-count">
+                    <td>
+                        
+                        <a href="Пенза.html" class="filial-link">Пенза</a>
+                        
+                    </td>
+                    <td>913</td>
+                    <td>805</td>
+                    <td>100</td>
+                    <td>8</td>
+                    <td class="overdue">1</td>
+                    <td class="resolved">817</td>
+                    <td class="returned">23</td>
+                    <td class="cancelled">19</td>
+                    <td class="sla-good">
+                        96,88%
+                    </td>
                 </tr>
                 
-                <tr>
-                    <td><a href="Тольятти.html" class="filial-link">Тольятти</a></td>
-                    <td>664</td><td>621</td><td>38</td><td>0</td>
-                    <td class="overdue">2</td><td class="resolved">616</td><td class="returned">4</td>
-                    <td class="cancelled">9</td><td>97,16%</td>
+                <tr class="high-count">
+                    <td>
+                        
+                        <a href="Тольятти.html" class="filial-link">Тольятти</a>
+                        
+                    </td>
+                    <td>664</td>
+                    <td>621</td>
+                    <td>38</td>
+                    <td>0</td>
+                    <td class="overdue">2</td>
+                    <td class="resolved">616</td>
+                    <td class="returned">4</td>
+                    <td class="cancelled">9</td>
+                    <td class="sla-good">
+                        97,16%
+                    </td>
                 </tr>
                 
-                <tr>
-                    <td><a href="Самара Запад.html" class="filial-link">Самара Запад</a></td>
-                    <td>657</td><td>593</td><td>60</td><td>4</td>
-                    <td class="overdue">0</td><td class="resolved">590</td><td class="returned">12</td>
-                    <td class="cancelled">21</td><td>93,63%</td>
+                <tr class="high-count">
+                    <td>
+                        
+                        <a href="Самара Запад.html" class="filial-link">Самара Запад</a>
+                        
+                    </td>
+                    <td>657</td>
+                    <td>593</td>
+                    <td>60</td>
+                    <td>4</td>
+                    <td class="overdue">0</td>
+                    <td class="resolved">590</td>
+                    <td class="returned">12</td>
+                    <td class="cancelled">21</td>
+                    <td class="sla-good">
+                        93,63%
+                    </td>
                 </tr>
                 
-                <tr>
-                    <td><a href="Волгоград Восток.html" class="filial-link">Волгоград Восток</a></td>
-                    <td>251</td><td>250</td><td>1</td><td>0</td>
-                    <td class="overdue">0</td><td class="resolved">236</td><td class="returned">0</td>
-                    <td class="cancelled">1</td><td>99,30%</td>
+                <tr class="high-count">
+                    <td>
+                        
+                        <a href="Волгоград Восток.html" class="filial-link">Волгоград Восток</a>
+                        
+                    </td>
+                    <td>251</td>
+                    <td>250</td>
+                    <td>1</td>
+                    <td>0</td>
+                    <td class="overdue">0</td>
+                    <td class="resolved">236</td>
+                    <td class="returned">0</td>
+                    <td class="cancelled">1</td>
+                    <td class="sla-good">
+                        99,30%
+                    </td>
                 </tr>
                 
-                <tr>
-                    <td><a href="Владикавказ.html" class="filial-link">Владикавказ</a></td>
-                    <td>24</td><td>14</td><td>8</td><td>2</td>
-                    <td class="overdue">2</td><td class="resolved">182</td><td class="returned">4</td>
-                    <td class="cancelled">8</td><td>92,93%</td>
+                <tr class="high-count">
+                    <td>
+                        
+                        <a href="Владикавказ.html" class="filial-link">Владикавказ</a>
+                        
+                    </td>
+                    <td>24</td>
+                    <td>14</td>
+                    <td>8</td>
+                    <td>2</td>
+                    <td class="overdue">2</td>
+                    <td class="resolved">182</td>
+                    <td class="returned">4</td>
+                    <td class="cancelled">8</td>
+                    <td class="sla-good">
+                        92,93%
+                    </td>
                 </tr>
                 
             </tbody>
         </table>
+        
         <div class="nav-links">
             <a href="index.html">← Назад к списку филиалов</a>
             <a href="Сводный_отчет_по_филиалам.xlsx">📥 Скачать Excel отчет</a>
         </div>
-        <div style="text-align: center; margin-top: 20px; color: #666; font-size: 12px;">Отчет сгенерирован: 29.03.2026 13:41</div>
+        
+        <div style="text-align: center; margin-top: 20px; color: #666; font-size: 12px;">
+            Отчет сгенерирован: 29.03.2026 14:13<br>
+            <small>SLA данные загружены из файла: SLA.xlsx<br>
+            Статистика по решенным заявкам: Решенные.xlsx<br>
+            Статистика по возвращенным заявкам: Возвращенные.xlsx</small>
+        </div>
     </div>
 </body>
 </html>
+    
