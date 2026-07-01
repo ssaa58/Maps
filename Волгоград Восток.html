@@ -612,9 +612,11 @@
                     <select id="shop_select" class="shop-select">
                         <option value="all">Все магазины</option>
                         
-                        <option value="Килакекуа">Килакекуа</option>
+                        <option value="Камышин 1 5 микрорайон">Камышин 1 5 микрорайон</option>
                         
-                        <option value="Регион">Регион</option>
+                        <option value="Михайловка 1 Поперечная">Михайловка 1 Поперечная</option>
+                        
+                        <option value="Циково">Циково</option>
                         
                     </select>
                 </div>
@@ -625,7 +627,7 @@
                 <div class="filter-title">ВСЕ НАПРАВЛЕНИЯ</div>
                 <div class="direction-button-container">
                     <div class="direction-button" id="directionButton">
-                        <span id="selectedDirectionsCount">Все (22)</span>
+                        <span id="selectedDirectionsCount">Все (20)</span>
                         <span class="arrow" id="directionArrow">▼</span>
                     </div>
                     <div class="direction-dropdown" id="directionDropdown">
@@ -649,9 +651,9 @@
                             <span>Водоснабжение и водоотведение</span>
                         </div>
                         
-                        <div class="direction-option selected" data-direction="Ворота">
+                        <div class="direction-option selected" data-direction="Грузовой подъемник">
                             <span class="checkbox"></span>
-                            <span>Ворота</span>
+                            <span>Грузовой подъемник</span>
                         </div>
                         
                         <div class="direction-option selected" data-direction="Здания и сооружения">
@@ -669,11 +671,6 @@
                             <span>Кофемашина</span>
                         </div>
                         
-                        <div class="direction-option selected" data-direction="Очистные сооружения">
-                            <span class="checkbox"></span>
-                            <span>Очистные сооружения</span>
-                        </div>
-                        
                         <div class="direction-option selected" data-direction="Подъездные пути">
                             <span class="checkbox"></span>
                             <span>Подъездные пути</span>
@@ -687,11 +684,6 @@
                         <div class="direction-option selected" data-direction="РИМ">
                             <span class="checkbox"></span>
                             <span>РИМ</span>
-                        </div>
-                        
-                        <div class="direction-option selected" data-direction="Роллеты">
-                            <span class="checkbox"></span>
-                            <span>Роллеты</span>
                         </div>
                         
                         <div class="direction-option selected" data-direction="Самоходное и складское оборудование">
@@ -767,13 +759,13 @@
                         <span class="button-text">0</span>
                     </button>
                     <button id="yellow_button" class="color-yellow active" title="Срочные заявки">
-                        <span class="button-text">2</span>
+                        <span class="button-text">4</span>
                     </button>
                     <button id="blue_button" class="color-blue active" title="Обычные заявки">
                         <span class="button-text">0</span>
                     </button>
                     <button id="all_button" class="color-green active" title="Все заявки">
-                        <span class="button-text">2</span>
+                        <span class="button-text">4</span>
                     </button>
                 </div>
             </div>
@@ -781,7 +773,7 @@
     </div>
     
     <!-- Прозрачные информационные элементы -->
-    <div id="report_datetime">Дата и время отчета: 29-06-2026 06:07:44</div>
+    <div id="report_datetime">Дата и время отчета: 01-07-2026 07:17:15</div>
     <div id="title_button">Волгоград Восток</div>
     
     <!-- Кнопка "Назад" - без изменений -->
@@ -797,7 +789,7 @@ function init() {
         controls: ['zoomControl']
     });
 
-    var placemarksData = [{"coords": [50.97625, 44.776942], "balloonContent": "<b>Подразделение:</b> Килакекуа<br><b>Отв.:</b> Не указан<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00009942598<br><b>Ответственный:</b> Трудов Алексей Владимирович<br><b>Выполнить до:</b> 01.07.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b> Выполнение ежемесячных работ по ТО ХО малых форматов_Июнь 2026 Выполнить ежемесячные работы по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО ММ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов малых форматов. \nПри закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\nПри закрытии задачи в ТОИР обязательно вложить: \n1.  Полностью заполненный с обоих сторон акт сервисных работ.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа) в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\n <br><b>Осталось дней:</b> 1<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=44.776942,50.97625&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "yellow", "days_left": 1, "total_requests": 1, "red_count": 0, "yellow_count": 1, "blue_count": 0, "sector": "Не указан", "podrazdelenie": "Килакекуа", "address": ""}, {"coords": [50.086935, 45.364909], "balloonContent": "<b>Подразделение:</b> Регион<br><b>Отв.:</b> Не указан<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00009975924<br><b>Ответственный:</b> Трудов Алексей Владимирович<br><b>Выполнить до:</b> 01.07.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b> Выполнение ежемесячных работ по ТО ХО малых форматов_Июнь 2026 Выполнить ежемесячные работы по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО ММ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов малых форматов. \nПри закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\nПри закрытии задачи в ТОИР обязательно вложить: \n1.  Полностью заполненный с обоих сторон акт сервисных работ.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа) в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\n <br><b>Осталось дней:</b> 1<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=45.364909,50.086935&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "yellow", "days_left": 1, "total_requests": 1, "red_count": 0, "yellow_count": 1, "blue_count": 0, "sector": "Не указан", "podrazdelenie": "Регион", "address": ""}];
+    var placemarksData = [{"coords": [50.091, 45.3568], "balloonContent": "<b>Подразделение:</b> Камышин 1 5 микрорайон<br><b>Отв.:</b> Не указан<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00010258760<br><b>Ответственный:</b> Трудов Алексей Владимирович<br><b>Выполнить до:</b> 01.07.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b> Тема: СГИ Камышин 1 5 микрорайон (993401) В_Ягоды..71 SCADA-XO \nОписание: Сигнал: Авария холодильного оборудования: В_Ягоды..71; Наименование аварии: A1. Высокая температура; \n\nВременная метка сигнала: 30.06.26 21:06:09::552; \n\nЗначение: true (вкл) ; \n\nСработавшее состояние: Дискретное значение(лог. 1); \n\nПредыдущее состояние: Норма(не было срабатываний); \n\nЗадержка срабатывания: 3000 сек.; \n\nВремя срабатывания: 30.06.26 21:06:29::788.\n<br><b>Осталось дней:</b> 0<br><hr><b>Подразделение:</b> Камышин 1 5 микрорайон<br><b>Отв.:</b> Не указан<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00010259398<br><b>Ответственный:</b> Трудов Алексей Владимирович<br><b>Выполнить до:</b> 02.07.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b> Тема: СГИ Камышин 1 5 микрорайон (993401) БШ_ПФ..20 SCADA-XO \nОписание: Сигнал: Авария холодильного оборудования: БШ_ПФ..20; Наименование аварии: Е27. Неисправность датчика температуры S5; \n\nВременная метка сигнала: 01.07.26 06:04:33::705; \n\nЗначение: true (вкл) ; \n\nСработавшее состояние: Дискретное значение(лог. 1); \n\nПредыдущее состояние: Норма(не было срабатываний); \n\nЗадержка срабатывания: 300 сек.; \n\nВремя срабатывания: 01.07.26 06:04:37::424.\n<br><b>Осталось дней:</b> 0<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=45.3568,50.091&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "yellow", "days_left": 0, "total_requests": 2, "red_count": 0, "yellow_count": 2, "blue_count": 0, "sector": "Не указан", "podrazdelenie": "Камышин 1 5 микрорайон", "address": ""}, {"coords": [50.070299, 43.215768], "balloonContent": "<b>Подразделение:</b> Михайловка 1 Поперечная<br><b>Отв.:</b> Не указан<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00010259304<br><b>Ответственный:</b> Дронов Данила Евгеньевич<br><b>Выполнить до:</b> 04.07.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b> Тема: СГИ Михайловка 1 Поперечная (993412) СТЦ..101 SCADA-XO \nОписание: Сигнал: Авария холодильного оборудования: СТЦ..101; Наименование аварии: А19. Авария компрессора №1; \n\nВременная метка сигнала: 01.07.26 05:07:52::263; \n\nЗначение: true (вкл) ; \n\nСработавшее состояние: Дискретное значение(лог. 1); \n\nПредыдущее состояние: Норма(не было срабатываний); \n\nЗадержка срабатывания: 300 сек.; \n\nВремя срабатывания: 01.07.26 05:08:14::747.\n<br><b>Осталось дней:</b> 2<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=43.215768,50.070299&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "yellow", "days_left": 2, "total_requests": 1, "red_count": 0, "yellow_count": 1, "blue_count": 0, "sector": "Не указан", "podrazdelenie": "Михайловка 1 Поперечная", "address": ""}, {"coords": [50.125861, 45.410335], "balloonContent": "<b>Подразделение:</b> Циково<br><b>Отв.:</b> Не указан<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00010257045<br><b>Ответственный:</b> Трудов Алексей Владимирович<br><b>Выполнить до:</b> 03.07.2026<br><b>Направление:</b> Система кондиционирования<br><b>Описание:</b> Тема: Кондиционирование \nОписание: Добрый день. Необходимо выполнить запрос, руководствуясь следующими данными:\nОбъект ремонта, с которым возникли проблемы: Сплит-система\nПроблема: Не работает\nОписание проблемы: дует теплый воздух, на табло буква F\nСотрудник магазина: Да\nФилиал: АО Тандер Волгоградский филиал\nОбъект: Циково МД ВлФ\nФИО: Рагузина Любовь Александровна\nНомер телефона: <a href=\"tel:89963570611\" style=\"color: #2196F3; font-weight: bold; text-decoration: none; background: #f0f8ff; padding: 2px 6px; border-radius: 4px; border: 1px solid #2196F3;\">📞 +79963570611</a><br><b>Осталось дней:</b> 2<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=45.410335,50.125861&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "yellow", "days_left": 2, "total_requests": 1, "red_count": 0, "yellow_count": 1, "blue_count": 0, "sector": "Не указан", "podrazdelenie": "Циково", "address": ""}];
     var allPlacemarks = [];
     var placemarksByColor = { 'red': [], 'yellow': [], 'blue': [] };
     var placemarksBySector = {};
@@ -810,9 +802,11 @@ function init() {
     // Инициализируем магазины
     placemarksByShop['all'] = [];
     
-    placemarksByShop['Килакекуа'] = [];
+    placemarksByShop['Камышин 1 5 микрорайон'] = [];
     
-    placemarksByShop['Регион'] = [];
+    placemarksByShop['Михайловка 1 Поперечная'] = [];
+    
+    placemarksByShop['Циково'] = [];
     
 
     // Инициализируем направления
@@ -824,7 +818,7 @@ function init() {
     
     placemarksByDirection['Водоснабжение и водоотведение'] = [];
     
-    placemarksByDirection['Ворота'] = [];
+    placemarksByDirection['Грузовой подъемник'] = [];
     
     placemarksByDirection['Здания и сооружения'] = [];
     
@@ -832,15 +826,11 @@ function init() {
     
     placemarksByDirection['Кофемашина'] = [];
     
-    placemarksByDirection['Очистные сооружения'] = [];
-    
     placemarksByDirection['Подъездные пути'] = [];
     
     placemarksByDirection['Пресс вторсырья'] = [];
     
     placemarksByDirection['РИМ'] = [];
-    
-    placemarksByDirection['Роллеты'] = [];
     
     placemarksByDirection['Самоходное и складское оборудование'] = [];
     
@@ -967,7 +957,7 @@ function init() {
     
     activeDirections['Водоснабжение и водоотведение'] = true;
     
-    activeDirections['Ворота'] = true;
+    activeDirections['Грузовой подъемник'] = true;
     
     activeDirections['Здания и сооружения'] = true;
     
@@ -975,15 +965,11 @@ function init() {
     
     activeDirections['Кофемашина'] = true;
     
-    activeDirections['Очистные сооружения'] = true;
-    
     activeDirections['Подъездные пути'] = true;
     
     activeDirections['Пресс вторсырья'] = true;
     
     activeDirections['РИМ'] = true;
-    
-    activeDirections['Роллеты'] = true;
     
     activeDirections['Самоходное и складское оборудование'] = true;
     
@@ -1013,7 +999,7 @@ function init() {
     // Функция для обновления текста на кнопке направлений
     function updateDirectionButtonText() {
         var selectedCount = Object.values(activeDirections).filter(v => v).length;
-        var totalCount = 22;
+        var totalCount = 20;
         var buttonText = document.getElementById('selectedDirectionsCount');
         
         if (selectedCount === totalCount) {
@@ -1301,7 +1287,7 @@ function init() {
         
         activeDirections['Водоснабжение и водоотведение'] = true;
         
-        activeDirections['Ворота'] = true;
+        activeDirections['Грузовой подъемник'] = true;
         
         activeDirections['Здания и сооружения'] = true;
         
@@ -1309,15 +1295,11 @@ function init() {
         
         activeDirections['Кофемашина'] = true;
         
-        activeDirections['Очистные сооружения'] = true;
-        
         activeDirections['Подъездные пути'] = true;
         
         activeDirections['Пресс вторсырья'] = true;
         
         activeDirections['РИМ'] = true;
-        
-        activeDirections['Роллеты'] = true;
         
         activeDirections['Самоходное и складское оборудование'] = true;
         
@@ -1353,7 +1335,7 @@ function init() {
         
         activeDirections['Водоснабжение и водоотведение'] = false;
         
-        activeDirections['Ворота'] = false;
+        activeDirections['Грузовой подъемник'] = false;
         
         activeDirections['Здания и сооружения'] = false;
         
@@ -1361,15 +1343,11 @@ function init() {
         
         activeDirections['Кофемашина'] = false;
         
-        activeDirections['Очистные сооружения'] = false;
-        
         activeDirections['Подъездные пути'] = false;
         
         activeDirections['Пресс вторсырья'] = false;
         
         activeDirections['РИМ'] = false;
-        
-        activeDirections['Роллеты'] = false;
         
         activeDirections['Самоходное и складское оборудование'] = false;
         
