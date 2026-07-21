@@ -612,13 +612,15 @@
                     <select id="shop_select" class="shop-select">
                         <option value="all">Все магазины</option>
                         
-                        <option value="Диалог">Диалог</option>
+                        <option value="Бухта">Бухта</option>
+                        
+                        <option value="Елань">Елань</option>
                         
                         <option value="Камышин 1 5 микрорайон">Камышин 1 5 микрорайон</option>
                         
                         <option value="Михайловка 1 Поперечная">Михайловка 1 Поперечная</option>
                         
-                        <option value="Секачи">Секачи</option>
+                        <option value="Токаревщина">Токаревщина</option>
                         
                     </select>
                 </div>
@@ -658,11 +660,6 @@
                             <span>Ворота</span>
                         </div>
                         
-                        <div class="direction-option selected" data-direction="Грузовой подъемник">
-                            <span class="checkbox"></span>
-                            <span>Грузовой подъемник</span>
-                        </div>
-                        
                         <div class="direction-option selected" data-direction="Здания и сооружения">
                             <span class="checkbox"></span>
                             <span>Здания и сооружения</span>
@@ -676,6 +673,11 @@
                         <div class="direction-option selected" data-direction="Кофемашина">
                             <span class="checkbox"></span>
                             <span>Кофемашина</span>
+                        </div>
+                        
+                        <div class="direction-option selected" data-direction="Очистные сооружения">
+                            <span class="checkbox"></span>
+                            <span>Очистные сооружения</span>
                         </div>
                         
                         <div class="direction-option selected" data-direction="Подъездные пути">
@@ -771,13 +773,13 @@
                         <span class="button-text">0</span>
                     </button>
                     <button id="yellow_button" class="color-yellow active" title="Срочные заявки">
-                        <span class="button-text">2</span>
+                        <span class="button-text">3</span>
                     </button>
                     <button id="blue_button" class="color-blue active" title="Обычные заявки">
-                        <span class="button-text">2</span>
+                        <span class="button-text">3</span>
                     </button>
                     <button id="all_button" class="color-green active" title="Все заявки">
-                        <span class="button-text">4</span>
+                        <span class="button-text">6</span>
                     </button>
                 </div>
             </div>
@@ -785,7 +787,7 @@
     </div>
     
     <!-- Прозрачные информационные элементы -->
-    <div id="report_datetime">Дата и время отчета: 20-07-2026 05:46:30</div>
+    <div id="report_datetime">Дата и время отчета: 21-07-2026 05:58:14</div>
     <div id="title_button">Волгоград Восток</div>
     
     <!-- Кнопка "Назад" - без изменений -->
@@ -801,7 +803,7 @@ function init() {
         controls: ['zoomControl']
     });
 
-    var placemarksData = [{"coords": [50.090355, 45.375814], "balloonContent": "<b>Подразделение:</b> Диалог<br><b>Отв.:</b> Не указан<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00010383109<br><b>Ответственный:</b> Трудов Алексей Владимирович<br><b>Выполнить до:</b> 21.07.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b> Тема: Холодильное оборудование \nОписание: Добрый день. Необходимо выполнить запрос, руководствуясь следующими данными:\nОбъект ремонта, с которым возникли проблемы: Горка холодильная\nПроблема: Механическое повреждение\nОписание проблемы: Дверь отпала. Требуется установка двери. \nСотрудник магазина: Да\nФилиал: АО Тандер Волгоградский филиал\nОбъект: Диалог МД ВлФ\nФИО: Лебзак\nНомер телефона: <a href=\"tel:89375602737\" style=\"color: #2196F3; font-weight: bold; text-decoration: none; background: #f0f8ff; padding: 2px 6px; border-radius: 4px; border: 1px solid #2196F3;\">📞 +79375602737</a><br><b>Осталось дней:</b> 1<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=45.375814,50.090355&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "yellow", "days_left": 1, "total_requests": 1, "red_count": 0, "yellow_count": 1, "blue_count": 0, "sector": "Не указан", "podrazdelenie": "Диалог", "address": ""}, {"coords": [50.091, 45.3568], "balloonContent": "<b>Подразделение:</b> Камышин 1 5 микрорайон<br><b>Отв.:</b> Не указан<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00010272473<br><b>Ответственный:</b> Трудов Алексей Владимирович<br><b>Выполнить до:</b> 30.09.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b> Выполнение работ по ТО ХО БФ_3кв_2026 Выполнить работы с периодичностью раз в 3 месяца по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО БФ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов больших форматов. При закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\n\nПри закрытии задачи в ТОИР обязательно вложить: \n \n1.  Полностью заполненный с обоих сторон акт сервисных работ. Шаблон акта приложен к задаче.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа), в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\nПредставить обратную связь, задавать вопросы: Сектор холодильных систем <sec_holod_sys@magnit.ru><br><b>Осталось дней:</b> 71<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=45.3568,50.091&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 71, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Не указан", "podrazdelenie": "Камышин 1 5 микрорайон", "address": ""}, {"coords": [50.070299, 43.215768], "balloonContent": "<b>Подразделение:</b> Михайловка 1 Поперечная<br><b>Отв.:</b> Не указан<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00010272474<br><b>Ответственный:</b> Дронов Данила Евгеньевич<br><b>Выполнить до:</b> 30.09.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b> Выполнение работ по ТО ХО БФ_3кв_2026 Выполнить работы с периодичностью раз в 3 месяца по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО БФ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов больших форматов. При закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\n\nПри закрытии задачи в ТОИР обязательно вложить: \n \n1.  Полностью заполненный с обоих сторон акт сервисных работ. Шаблон акта приложен к задаче.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа), в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\nПредставить обратную связь, задавать вопросы: Сектор холодильных систем <sec_holod_sys@magnit.ru><br><b>Осталось дней:</b> 71<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=43.215768,50.070299&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 71, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Не указан", "podrazdelenie": "Михайловка 1 Поперечная", "address": ""}, {"coords": [50.069428, 43.231343], "balloonContent": "<b>Подразделение:</b> Секачи<br><b>Отв.:</b> Не указан<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00010387318<br><b>Ответственный:</b> Дронов Данила Евгеньевич<br><b>Выполнить до:</b> 20.07.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b> Тема: Холодильное оборудование \nОписание: Добрый день. Необходимо выполнить запрос, руководствуясь следующими данными:\nОбъект ремонта, с которым возникли проблемы: Боннета\nПроблема: Течь воды\nОписание проблемы: Из под холодильника с мясом течет вода, и на холодильнике с колбасой не закрывается дверь\nСотрудник магазина: Да\nФилиал: АО Тандер Волгоградский филиал\nОбъект: Секачи МД ВлФ\nФИО: Еськова Любовь Васильевна\nНомер телефона: <a href=\"tel:89026503471\" style=\"color: #2196F3; font-weight: bold; text-decoration: none; background: #f0f8ff; padding: 2px 6px; border-radius: 4px; border: 1px solid #2196F3;\">📞 +79026503471</a><br><b>Осталось дней:</b> 0<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=43.231343,50.069428&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "yellow", "days_left": 0, "total_requests": 1, "red_count": 0, "yellow_count": 1, "blue_count": 0, "sector": "Не указан", "podrazdelenie": "Секачи", "address": ""}];
+    var placemarksData = [{"coords": [50.0832, 45.40864], "balloonContent": "<b>Подразделение:</b> Бухта<br><b>Отв.:</b> Не указан<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00010391732<br><b>Ответственный:</b> Дронов Данила Евгеньевич<br><b>Выполнить до:</b> 19.08.2026<br><b>Направление:</b> Здания и сооружения<br><b>Описание:</b> Ремонт НТ бонеты<br><b>Осталось дней:</b> 29<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=45.40864,50.0832&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 29, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Не указан", "podrazdelenie": "Бухта", "address": ""}, {"coords": [50.945102, 43.739888], "balloonContent": "<b>Подразделение:</b> Елань<br><b>Отв.:</b> Не указан<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00010395285<br><b>Ответственный:</b> Трудов Алексей Владимирович<br><b>Выполнить до:</b> 23.07.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b> Тема: Холодильное оборудование \nОписание: Добрый день. Необходимо выполнить запрос, руководствуясь следующими данными:\nОбъект ремонта, с которым возникли проблемы: Боннета\nПроблема: Механическое повреждение\nОписание проблемы: В боннете самопроизвольно взорвалось стекло, требуется замена стекла\nСотрудник магазина: Да\nФилиал: АО Тандер Волгоградский филиал\nОбъект: Елань МД ВлФ\nФИО: Петренко\nНомер телефона: <a href=\"tel:89275085145\" style=\"color: #2196F3; font-weight: bold; text-decoration: none; background: #f0f8ff; padding: 2px 6px; border-radius: 4px; border: 1px solid #2196F3;\">📞 +79275085145</a><br><b>Осталось дней:</b> 2<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=43.739888,50.945102&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "yellow", "days_left": 2, "total_requests": 1, "red_count": 0, "yellow_count": 1, "blue_count": 0, "sector": "Не указан", "podrazdelenie": "Елань", "address": ""}, {"coords": [50.091, 45.3568], "balloonContent": "<b>Подразделение:</b> Камышин 1 5 микрорайон<br><b>Отв.:</b> Не указан<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00010396629<br><b>Ответственный:</b> Трудов Алексей Владимирович<br><b>Выполнить до:</b> 21.07.2026<br><b>Направление:</b> Система вентиляции<br><b>Описание:</b> Тема: Вентиляция и тепловые завесы \nОписание: Добрый день. Необходимо выполнить запрос, руководствуясь следующими данными:\n\nОбъект ремонта, с которым возникли проблемы: Вентиляция\nПроблема: Не работает\nОписание проблемы: В горячем цеху  и гриль нужно  помыть вентиляцию \nСотрудник магазина: Да\nФилиал: \nОбъект: АО Тандер Камышин 5 микрорайон ГМ\nФИО: Кинякина Ж.В.\nНомер телефона: <a href=\"tel:89610753248\" style=\"color: #2196F3; font-weight: bold; text-decoration: none; background: #f0f8ff; padding: 2px 6px; border-radius: 4px; border: 1px solid #2196F3;\">📞 +79610753248</a><br><b>Осталось дней:</b> 0<br><hr><b>Подразделение:</b> Камышин 1 5 микрорайон<br><b>Отв.:</b> Не указан<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00010272473<br><b>Ответственный:</b> Трудов Алексей Владимирович<br><b>Выполнить до:</b> 30.09.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b> Выполнение работ по ТО ХО БФ_3кв_2026 Выполнить работы с периодичностью раз в 3 месяца по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО БФ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов больших форматов. При закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\n\nПри закрытии задачи в ТОИР обязательно вложить: \n \n1.  Полностью заполненный с обоих сторон акт сервисных работ. Шаблон акта приложен к задаче.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа), в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\nПредставить обратную связь, задавать вопросы: Сектор холодильных систем <sec_holod_sys@magnit.ru><br><b>Осталось дней:</b> 70<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=45.3568,50.091&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "yellow", "days_left": 0, "total_requests": 2, "red_count": 0, "yellow_count": 1, "blue_count": 1, "sector": "Не указан", "podrazdelenie": "Камышин 1 5 микрорайон", "address": ""}, {"coords": [50.070299, 43.215768], "balloonContent": "<b>Подразделение:</b> Михайловка 1 Поперечная<br><b>Отв.:</b> Не указан<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00010272474<br><b>Ответственный:</b> Дронов Данила Евгеньевич<br><b>Выполнить до:</b> 30.09.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b> Выполнение работ по ТО ХО БФ_3кв_2026 Выполнить работы с периодичностью раз в 3 месяца по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО БФ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов больших форматов. При закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\n\nПри закрытии задачи в ТОИР обязательно вложить: \n \n1.  Полностью заполненный с обоих сторон акт сервисных работ. Шаблон акта приложен к задаче.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа), в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\nПредставить обратную связь, задавать вопросы: Сектор холодильных систем <sec_holod_sys@magnit.ru><br><b>Осталось дней:</b> 70<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=43.215768,50.070299&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 70, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Не указан", "podrazdelenie": "Михайловка 1 Поперечная", "address": ""}, {"coords": [50.059212, 43.214966], "balloonContent": "<b>Подразделение:</b> Токаревщина<br><b>Отв.:</b> Не указан<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00010394389<br><b>Ответственный:</b> Дронов Данила Евгеньевич<br><b>Выполнить до:</b> 23.07.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b> Тема: Холодильное оборудование \nОписание: Добрый день. Необходимо выполнить запрос, руководствуясь следующими данными:\nОбъект ремонта, с которым возникли проблемы: Горка холодильная\nПроблема: Требуется замена лампы\nОписание проблемы: требуется замена лампы\nСотрудник магазина: Да\nФилиал: АО Тандер Волгоградский филиал\nОбъект: Токаревщина МД ВлФ\nФИО: Свиридов Роман Юрьевич\nНомер телефона: <a href=\"tel:89921452468\" style=\"color: #2196F3; font-weight: bold; text-decoration: none; background: #f0f8ff; padding: 2px 6px; border-radius: 4px; border: 1px solid #2196F3;\">📞 +79921452468</a><br><b>Осталось дней:</b> 2<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=43.214966,50.059212&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "yellow", "days_left": 2, "total_requests": 1, "red_count": 0, "yellow_count": 1, "blue_count": 0, "sector": "Не указан", "podrazdelenie": "Токаревщина", "address": ""}];
     var allPlacemarks = [];
     var placemarksByColor = { 'red': [], 'yellow': [], 'blue': [] };
     var placemarksBySector = {};
@@ -814,13 +816,15 @@ function init() {
     // Инициализируем магазины
     placemarksByShop['all'] = [];
     
-    placemarksByShop['Диалог'] = [];
+    placemarksByShop['Бухта'] = [];
+    
+    placemarksByShop['Елань'] = [];
     
     placemarksByShop['Камышин 1 5 микрорайон'] = [];
     
     placemarksByShop['Михайловка 1 Поперечная'] = [];
     
-    placemarksByShop['Секачи'] = [];
+    placemarksByShop['Токаревщина'] = [];
     
 
     // Инициализируем направления
@@ -834,13 +838,13 @@ function init() {
     
     placemarksByDirection['Ворота'] = [];
     
-    placemarksByDirection['Грузовой подъемник'] = [];
-    
     placemarksByDirection['Здания и сооружения'] = [];
     
     placemarksByDirection['Касса'] = [];
     
     placemarksByDirection['Кофемашина'] = [];
+    
+    placemarksByDirection['Очистные сооружения'] = [];
     
     placemarksByDirection['Подъездные пути'] = [];
     
@@ -977,13 +981,13 @@ function init() {
     
     activeDirections['Ворота'] = true;
     
-    activeDirections['Грузовой подъемник'] = true;
-    
     activeDirections['Здания и сооружения'] = true;
     
     activeDirections['Касса'] = true;
     
     activeDirections['Кофемашина'] = true;
+    
+    activeDirections['Очистные сооружения'] = true;
     
     activeDirections['Подъездные пути'] = true;
     
@@ -1311,13 +1315,13 @@ function init() {
         
         activeDirections['Ворота'] = true;
         
-        activeDirections['Грузовой подъемник'] = true;
-        
         activeDirections['Здания и сооружения'] = true;
         
         activeDirections['Касса'] = true;
         
         activeDirections['Кофемашина'] = true;
+        
+        activeDirections['Очистные сооружения'] = true;
         
         activeDirections['Подъездные пути'] = true;
         
@@ -1363,13 +1367,13 @@ function init() {
         
         activeDirections['Ворота'] = false;
         
-        activeDirections['Грузовой подъемник'] = false;
-        
         activeDirections['Здания и сооружения'] = false;
         
         activeDirections['Касса'] = false;
         
         activeDirections['Кофемашина'] = false;
+        
+        activeDirections['Очистные сооружения'] = false;
         
         activeDirections['Подъездные пути'] = false;
         
