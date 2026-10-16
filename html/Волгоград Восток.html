@@ -1,0 +1,1676 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Волгоград Восток</title>
+    <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body, html {
+            height: 100%;
+            width: 100%;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+        
+        #map {
+            width: 100%;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+        
+        /* Панель управления - всегда видима */
+        #controls {
+            position: fixed;
+            top: 35px;
+            left: 40px;
+            z-index: 1000;
+            background: transparent;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-width: 300px;
+        }
+        
+        .filter-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+            background: transparent;
+            margin-bottom: 1px;
+        }
+
+        .filter-title {
+            font-size: 11px;
+            font-weight: bold;
+            color: rgba(255, 255, 255, 0.3);
+            text-align: center;
+            margin-bottom: 2px;
+        }
+        
+        .color-buttons {
+            display: flex;
+            flex-direction: row;
+            gap: 8px;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+        }
+        
+        /* Стили для выпадающих меню */
+        .select-container {
+            background: transparent;
+            margin-bottom: 1px;
+            max-width: 170px;
+        }
+
+        .shop-select, .sector-select {
+            width: 100%;
+            padding: 6px 4px;
+            border-radius: 16px;
+            border: 1px solid #000000;
+            background-color: rgba(255, 255, 255, 0.95);
+            color: #000000;
+            font-size: 14px;
+            backdrop-filter: blur(5px);
+            cursor: pointer;
+            font-weight: bold;
+            max-width: 170px;
+        }
+        
+        .shop-select option, .sector-select option {
+            background-color: white;
+            color: black;
+            padding: 4px 8px;
+            font-size: 11px;
+            line-height: 1.2;
+            height: 14px;
+        }
+        
+        /* Стили для кнопки направления */
+        .direction-button-container {
+            position: relative;
+            max-width: 170px;
+        }
+        
+        .direction-button {
+            width: 100%;
+            padding: 8px 12px;
+            border-radius: 20px;
+            border: 1px solid #000000;
+            background-color: rgba(255, 255, 255, 0.95);
+            color: #000000;
+            font-size: 14px;
+            font-weight: bold;
+            backdrop-filter: blur(5px);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .direction-button:hover {
+            background-color: rgba(255, 255, 255, 1);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        
+        .direction-button.active {
+            background-color: #2196F3;
+            color: white;
+            border-color: #2196F3;
+        }
+        
+        .direction-button .arrow {
+            font-size: 12px;
+            transition: transform 0.3s ease;
+        }
+        
+        .direction-button .arrow.open {
+            transform: rotate(180deg);
+        }
+        
+        .direction-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            margin-top: 5px;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #ddd;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            max-height: 300px;
+            overflow-y: auto;
+            display: none;
+            z-index: 1002;
+            padding: 8px;
+        }
+        
+        .direction-dropdown.show {
+            display: block;
+        }
+        
+        .direction-option {
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 8px;
+            margin: 2px 0;
+            transition: all 0.2s ease;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .direction-option:hover {
+            background-color: #f0f0f0;
+        }
+        
+        .direction-option.selected {
+            background-color: #e3f2fd;
+            color: #2196F3;
+            font-weight: 500;
+        }
+        
+        .direction-option .checkbox {
+            width: 16px;
+            height: 16px;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            display: inline-block;
+            position: relative;
+        }
+        
+        .direction-option.selected .checkbox {
+            background-color: #2196F3;
+            border-color: #2196F3;
+        }
+        
+        .direction-option.selected .checkbox::after {
+            content: '✓';
+            position: absolute;
+            color: white;
+            font-size: 12px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .direction-select-actions {
+            display: flex;
+            gap: 8px;
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 8px;
+        }
+        
+        .direction-action-btn {
+            flex: 1;
+            padding: 6px;
+            border: none;
+            border-radius: 16px;
+            background-color: #f0f0f0;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: bold;
+            transition: all 0.2s ease;
+        }
+        
+        .direction-action-btn:hover {
+            background-color: #e0e0e0;
+        }
+        
+        .direction-action-btn.select-all {
+            background-color: #4CAF50;
+            color: white;
+        }
+        
+        .direction-action-btn.select-all:hover {
+            background-color: #45a049;
+        }
+        
+        .direction-action-btn.deselect-all {
+            background-color: #f44336;
+            color: white;
+        }
+        
+        .direction-action-btn.deselect-all:hover {
+            background-color: #da190b;
+        }
+        
+        /* Обновленные стили для кнопок с черными цифрами */
+        button {
+            padding: 0;
+            border: 1px solid #000000;
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #000000;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            width: 44px;
+            height: 44px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+        
+        button.active {
+            border: 1px solid #000000;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+            transform: scale(1.05);
+        }
+        
+        button.color-red.active { 
+            background-color: rgba(255, 68, 68, 0.9); 
+            color: white;
+        }
+        button.color-yellow.active { 
+            background-color: rgba(255, 204, 0, 0.9); 
+            color: white;
+        }
+        button.color-blue.active { 
+            background-color: rgba(68, 68, 255, 0.9); 
+            color: white;
+        }
+        button.color-green.active { 
+            background-color: rgba(76, 175, 80, 0.9); 
+            color: white;
+        }
+        
+        /* Стили для неактивных кнопок */
+        button.color-red:not(.active) { 
+            background-color: rgba(255, 255, 255, 0.9); 
+            color: #000000;
+            border: 1px solid #000000;
+        }
+        button.color-yellow:not(.active) { 
+            background-color: rgba(255, 255, 255, 0.9); 
+            color: #000000;
+            border: 1px solid #000000;
+        }
+        button.color-blue:not(.active) { 
+            background-color: rgba(255, 255, 255, 0.9); 
+            color: #000000;
+            border: 1px solid #000000;
+        }
+        button.color-green:not(.active) { 
+            background-color: rgba(255, 255, 255, 0.9); 
+            color: #000000;
+            border: 1px solid #000000;
+        }
+        
+        button:not(.active):hover {
+            background-color: rgba(255, 255, 255, 0.95);
+            transform: scale(1.02);
+        }
+        
+        .button-text {
+            font-size: 16px;
+            font-weight: bold;
+            pointer-events: none;
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
+        }
+        
+        /* Стили для прозрачных информационных элементов */
+        #report_datetime {
+            position: fixed;
+            bottom: 60px;
+            right: 10px;
+            z-index: 1000;
+            background: transparent;
+            padding: 6px 10px;
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.2);
+            text-align: right;
+            pointer-events: none;
+        }
+        
+        #title_button {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+            background: transparent;
+            padding: 6px 12px;
+            font-size: 14px;
+            font-weight: bold;
+            color: rgba(255, 255, 255, 0.2);
+            pointer-events: none;
+        }
+        
+        /* Кнопка "Назад" */
+        .back-link {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            z-index: 1000;
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: #fff;
+            text-decoration: none;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .back-link:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+            transform: translateY(-1px);
+            color: #fff;
+        }
+        
+        /* Кнопка сворачивания */
+        .toggle-controls {
+            width: 50px; 
+            height: 50px;
+            background: #ff4444;
+            border: 3px solid #fff;
+            border-radius: 50%;
+            color: white;
+            font-weight: 900;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(255, 68, 68, 0.6);
+            z-index: 1001;
+            transition: all 0.3s ease;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+            margin: 0 auto 10px auto;
+        }
+        
+        .toggle-controls:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(255, 68, 68, 0.8);
+        }
+        
+        .toggle-controls.collapsed .minus {
+            display: none;
+        }
+        
+        .toggle-controls.collapsed .plus {
+            display: block;
+        }
+        
+        .toggle-controls .minus {
+            display: block;
+        }
+        
+        .toggle-controls .plus {
+            display: none;
+        }
+        
+        .toggle-controls.collapsed {
+            background: #4CAF50;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.6);
+        }
+        
+        .toggle-controls.collapsed:hover {
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.8);
+        }
+        
+        /* Состояние свернутых фильтров */
+        #controls.collapsed .filter-content {
+            display: none;
+        }
+        
+        .filter-content {
+            transition: all 0.3s ease;
+        }
+        
+        /* Скрываем заголовки секций когда свернуто */
+        #controls.collapsed .filter-title {
+            display: none;
+        }
+        
+        /* Адаптивность для мобильных устройств */
+        @media (max-width: 768px) {
+            #controls {
+                top: 15px;
+                left: 25px;
+                gap: 12px;
+                max-width: 80vw;
+            }
+            
+            #title_button {
+                top: 15px;
+                right: 15px;
+                font-size: 12px;
+            }
+            
+            #report_datetime {
+                bottom: 50px;
+                right: 15px;
+                font-size: 10px;
+            }
+            
+            button {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .filter-title {
+                font-size: 11px;
+            }
+            
+            .toggle-controls {
+                width: 30px;
+                height: 30px;
+                font-size: 16px;
+                margin: 0 auto 8px auto;
+            }
+            
+            .shop-select, .sector-select {
+                font-size: 14px;
+                padding: 7px 8px;
+                max-width: 100%;
+            }
+            
+            .shop-select option, .sector-select option {
+                font-size: 13px;
+                padding: 6px 8px;
+                line-height: 1.3;
+                height: 22px;
+            }
+            
+            .direction-button-container {
+                max-width: 150px;
+            }
+            
+            .direction-button {
+                padding: 6px 10px;
+                font-size: 13px;
+            }
+            
+            .direction-dropdown {
+                max-height: 250px;
+            }
+            
+            .direction-option {
+                padding: 6px 10px;
+                font-size: 12px;
+            }
+            
+            .select-container {
+                max-width: 150px;
+            }
+            
+            .color-buttons {
+                gap: 6px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #controls {
+                top: 10px;
+                left: 20px;
+                gap: 10px;
+                max-width: 90vw;
+            }
+            
+            .shop-select, .sector-select {
+                font-size: 13px;
+                padding: 7px 8px;
+                max-width: 140px;
+            }
+            
+            .shop-select option, .sector-select option {
+                font-size: 12px;
+                padding: 5px 6px;
+                line-height: 1.2;
+                height: 20px;
+            }
+            
+            .direction-button-container {
+                max-width: 140px;
+            }
+            
+            .direction-button {
+                padding: 5px 8px;
+                font-size: 12px;
+            }
+            
+            .direction-dropdown {
+                max-height: 200px;
+            }
+            
+            .direction-option {
+                padding: 5px 8px;
+                font-size: 11px;
+            }
+            
+            .select-container {
+                max-width: 140px;
+            }
+            
+            button {
+                width: 36px;
+                height: 36px;
+            }
+            
+            .button-text {
+                font-size: 14px;
+            }
+            
+            .color-buttons {
+                gap: 4px;
+            }
+            
+            .filter-title {
+                font-size: 12px;
+            }
+        }
+        
+        /* Анимации */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        #controls {
+            animation: fadeIn 0.5s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    
+    <!-- Панель управления -->
+    <div id="controls">
+        <!-- Кнопка сворачивания - по центру над фильтрами заявок -->
+        <div class="toggle-controls" id="toggleControls">
+            <span class="minus">−</span>
+            <span class="plus">+</span>
+        </div>
+        
+        <div class="filter-content">
+            <!-- Секция выбора магазина -->
+            <div class="filter-section">
+                <div class="filter-title">МАГАЗИН</div>
+                <div class="select-container">
+                    <select id="shop_select" class="shop-select">
+                        <option value="all">Все магазины</option>
+                        
+                        <option value="11 Квартал">11 Квартал</option>
+                        
+                        <option value="Бард">Бард</option>
+                        
+                        <option value="Блюз">Блюз</option>
+                        
+                        <option value="Боннская">Боннская</option>
+                        
+                        <option value="Бродовская">Бродовская</option>
+                        
+                        <option value="Бударинский">Бударинский</option>
+                        
+                        <option value="Бурлук">Бурлук</option>
+                        
+                        <option value="Бухта">Бухта</option>
+                        
+                        <option value="Ватерпас">Ватерпас</option>
+                        
+                        <option value="Вида">Вида</option>
+                        
+                        <option value="Генезис">Генезис</option>
+                        
+                        <option value="Горошинка">Горошинка</option>
+                        
+                        <option value="Дженкс">Дженкс</option>
+                        
+                        <option value="Дмитриевский">Дмитриевский</option>
+                        
+                        <option value="Дорожное">Дорожное</option>
+                        
+                        <option value="Елань">Елань</option>
+                        
+                        <option value="Жирновский">Жирновский</option>
+                        
+                        <option value="Идея">Идея</option>
+                        
+                        <option value="Ильмень">Ильмень</option>
+                        
+                        <option value="Камыш">Камыш</option>
+                        
+                        <option value="Камышин 1 5 микрорайон">Камышин 1 5 микрорайон</option>
+                        
+                        <option value="Карбондал">Карбондал</option>
+                        
+                        <option value="Каршево">Каршево</option>
+                        
+                        <option value="Каховский">Каховский</option>
+                        
+                        <option value="Квэнди">Квэнди</option>
+                        
+                        <option value="Килакекуа">Килакекуа</option>
+                        
+                        <option value="Кинстон">Кинстон</option>
+                        
+                        <option value="Кокон">Кокон</option>
+                        
+                        <option value="Комета">Комета</option>
+                        
+                        <option value="Красновишерск">Красновишерск</option>
+                        
+                        <option value="Лаймон">Лаймон</option>
+                        
+                        <option value="Лигатне">Лигатне</option>
+                        
+                        <option value="Лукьяненко">Лукьяненко</option>
+                        
+                        <option value="Майолика">Майолика</option>
+                        
+                        <option value="Мерукан">Мерукан</option>
+                        
+                        <option value="Михайловка 1 Поперечная">Михайловка 1 Поперечная</option>
+                        
+                        <option value="Окраюшкин">Окраюшкин</option>
+                        
+                        <option value="Парадигма">Парадигма</option>
+                        
+                        <option value="Патагозавр">Патагозавр</option>
+                        
+                        <option value="Петров Вал">Петров Вал</option>
+                        
+                        <option value="Плавленый">Плавленый</option>
+                        
+                        <option value="Подвластный">Подвластный</option>
+                        
+                        <option value="Секачи">Секачи</option>
+                        
+                        <option value="Солонский">Солонский</option>
+                        
+                        <option value="Сорго">Сорго</option>
+                        
+                        <option value="Стекольный">Стекольный</option>
+                        
+                        <option value="Терса">Терса</option>
+                        
+                        <option value="Титановый">Титановый</option>
+                        
+                        <option value="Токаревщина">Токаревщина</option>
+                        
+                        <option value="Траверз">Траверз</option>
+                        
+                        <option value="Филоновский">Филоновский</option>
+                        
+                        <option value="Циково">Циково</option>
+                        
+                        <option value="Этажность">Этажность</option>
+                        
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Секция выбора направления - КНОПКА С ВЫПАДАЮЩИМ МЕНЮ -->
+            <div class="filter-section">
+                <div class="filter-title">ВСЕ НАПРАВЛЕНИЯ</div>
+                <div class="direction-button-container">
+                    <div class="direction-button" id="directionButton">
+                        <span id="selectedDirectionsCount">Все (24)</span>
+                        <span class="arrow" id="directionArrow">▼</span>
+                    </div>
+                    <div class="direction-dropdown" id="directionDropdown">
+                        <div class="direction-select-actions">
+                            <button class="direction-action-btn select-all" id="selectAllDirections">Выбрать все</button>
+                            <button class="direction-action-btn deselect-all" id="deselectAllDirections">Сбросить все</button>
+                        </div>
+                        
+                        <div class="direction-option selected" data-direction="Автоматические двери">
+                            <span class="checkbox"></span>
+                            <span>Автоматические двери</span>
+                        </div>
+                        
+                        <div class="direction-option selected" data-direction="Водоснабжение и водоотведение">
+                            <span class="checkbox"></span>
+                            <span>Водоснабжение и водоотведение</span>
+                        </div>
+                        
+                        <div class="direction-option selected" data-direction="Ворота">
+                            <span class="checkbox"></span>
+                            <span>Ворота</span>
+                        </div>
+                        
+                        <div class="direction-option selected" data-direction="Грузовой подъемник">
+                            <span class="checkbox"></span>
+                            <span>Грузовой подъемник</span>
+                        </div>
+                        
+                        <div class="direction-option selected" data-direction="Допуслуги по клинингу">
+                            <span class="checkbox"></span>
+                            <span>Допуслуги по клинингу</span>
+                        </div>
+                        
+                        <div class="direction-option selected" data-direction="Здания и сооружения">
+                            <span class="checkbox"></span>
+                            <span>Здания и сооружения</span>
+                        </div>
+                        
+                        <div class="direction-option selected" data-direction="Касса">
+                            <span class="checkbox"></span>
+                            <span>Касса</span>
+                        </div>
+                        
+                        <div class="direction-option selected" data-direction="Кофемашина">
+                            <span class="checkbox"></span>
+                            <span>Кофемашина</span>
+                        </div>
+                        
+                        <div class="direction-option selected" data-direction="Очистные сооружения">
+                            <span class="checkbox"></span>
+                            <span>Очистные сооружения</span>
+                        </div>
+                        
+                        <div class="direction-option selected" data-direction="Подъездные пути">
+                            <span class="checkbox"></span>
+                            <span>Подъездные пути</span>
+                        </div>
+                        
+                        <div class="direction-option selected" data-direction="Пресс вторсырья">
+                            <span class="checkbox"></span>
+                            <span>Пресс вторсырья</span>
+                        </div>
+                        
+                        <div class="direction-option selected" data-direction="РИМ">
+                            <span class="checkbox"></span>
+                            <span>РИМ</span>
+                        </div>
+                        
+                        <div class="direction-option selected" data-direction="Роллеты">
+                            <span class="checkbox"></span>
+                            <span>Роллеты</span>
+                        </div>
+                        
+                        <div class="direction-option selected" data-direction="Самоходное и складское оборудование">
+                            <span class="checkbox"></span>
+                            <span>Самоходное и складское оборудование</span>
+                        </div>
+                        
+                        <div class="direction-option selected" data-direction="Система вентиляции">
+                            <span class="checkbox"></span>
+                            <span>Система вентиляции</span>
+                        </div>
+                        
+                        <div class="direction-option selected" data-direction="Система кондиционирования">
+                            <span class="checkbox"></span>
+                            <span>Система кондиционирования</span>
+                        </div>
+                        
+                        <div class="direction-option selected" data-direction="Система теплоснабжения">
+                            <span class="checkbox"></span>
+                            <span>Система теплоснабжения</span>
+                        </div>
+                        
+                        <div class="direction-option selected" data-direction="Стеллажное оборудование">
+                            <span class="checkbox"></span>
+                            <span>Стеллажное оборудование</span>
+                        </div>
+                        
+                        <div class="direction-option selected" data-direction="Табачное оборудование">
+                            <span class="checkbox"></span>
+                            <span>Табачное оборудование</span>
+                        </div>
+                        
+                        <div class="direction-option selected" data-direction="Тамбур-шлюз">
+                            <span class="checkbox"></span>
+                            <span>Тамбур-шлюз</span>
+                        </div>
+                        
+                        <div class="direction-option selected" data-direction="Технологическое оборудование">
+                            <span class="checkbox"></span>
+                            <span>Технологическое оборудование</span>
+                        </div>
+                        
+                        <div class="direction-option selected" data-direction="Уравнительная платформа">
+                            <span class="checkbox"></span>
+                            <span>Уравнительная платформа</span>
+                        </div>
+                        
+                        <div class="direction-option selected" data-direction="Холодильное оборудование">
+                            <span class="checkbox"></span>
+                            <span>Холодильное оборудование</span>
+                        </div>
+                        
+                        <div class="direction-option selected" data-direction="Электроснабжение">
+                            <span class="checkbox"></span>
+                            <span>Электроснабжение</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Секция выбора ответственного -->
+            <div class="filter-section">
+                <div class="filter-title">ОТВЕТСТВЕННЫЙ</div>
+                <div class="select-container">
+                    <select id="sector_select" class="sector-select">
+                        <option value="all">Все ответственные</option>
+                        
+                        <option value="Дронов Данила Евгеньевич">Дронов Данила Евгеньевич</option>
+                        
+                        <option value="Трудов Алексей Владимирович">Трудов Алексей Владимирович</option>
+                        
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Секция заявок - кнопки в ряд -->
+            <div class="filter-section">
+                <div class="filter-title">ЗАЯВКИ</div>
+                <div class="color-buttons">
+                    <button id="red_button" class="color-red active" title="Просроченные заявки">
+                        <span class="button-text">0</span>
+                    </button>
+                    <button id="yellow_button" class="color-yellow active" title="Срочные заявки">
+                        <span class="button-text">0</span>
+                    </button>
+                    <button id="blue_button" class="color-blue active" title="Обычные заявки">
+                        <span class="button-text">54</span>
+                    </button>
+                    <button id="all_button" class="color-green active" title="Все заявки">
+                        <span class="button-text">54</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Прозрачные информационные элементы -->
+    <div id="report_datetime">Дата и время отчета: 16-10-2026 21:50:02</div>
+    <div id="title_button">Волгоград Восток</div>
+    
+    <!-- Кнопка "Назад" - без изменений -->
+    <a href="index.html" class="back-link">← Назад к списку филиалов</a>
+</body>
+</html>
+
+<script type="text/javascript">
+function init() {
+    var myMap = new ymaps.Map("map", {
+        center: [48.708, 44.5133],
+        zoom: 10,
+        controls: ['zoomControl']
+    });
+
+    var placemarksData = [{"coords": [50.100314, 45.405986], "balloonContent": "<b>Подразделение:</b> 11 Квартал<br><b>Отв.:</b> Трудов Алексей Владимирович<br><b>Контрагент:</b> Евроком ООО<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00011211172<br><b>Ответственный:</b> Трудов Алексей Владимирович<br><b>Выполнить до:</b> 31.12.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b>  Выполнение ежеквартальных работ по ТО ХО малых форматов_4 квартал Выполнить ежеквартальные работы по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО ММ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов малых форматов. \nПри закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\nПри закрытии задачи в ТОИР обязательно вложить: \n1.  Полностью заполненный с обоих сторон акт сервисных работ.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа) в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\n <br><b>Осталось дней:</b> 75<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=45.405986,50.100314&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 75, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Трудов Алексей Владимирович", "podrazdelenie": "11 Квартал", "address": ""}, {"coords": [49.850865, 44.561502], "balloonContent": "<b>Подразделение:</b> Бард<br><b>Отв.:</b> Трудов Алексей Владимирович<br><b>Контрагент:</b> Евроком ООО<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00011213796<br><b>Ответственный:</b> Трудов Алексей Владимирович<br><b>Выполнить до:</b> 31.12.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b>  Выполнение ежеквартальных работ по ТО ХО малых форматов_4 квартал Выполнить ежеквартальные работы по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО ММ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов малых форматов. \nПри закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\nПри закрытии задачи в ТОИР обязательно вложить: \n1.  Полностью заполненный с обоих сторон акт сервисных работ.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа) в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\n <br><b>Осталось дней:</b> 75<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=44.561502,49.850865&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 75, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Трудов Алексей Владимирович", "podrazdelenie": "Бард", "address": ""}, {"coords": [50.102266, 45.424803], "balloonContent": "<b>Подразделение:</b> Блюз<br><b>Отв.:</b> Трудов Алексей Владимирович<br><b>Контрагент:</b> Евроком ООО<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00011215336<br><b>Ответственный:</b> Трудов Алексей Владимирович<br><b>Выполнить до:</b> 31.12.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b>  Выполнение ежеквартальных работ по ТО ХО малых форматов_4 квартал Выполнить ежеквартальные работы по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО ММ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов малых форматов. \nПри закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\nПри закрытии задачи в ТОИР обязательно вложить: \n1.  Полностью заполненный с обоих сторон акт сервисных работ.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа) в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\n <br><b>Осталось дней:</b> 75<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=45.424803,50.102266&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 75, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Трудов Алексей Владимирович", "podrazdelenie": "Блюз", "address": ""}, {"coords": [50.5139, 42.665336], "balloonContent": "<b>Подразделение:</b> Боннская<br><b>Отв.:</b> Дронов Данила Евгеньевич<br><b>Контрагент:</b> Евроком ООО<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00011215471<br><b>Ответственный:</b> Дронов Данила Евгеньевич<br><b>Выполнить до:</b> 31.12.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b>  Выполнение ежеквартальных работ по ТО ХО малых форматов_4 квартал Выполнить ежеквартальные работы по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО ММ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов малых форматов. \nПри закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\nПри закрытии задачи в ТОИР обязательно вложить: \n1.  Полностью заполненный с обоих сторон акт сервисных работ.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа) в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\n <br><b>Осталось дней:</b> 75<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=42.665336,50.5139&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 75, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Дронов Данила Евгеньевич", "podrazdelenie": "Боннская", "address": ""}, {"coords": [50.977631, 44.774324], "balloonContent": "<b>Подразделение:</b> Бродовская<br><b>Отв.:</b> Трудов Алексей Владимирович<br><b>Контрагент:</b> Евроком ООО<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00011215682<br><b>Ответственный:</b> Трудов Алексей Владимирович<br><b>Выполнить до:</b> 31.12.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b>  Выполнение ежеквартальных работ по ТО ХО малых форматов_4 квартал Выполнить ежеквартальные работы по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО ММ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов малых форматов. \nПри закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\nПри закрытии задачи в ТОИР обязательно вложить: \n1.  Полностью заполненный с обоих сторон акт сервисных работ.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа) в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\n <br><b>Осталось дней:</b> 75<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=44.774324,50.977631&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 75, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Трудов Алексей Владимирович", "podrazdelenie": "Бродовская", "address": ""}, {"coords": [50.535137, 42.666055], "balloonContent": "<b>Подразделение:</b> Бударинский<br><b>Отв.:</b> Дронов Данила Евгеньевич<br><b>Контрагент:</b> Евроком ООО<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00011215765<br><b>Ответственный:</b> Дронов Данила Евгеньевич<br><b>Выполнить до:</b> 31.12.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b>  Выполнение ежеквартальных работ по ТО ХО малых форматов_4 квартал Выполнить ежеквартальные работы по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО ММ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов малых форматов. \nПри закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\nПри закрытии задачи в ТОИР обязательно вложить: \n1.  Полностью заполненный с обоих сторон акт сервисных работ.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа) в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\n <br><b>Осталось дней:</b> 75<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=42.666055,50.535137&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 75, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Дронов Данила Евгеньевич", "podrazdelenie": "Бударинский", "address": ""}, {"coords": [50.888761, 44.82585], "balloonContent": "<b>Подразделение:</b> Бурлук<br><b>Отв.:</b> Трудов Алексей Владимирович<br><b>Контрагент:</b> Евроком ООО<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00011215861<br><b>Ответственный:</b> Трудов Алексей Владимирович<br><b>Выполнить до:</b> 31.12.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b>  Выполнение ежеквартальных работ по ТО ХО малых форматов_4 квартал Выполнить ежеквартальные работы по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО ММ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов малых форматов. \nПри закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\nПри закрытии задачи в ТОИР обязательно вложить: \n1.  Полностью заполненный с обоих сторон акт сервисных работ.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа) в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\n <br><b>Осталось дней:</b> 75<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=44.82585,50.888761&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 75, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Трудов Алексей Владимирович", "podrazdelenie": "Бурлук", "address": ""}, {"coords": [50.083203, 45.408667], "balloonContent": "<b>Подразделение:</b> Бухта<br><b>Отв.:</b> Трудов Алексей Владимирович<br><b>Контрагент:</b> Евроком ООО<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00011215900<br><b>Ответственный:</b> Трудов Алексей Владимирович<br><b>Выполнить до:</b> 31.12.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b>  Выполнение ежеквартальных работ по ТО ХО малых форматов_4 квартал Выполнить ежеквартальные работы по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО ММ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов малых форматов. \nПри закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\nПри закрытии задачи в ТОИР обязательно вложить: \n1.  Полностью заполненный с обоих сторон акт сервисных работ.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа) в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\n <br><b>Осталось дней:</b> 75<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=45.408667,50.083203&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 75, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Трудов Алексей Владимирович", "podrazdelenie": "Бухта", "address": ""}, {"coords": [50.064549, 43.243949], "balloonContent": "<b>Подразделение:</b> Ватерпас<br><b>Отв.:</b> Дронов Данила Евгеньевич<br><b>Контрагент:</b> Евроком ООО<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00011216112<br><b>Ответственный:</b> Дронов Данила Евгеньевич<br><b>Выполнить до:</b> 31.12.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b>  Выполнение ежеквартальных работ по ТО ХО малых форматов_4 квартал Выполнить ежеквартальные работы по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО ММ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов малых форматов. \nПри закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\nПри закрытии задачи в ТОИР обязательно вложить: \n1.  Полностью заполненный с обоих сторон акт сервисных работ.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа) в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\n <br><b>Осталось дней:</b> 75<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=43.243949,50.064549&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 75, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Дронов Данила Евгеньевич", "podrazdelenie": "Ватерпас", "address": ""}, {"coords": [50.067615, 43.229163], "balloonContent": "<b>Подразделение:</b> Вида<br><b>Отв.:</b> Дронов Данила Евгеньевич<br><b>Контрагент:</b> Евроком ООО<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00011217330<br><b>Ответственный:</b> Дронов Данила Евгеньевич<br><b>Выполнить до:</b> 31.12.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b>  Выполнение ежеквартальных работ по ТО ХО малых форматов_4 квартал Выполнить ежеквартальные работы по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО ММ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов малых форматов. \nПри закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\nПри закрытии задачи в ТОИР обязательно вложить: \n1.  Полностью заполненный с обоих сторон акт сервисных работ.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа) в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\n <br><b>Осталось дней:</b> 75<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=43.229163,50.067615&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 75, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Дронов Данила Евгеньевич", "podrazdelenie": "Вида", "address": ""}, {"coords": [50.982549, 44.774083], "balloonContent": "<b>Подразделение:</b> Генезис<br><b>Отв.:</b> Трудов Алексей Владимирович<br><b>Контрагент:</b> Евроком ООО<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00011219105<br><b>Ответственный:</b> Трудов Алексей Владимирович<br><b>Выполнить до:</b> 31.12.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b>  Выполнение ежеквартальных работ по ТО ХО малых форматов_4 квартал Выполнить ежеквартальные работы по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО ММ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов малых форматов. \nПри закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\nПри закрытии задачи в ТОИР обязательно вложить: \n1.  Полностью заполненный с обоих сторон акт сервисных работ.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа) в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\n <br><b>Осталось дней:</b> 75<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=44.774083,50.982549&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 75, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Трудов Алексей Владимирович", "podrazdelenie": "Генезис", "address": ""}, {"coords": [50.067742, 45.401382], "balloonContent": "<b>Подразделение:</b> Горошинка<br><b>Отв.:</b> Трудов Алексей Владимирович<br><b>Контрагент:</b> Евроком ООО<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00011219525<br><b>Ответственный:</b> Трудов Алексей Владимирович<br><b>Выполнить до:</b> 31.12.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b>  Выполнение ежеквартальных работ по ТО ХО малых форматов_4 квартал Выполнить ежеквартальные работы по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО ММ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов малых форматов. \nПри закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\nПри закрытии задачи в ТОИР обязательно вложить: \n1.  Полностью заполненный с обоих сторон акт сервисных работ.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа) в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\n <br><b>Осталось дней:</b> 75<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=45.401382,50.067742&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 75, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Трудов Алексей Владимирович", "podrazdelenie": "Горошинка", "address": ""}, {"coords": [50.072084, 43.232822], "balloonContent": "<b>Подразделение:</b> Дженкс<br><b>Отв.:</b> Дронов Данила Евгеньевич<br><b>Контрагент:</b> Евроком ООО<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00011220556<br><b>Ответственный:</b> Дронов Данила Евгеньевич<br><b>Выполнить до:</b> 31.12.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b>  Выполнение ежеквартальных работ по ТО ХО малых форматов_4 квартал Выполнить ежеквартальные работы по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО ММ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов малых форматов. \nПри закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\nПри закрытии задачи в ТОИР обязательно вложить: \n1.  Полностью заполненный с обоих сторон акт сервисных работ.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа) в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\n <br><b>Осталось дней:</b> 75<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=43.232822,50.072084&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 75, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Дронов Данила Евгеньевич", "podrazdelenie": "Дженкс", "address": ""}, {"coords": [50.070345, 45.38614], "balloonContent": "<b>Подразделение:</b> Дмитриевский<br><b>Отв.:</b> Трудов Алексей Владимирович<br><b>Контрагент:</b> Евроком ООО<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00011220816<br><b>Ответственный:</b> Трудов Алексей Владимирович<br><b>Выполнить до:</b> 31.12.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b>  Выполнение ежеквартальных работ по ТО ХО малых форматов_4 квартал Выполнить ежеквартальные работы по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО ММ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов малых форматов. \nПри закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\nПри закрытии задачи в ТОИР обязательно вложить: \n1.  Полностью заполненный с обоих сторон акт сервисных работ.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа) в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\n <br><b>Осталось дней:</b> 75<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=45.38614,50.070345&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 75, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Трудов Алексей Владимирович", "podrazdelenie": "Дмитриевский", "address": ""}, {"coords": [50.053847, 43.233969], "balloonContent": "<b>Подразделение:</b> Дорожное<br><b>Отв.:</b> Дронов Данила Евгеньевич<br><b>Контрагент:</b> Евроком ООО<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00011221033<br><b>Ответственный:</b> Дронов Данила Евгеньевич<br><b>Выполнить до:</b> 31.12.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b>  Выполнение ежеквартальных работ по ТО ХО малых форматов_4 квартал Выполнить ежеквартальные работы по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО ММ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов малых форматов. \nПри закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\nПри закрытии задачи в ТОИР обязательно вложить: \n1.  Полностью заполненный с обоих сторон акт сервисных работ.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа) в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\n <br><b>Осталось дней:</b> 75<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=43.233969,50.053847&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 75, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Дронов Данила Евгеньевич", "podrazdelenie": "Дорожное", "address": ""}, {"coords": [50.945102, 43.739888], "balloonContent": "<b>Подразделение:</b> Елань<br><b>Отв.:</b> Трудов Алексей Владимирович<br><b>Контрагент:</b> Евроком ООО<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00011221388<br><b>Ответственный:</b> Трудов Алексей Владимирович<br><b>Выполнить до:</b> 31.12.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b>  Выполнение ежеквартальных работ по ТО ХО малых форматов_4 квартал Выполнить ежеквартальные работы по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО ММ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов малых форматов. \nПри закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\nПри закрытии задачи в ТОИР обязательно вложить: \n1.  Полностью заполненный с обоих сторон акт сервисных работ.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа) в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\n <br><b>Осталось дней:</b> 75<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=43.739888,50.945102&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 75, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Трудов Алексей Владимирович", "podrazdelenie": "Елань", "address": ""}, {"coords": [50.973693, 44.787671], "balloonContent": "<b>Подразделение:</b> Жирновский<br><b>Отв.:</b> Трудов Алексей Владимирович<br><b>Контрагент:</b> Евроком ООО<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00011221807<br><b>Ответственный:</b> Трудов Алексей Владимирович<br><b>Выполнить до:</b> 31.12.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b>  Выполнение ежеквартальных работ по ТО ХО малых форматов_4 квартал Выполнить ежеквартальные работы по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО ММ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов малых форматов. \nПри закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\nПри закрытии задачи в ТОИР обязательно вложить: \n1.  Полностью заполненный с обоих сторон акт сервисных работ.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа) в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\n <br><b>Осталось дней:</b> 75<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=44.787671,50.973693&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 75, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Трудов Алексей Владимирович", "podrazdelenie": "Жирновский", "address": ""}, {"coords": [50.106016, 45.416333], "balloonContent": "<b>Подразделение:</b> Идея<br><b>Отв.:</b> Трудов Алексей Владимирович<br><b>Контрагент:</b> Евроком ООО<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00011222626<br><b>Ответственный:</b> Трудов Алексей Владимирович<br><b>Выполнить до:</b> 31.12.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b>  Выполнение ежеквартальных работ по ТО ХО малых форматов_4 квартал Выполнить ежеквартальные работы по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО ММ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов малых форматов. \nПри закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\nПри закрытии задачи в ТОИР обязательно вложить: \n1.  Полностью заполненный с обоих сторон акт сервисных работ.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа) в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\n <br><b>Осталось дней:</b> 75<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=45.416333,50.106016&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 75, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Трудов Алексей Владимирович", "podrazdelenie": "Идея", "address": ""}, {"coords": [50.081601, 43.2361], "balloonContent": "<b>Подразделение:</b> Ильмень<br><b>Отв.:</b> Дронов Данила Евгеньевич<br><b>Контрагент:</b> Евроком ООО<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00011222840<br><b>Ответственный:</b> Дронов Данила Евгеньевич<br><b>Выполнить до:</b> 31.12.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b>  Выполнение ежеквартальных работ по ТО ХО малых форматов_4 квартал Выполнить ежеквартальные работы по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО ММ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов малых форматов. \nПри закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\nПри закрытии задачи в ТОИР обязательно вложить: \n1.  Полностью заполненный с обоих сторон акт сервисных работ.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа) в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\n <br><b>Осталось дней:</b> 75<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=43.2361,50.081601&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 75, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Дронов Данила Евгеньевич", "podrazdelenie": "Ильмень", "address": ""}, {"coords": [50.075675, 45.399247], "balloonContent": "<b>Подразделение:</b> Камыш<br><b>Отв.:</b> Трудов Алексей Владимирович<br><b>Контрагент:</b> Евроком ООО<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00011223518<br><b>Ответственный:</b> Трудов Алексей Владимирович<br><b>Выполнить до:</b> 31.12.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b>  Выполнение ежеквартальных работ по ТО ХО малых форматов_4 квартал Выполнить ежеквартальные работы по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО ММ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов малых форматов. \nПри закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\nПри закрытии задачи в ТОИР обязательно вложить: \n1.  Полностью заполненный с обоих сторон акт сервисных работ.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа) в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\n <br><b>Осталось дней:</b> 75<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=45.399247,50.075675&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 75, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Трудов Алексей Владимирович", "podrazdelenie": "Камыш", "address": ""}, {"coords": [50.091, 45.3568], "balloonContent": "<b>Подразделение:</b> Камышин 1 5 микрорайон<br><b>Отв.:</b> Трудов Алексей Владимирович<br><b>Контрагент:</b> Евроком ООО<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00011084728<br><b>Ответственный:</b> Трудов Алексей Владимирович<br><b>Выполнить до:</b> 20.11.2026<br><b>Направление:</b> Система вентиляции<br><b>Описание:</b> Техническое обслуживание тепловых электрических завес с электрическим нагревом на всех объектах_ГМ, МС. До 20.11.2026г Организовать  плановое выполнение ТО тепловых электрических завес с электрическим нагревом согласно заявки.\nПредоставить в сканированном виде отчёт о выполнении ТО с указанием ответственных и срока фактического выполнения с приложением:\n- Приложение 1. Перечень мероприятий по подготовке тепловых завес с  электрическим нагревом), с указанием срока фактического выполнения;\n- Приложение 2. Фотоотчет - при закрытии задачи обязательно вложить фото каждой завесы «до выполнения ТО» и «после выполнения ТО» .<br><b>Осталось дней:</b> 34<br><hr><b>Подразделение:</b> Камышин 1 5 микрорайон<br><b>Отв.:</b> Трудов Алексей Владимирович<br><b>Контрагент:</b> Евроком ООО<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00011286126<br><b>Ответственный:</b> Трудов Алексей Владимирович<br><b>Выполнить до:</b> 31.12.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b> Выполнение работ по ТО ХО БФ_4кв_2026 Выполнить работы с периодичностью раз в 3 месяца по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО БФ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов больших форматов. При закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\n\nПри закрытии задачи в ТОИР обязательно вложить: \n \n1.  Полностью заполненный с обоих сторон акт сервисных работ. Шаблон акта приложен к задаче.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа), в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\nПредставить обратную связь, задавать вопросы: Сектор холодильных систем <sec_holod_sys@magnit.ru><br><b>Осталось дней:</b> 75<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=45.3568,50.091&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 34, "total_requests": 2, "red_count": 0, "yellow_count": 0, "blue_count": 2, "sector": "Трудов Алексей Владимирович", "podrazdelenie": "Камышин 1 5 микрорайон", "address": ""}, {"coords": [49.854482, 44.563629], "balloonContent": "<b>Подразделение:</b> Карбондал<br><b>Отв.:</b> Трудов Алексей Владимирович<br><b>Контрагент:</b> Евроком ООО<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00011223682<br><b>Ответственный:</b> Трудов Алексей Владимирович<br><b>Выполнить до:</b> 31.12.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b>  Выполнение ежеквартальных работ по ТО ХО малых форматов_4 квартал Выполнить ежеквартальные работы по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО ММ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов малых форматов. \nПри закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\nПри закрытии задачи в ТОИР обязательно вложить: \n1.  Полностью заполненный с обоих сторон акт сервисных работ.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа) в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\n <br><b>Осталось дней:</b> 75<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=44.563629,49.854482&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 75, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Трудов Алексей Владимирович", "podrazdelenie": "Карбондал", "address": ""}, {"coords": [50.739528, 43.058422], "balloonContent": "<b>Подразделение:</b> Каршево<br><b>Отв.:</b> Дронов Данила Евгеньевич<br><b>Контрагент:</b> Евроком ООО<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00011223809<br><b>Ответственный:</b> Дронов Данила Евгеньевич<br><b>Выполнить до:</b> 31.12.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b>  Выполнение ежеквартальных работ по ТО ХО малых форматов_4 квартал Выполнить ежеквартальные работы по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО ММ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов малых форматов. \nПри закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\nПри закрытии задачи в ТОИР обязательно вложить: \n1.  Полностью заполненный с обоих сторон акт сервисных работ.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа) в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\n <br><b>Осталось дней:</b> 75<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=43.058422,50.739528&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 75, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Дронов Данила Евгеньевич", "podrazdelenie": "Каршево", "address": ""}, {"coords": [50.112519, 45.429009], "balloonContent": "<b>Подразделение:</b> Каховский<br><b>Отв.:</b> Трудов Алексей Владимирович<br><b>Контрагент:</b> Евроком ООО<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00011223897<br><b>Ответственный:</b> Трудов Алексей Владимирович<br><b>Выполнить до:</b> 31.12.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b>  Выполнение ежеквартальных работ по ТО ХО малых форматов_4 квартал Выполнить ежеквартальные работы по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО ММ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов малых форматов. \nПри закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\nПри закрытии задачи в ТОИР обязательно вложить: \n1.  Полностью заполненный с обоих сторон акт сервисных работ.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа) в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\n <br><b>Осталось дней:</b> 75<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=45.429009,50.112519&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 75, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Трудов Алексей Владимирович", "podrazdelenie": "Каховский", "address": ""}, {"coords": [50.353638, 44.118401], "balloonContent": "<b>Подразделение:</b> Квэнди<br><b>Отв.:</b> Трудов Алексей Владимирович<br><b>Контрагент:</b> Евроком ООО<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00011224198<br><b>Ответственный:</b> Трудов Алексей Владимирович<br><b>Выполнить до:</b> 31.12.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b>  Выполнение ежеквартальных работ по ТО ХО малых форматов_4 квартал Выполнить ежеквартальные работы по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО ММ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов малых форматов. \nПри закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\nПри закрытии задачи в ТОИР обязательно вложить: \n1.  Полностью заполненный с обоих сторон акт сервисных работ.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа) в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\n <br><b>Осталось дней:</b> 75<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=44.118401,50.353638&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 75, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Трудов Алексей Владимирович", "podrazdelenie": "Квэнди", "address": ""}, {"coords": [50.97625, 44.776942], "balloonContent": "<b>Подразделение:</b> Килакекуа<br><b>Отв.:</b> Трудов Алексей Владимирович<br><b>Контрагент:</b> Евроком ООО<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00011224352<br><b>Ответственный:</b> Трудов Алексей Владимирович<br><b>Выполнить до:</b> 31.12.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b>  Выполнение ежеквартальных работ по ТО ХО малых форматов_4 квартал Выполнить ежеквартальные работы по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО ММ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов малых форматов. \nПри закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\nПри закрытии задачи в ТОИР обязательно вложить: \n1.  Полностью заполненный с обоих сторон акт сервисных работ.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа) в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\n <br><b>Осталось дней:</b> 75<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=44.776942,50.97625&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 75, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Трудов Алексей Владимирович", "podrazdelenie": "Килакекуа", "address": ""}, {"coords": [50.072636, 43.223001], "balloonContent": "<b>Подразделение:</b> Кинстон<br><b>Отв.:</b> Дронов Данила Евгеньевич<br><b>Контрагент:</b> Евроком ООО<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00011224410<br><b>Ответственный:</b> Дронов Данила Евгеньевич<br><b>Выполнить до:</b> 31.12.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b>  Выполнение ежеквартальных работ по ТО ХО малых форматов_4 квартал Выполнить ежеквартальные работы по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО ММ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов малых форматов. \nПри закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\nПри закрытии задачи в ТОИР обязательно вложить: \n1.  Полностью заполненный с обоих сторон акт сервисных работ.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа) в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\n <br><b>Осталось дней:</b> 75<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=43.223001,50.072636&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 75, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Дронов Данила Евгеньевич", "podrazdelenie": "Кинстон", "address": ""}, {"coords": [50.071616, 43.238804], "balloonContent": "<b>Подразделение:</b> Кокон<br><b>Отв.:</b> Дронов Данила Евгеньевич<br><b>Контрагент:</b> Евроком ООО<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00011224721<br><b>Ответственный:</b> Дронов Данила Евгеньевич<br><b>Выполнить до:</b> 31.12.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b>  Выполнение ежеквартальных работ по ТО ХО малых форматов_4 квартал Выполнить ежеквартальные работы по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО ММ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов малых форматов. \nПри закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\nПри закрытии задачи в ТОИР обязательно вложить: \n1.  Полностью заполненный с обоих сторон акт сервисных работ.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа) в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\n <br><b>Осталось дней:</b> 75<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=43.238804,50.071616&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 75, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Дронов Данила Евгеньевич", "podrazdelenie": "Кокон", "address": ""}, {"coords": [50.073853, 45.395621], "balloonContent": "<b>Подразделение:</b> Комета<br><b>Отв.:</b> Трудов Алексей Владимирович<br><b>Контрагент:</b> Евроком ООО<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00011224856<br><b>Ответственный:</b> Трудов Алексей Владимирович<br><b>Выполнить до:</b> 31.12.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b>  Выполнение ежеквартальных работ по ТО ХО малых форматов_4 квартал Выполнить ежеквартальные работы по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО ММ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов малых форматов. \nПри закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\nПри закрытии задачи в ТОИР обязательно вложить: \n1.  Полностью заполненный с обоих сторон акт сервисных работ.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа) в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\n <br><b>Осталось дней:</b> 75<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=45.395621,50.073853&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 75, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Трудов Алексей Владимирович", "podrazdelenie": "Комета", "address": ""}, {"coords": [50.357999, 44.108844], "balloonContent": "<b>Подразделение:</b> Красновишерск<br><b>Отв.:</b> Трудов Алексей Владимирович<br><b>Контрагент:</b> Евроком ООО<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00011225744<br><b>Ответственный:</b> Трудов Алексей Владимирович<br><b>Выполнить до:</b> 31.12.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b>  Выполнение ежеквартальных работ по ТО ХО малых форматов_4 квартал Выполнить ежеквартальные работы по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО ММ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов малых форматов. \nПри закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\nПри закрытии задачи в ТОИР обязательно вложить: \n1.  Полностью заполненный с обоих сторон акт сервисных работ.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа) в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\n <br><b>Осталось дней:</b> 75<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=44.108844,50.357999&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 75, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Трудов Алексей Владимирович", "podrazdelenie": "Красновишерск", "address": ""}, {"coords": [50.126213, 43.34194], "balloonContent": "<b>Подразделение:</b> Лаймон<br><b>Отв.:</b> Дронов Данила Евгеньевич<br><b>Контрагент:</b> Евроком ООО<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00011226413<br><b>Ответственный:</b> Дронов Данила Евгеньевич<br><b>Выполнить до:</b> 31.12.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b>  Выполнение ежеквартальных работ по ТО ХО малых форматов_4 квартал Выполнить ежеквартальные работы по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО ММ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов малых форматов. \nПри закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\nПри закрытии задачи в ТОИР обязательно вложить: \n1.  Полностью заполненный с обоих сторон акт сервисных работ.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа) в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\n <br><b>Осталось дней:</b> 75<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=43.34194,50.126213&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 75, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Дронов Данила Евгеньевич", "podrazdelenie": "Лаймон", "address": ""}, {"coords": [50.076734, 43.23354], "balloonContent": "<b>Подразделение:</b> Лигатне<br><b>Отв.:</b> Дронов Данила Евгеньевич<br><b>Контрагент:</b> Евроком ООО<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00011226922<br><b>Ответственный:</b> Дронов Данила Евгеньевич<br><b>Выполнить до:</b> 31.12.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b>  Выполнение ежеквартальных работ по ТО ХО малых форматов_4 квартал Выполнить ежеквартальные работы по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО ММ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов малых форматов. \nПри закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\nПри закрытии задачи в ТОИР обязательно вложить: \n1.  Полностью заполненный с обоих сторон акт сервисных работ.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа) в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\n <br><b>Осталось дней:</b> 75<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=43.23354,50.076734&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 75, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Дронов Данила Евгеньевич", "podrazdelenie": "Лигатне", "address": ""}, {"coords": [50.068978, 43.235514], "balloonContent": "<b>Подразделение:</b> Лукьяненко<br><b>Отв.:</b> Дронов Данила Евгеньевич<br><b>Контрагент:</b> Евроком ООО<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00011227269<br><b>Ответственный:</b> Дронов Данила Евгеньевич<br><b>Выполнить до:</b> 31.12.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b>  Выполнение ежеквартальных работ по ТО ХО малых форматов_4 квартал Выполнить ежеквартальные работы по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО ММ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов малых форматов. \nПри закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\nПри закрытии задачи в ТОИР обязательно вложить: \n1.  Полностью заполненный с обоих сторон акт сервисных работ.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа) в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\n <br><b>Осталось дней:</b> 75<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=43.235514,50.068978&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 75, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Дронов Данила Евгеньевич", "podrazdelenie": "Лукьяненко", "address": ""}, {"coords": [50.104834, 45.411138], "balloonContent": "<b>Подразделение:</b> Майолика<br><b>Отв.:</b> Трудов Алексей Владимирович<br><b>Контрагент:</b> Евроком ООО<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00011227500<br><b>Ответственный:</b> Трудов Алексей Владимирович<br><b>Выполнить до:</b> 31.12.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b>  Выполнение ежеквартальных работ по ТО ХО малых форматов_4 квартал Выполнить ежеквартальные работы по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО ММ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов малых форматов. \nПри закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\nПри закрытии задачи в ТОИР обязательно вложить: \n1.  Полностью заполненный с обоих сторон акт сервисных работ.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа) в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\n <br><b>Осталось дней:</b> 75<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=45.411138,50.104834&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 75, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Трудов Алексей Владимирович", "podrazdelenie": "Майолика", "address": ""}, {"coords": [50.973624, 42.357565], "balloonContent": "<b>Подразделение:</b> Мерукан<br><b>Отв.:</b> Дронов Данила Евгеньевич<br><b>Контрагент:</b> Евроком ООО<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00011228149<br><b>Ответственный:</b> Дронов Данила Евгеньевич<br><b>Выполнить до:</b> 31.12.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b>  Выполнение ежеквартальных работ по ТО ХО малых форматов_4 квартал Выполнить ежеквартальные работы по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО ММ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов малых форматов. \nПри закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\nПри закрытии задачи в ТОИР обязательно вложить: \n1.  Полностью заполненный с обоих сторон акт сервисных работ.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа) в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\n <br><b>Осталось дней:</b> 75<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=42.357565,50.973624&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 75, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Дронов Данила Евгеньевич", "podrazdelenie": "Мерукан", "address": ""}, {"coords": [50.070299, 43.215768], "balloonContent": "<b>Подразделение:</b> Михайловка 1 Поперечная<br><b>Отв.:</b> Дронов Данила Евгеньевич<br><b>Контрагент:</b> Евроком ООО<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00011286205<br><b>Ответственный:</b> Дронов Данила Евгеньевич<br><b>Выполнить до:</b> 31.12.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b> Выполнение работ по ТО ХО БФ_4кв_2026 Выполнить работы с периодичностью раз в 3 месяца по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО БФ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов больших форматов. При закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\n\nПри закрытии задачи в ТОИР обязательно вложить: \n \n1.  Полностью заполненный с обоих сторон акт сервисных работ. Шаблон акта приложен к задаче.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа), в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\nПредставить обратную связь, задавать вопросы: Сектор холодильных систем <sec_holod_sys@magnit.ru><br><b>Осталось дней:</b> 75<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=43.215768,50.070299&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 75, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Дронов Данила Евгеньевич", "podrazdelenie": "Михайловка 1 Поперечная", "address": ""}, {"coords": [50.951959, 43.775529], "balloonContent": "<b>Подразделение:</b> Окраюшкин<br><b>Отв.:</b> Трудов Алексей Владимирович<br><b>Контрагент:</b> Евроком ООО<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00011231123<br><b>Ответственный:</b> Трудов Алексей Владимирович<br><b>Выполнить до:</b> 31.12.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b>  Выполнение ежеквартальных работ по ТО ХО малых форматов_4 квартал Выполнить ежеквартальные работы по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО ММ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов малых форматов. \nПри закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\nПри закрытии задачи в ТОИР обязательно вложить: \n1.  Полностью заполненный с обоих сторон акт сервисных работ.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа) в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\n <br><b>Осталось дней:</b> 75<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=43.775529,50.951959&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 75, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Трудов Алексей Владимирович", "podrazdelenie": "Окраюшкин", "address": ""}, {"coords": [50.05234, 43.235586], "balloonContent": "<b>Подразделение:</b> Парадигма<br><b>Отв.:</b> Дронов Данила Евгеньевич<br><b>Контрагент:</b> Евроком ООО<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00011231830<br><b>Ответственный:</b> Дронов Данила Евгеньевич<br><b>Выполнить до:</b> 31.12.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b>  Выполнение ежеквартальных работ по ТО ХО малых форматов_4 квартал Выполнить ежеквартальные работы по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО ММ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов малых форматов. \nПри закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\nПри закрытии задачи в ТОИР обязательно вложить: \n1.  Полностью заполненный с обоих сторон акт сервисных работ.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа) в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\n <br><b>Осталось дней:</b> 75<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=43.235586,50.05234&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 75, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Дронов Данила Евгеньевич", "podrazdelenie": "Парадигма", "address": ""}, {"coords": [50.982989, 44.776556], "balloonContent": "<b>Подразделение:</b> Патагозавр<br><b>Отв.:</b> Трудов Алексей Владимирович<br><b>Контрагент:</b> Евроком ООО<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00011231970<br><b>Ответственный:</b> Трудов Алексей Владимирович<br><b>Выполнить до:</b> 31.12.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b>  Выполнение ежеквартальных работ по ТО ХО малых форматов_4 квартал Выполнить ежеквартальные работы по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО ММ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов малых форматов. \nПри закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\nПри закрытии задачи в ТОИР обязательно вложить: \n1.  Полностью заполненный с обоих сторон акт сервисных работ.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа) в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\n <br><b>Осталось дней:</b> 75<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=44.776556,50.982989&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 75, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Трудов Алексей Владимирович", "podrazdelenie": "Патагозавр", "address": ""}, {"coords": [50.139494, 45.206333], "balloonContent": "<b>Подразделение:</b> Петров Вал<br><b>Отв.:</b> Трудов Алексей Владимирович<br><b>Контрагент:</b> Евроком ООО<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00011232344<br><b>Ответственный:</b> Трудов Алексей Владимирович<br><b>Выполнить до:</b> 31.12.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b>  Выполнение ежеквартальных работ по ТО ХО малых форматов_4 квартал Выполнить ежеквартальные работы по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО ММ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов малых форматов. \nПри закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\nПри закрытии задачи в ТОИР обязательно вложить: \n1.  Полностью заполненный с обоих сторон акт сервисных работ.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа) в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\n <br><b>Осталось дней:</b> 75<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=45.206333,50.139494&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 75, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Трудов Алексей Владимирович", "podrazdelenie": "Петров Вал", "address": ""}, {"coords": [50.529648, 42.692265], "balloonContent": "<b>Подразделение:</b> Плавленый<br><b>Отв.:</b> Дронов Данила Евгеньевич<br><b>Контрагент:</b> Евроком ООО<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00011232586<br><b>Ответственный:</b> Дронов Данила Евгеньевич<br><b>Выполнить до:</b> 31.12.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b>  Выполнение ежеквартальных работ по ТО ХО малых форматов_4 квартал Выполнить ежеквартальные работы по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО ММ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов малых форматов. \nПри закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\nПри закрытии задачи в ТОИР обязательно вложить: \n1.  Полностью заполненный с обоих сторон акт сервисных работ.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа) в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\n <br><b>Осталось дней:</b> 75<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=42.692265,50.529648&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 75, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Дронов Данила Евгеньевич", "podrazdelenie": "Плавленый", "address": ""}, {"coords": [50.068493, 43.251704], "balloonContent": "<b>Подразделение:</b> Подвластный<br><b>Отв.:</b> Дронов Данила Евгеньевич<br><b>Контрагент:</b> Евроком ООО<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00011232868<br><b>Ответственный:</b> Дронов Данила Евгеньевич<br><b>Выполнить до:</b> 31.12.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b>  Выполнение ежеквартальных работ по ТО ХО малых форматов_4 квартал Выполнить ежеквартальные работы по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО ММ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов малых форматов. \nПри закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\nПри закрытии задачи в ТОИР обязательно вложить: \n1.  Полностью заполненный с обоих сторон акт сервисных работ.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа) в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\n <br><b>Осталось дней:</b> 75<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=43.251704,50.068493&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 75, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Дронов Данила Евгеньевич", "podrazdelenie": "Подвластный", "address": ""}, {"coords": [50.069467, 43.231325], "balloonContent": "<b>Подразделение:</b> Секачи<br><b>Отв.:</b> Дронов Данила Евгеньевич<br><b>Контрагент:</b> Евроком ООО<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00011242649<br><b>Ответственный:</b> Дронов Данила Евгеньевич<br><b>Выполнить до:</b> 31.12.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b>  Выполнение ежеквартальных работ по ТО ХО малых форматов_4 квартал Выполнить ежеквартальные работы по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО ММ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов малых форматов. \nПри закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\nПри закрытии задачи в ТОИР обязательно вложить: \n1.  Полностью заполненный с обоих сторон акт сервисных работ.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа) в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\n <br><b>Осталось дней:</b> 75<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=43.231325,50.069467&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 75, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Дронов Данила Евгеньевич", "podrazdelenie": "Секачи", "address": ""}, {"coords": [50.114907, 45.419907], "balloonContent": "<b>Подразделение:</b> Солонский<br><b>Отв.:</b> Трудов Алексей Владимирович<br><b>Контрагент:</b> Евроком ООО<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00011244595<br><b>Ответственный:</b> Трудов Алексей Владимирович<br><b>Выполнить до:</b> 31.12.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b>  Выполнение ежеквартальных работ по ТО ХО малых форматов_4 квартал Выполнить ежеквартальные работы по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО ММ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов малых форматов. \nПри закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\nПри закрытии задачи в ТОИР обязательно вложить: \n1.  Полностью заполненный с обоих сторон акт сервисных работ.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа) в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\n <br><b>Осталось дней:</b> 75<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=45.419907,50.114907&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 75, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Трудов Алексей Владимирович", "podrazdelenie": "Солонский", "address": ""}, {"coords": [50.738286, 43.055974], "balloonContent": "<b>Подразделение:</b> Сорго<br><b>Отв.:</b> Дронов Данила Евгеньевич<br><b>Контрагент:</b> Евроком ООО<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00011244643<br><b>Ответственный:</b> Дронов Данила Евгеньевич<br><b>Выполнить до:</b> 31.12.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b>  Выполнение ежеквартальных работ по ТО ХО малых форматов_4 квартал Выполнить ежеквартальные работы по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО ММ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов малых форматов. \nПри закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\nПри закрытии задачи в ТОИР обязательно вложить: \n1.  Полностью заполненный с обоих сторон акт сервисных работ.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа) в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\n <br><b>Осталось дней:</b> 75<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=43.055974,50.738286&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 75, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Дронов Данила Евгеньевич", "podrazdelenie": "Сорго", "address": ""}, {"coords": [50.091559, 45.420832], "balloonContent": "<b>Подразделение:</b> Стекольный<br><b>Отв.:</b> Трудов Алексей Владимирович<br><b>Контрагент:</b> Евроком ООО<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00011244948<br><b>Ответственный:</b> Трудов Алексей Владимирович<br><b>Выполнить до:</b> 31.12.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b>  Выполнение ежеквартальных работ по ТО ХО малых форматов_4 квартал Выполнить ежеквартальные работы по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО ММ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов малых форматов. \nПри закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\nПри закрытии задачи в ТОИР обязательно вложить: \n1.  Полностью заполненный с обоих сторон акт сервисных работ.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа) в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\n <br><b>Осталось дней:</b> 75<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=45.420832,50.091559&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 75, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Трудов Алексей Владимирович", "podrazdelenie": "Стекольный", "address": ""}, {"coords": [50.94734, 43.742382], "balloonContent": "<b>Подразделение:</b> Терса<br><b>Отв.:</b> Трудов Алексей Владимирович<br><b>Контрагент:</b> Евроком ООО<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00011246564<br><b>Ответственный:</b> Трудов Алексей Владимирович<br><b>Выполнить до:</b> 31.12.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b>  Выполнение ежеквартальных работ по ТО ХО малых форматов_4 квартал Выполнить ежеквартальные работы по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО ММ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов малых форматов. \nПри закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\nПри закрытии задачи в ТОИР обязательно вложить: \n1.  Полностью заполненный с обоих сторон акт сервисных работ.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа) в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\n <br><b>Осталось дней:</b> 75<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=43.742382,50.94734&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 75, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Трудов Алексей Владимирович", "podrazdelenie": "Терса", "address": ""}, {"coords": [50.739246, 43.045335], "balloonContent": "<b>Подразделение:</b> Титановый<br><b>Отв.:</b> Дронов Данила Евгеньевич<br><b>Контрагент:</b> Евроком ООО<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00011246703<br><b>Ответственный:</b> Дронов Данила Евгеньевич<br><b>Выполнить до:</b> 31.12.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b>  Выполнение ежеквартальных работ по ТО ХО малых форматов_4 квартал Выполнить ежеквартальные работы по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО ММ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов малых форматов. \nПри закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\nПри закрытии задачи в ТОИР обязательно вложить: \n1.  Полностью заполненный с обоих сторон акт сервисных работ.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа) в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\n <br><b>Осталось дней:</b> 75<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=43.045335,50.739246&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 75, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Дронов Данила Евгеньевич", "podrazdelenie": "Титановый", "address": ""}, {"coords": [50.059174, 43.214995], "balloonContent": "<b>Подразделение:</b> Токаревщина<br><b>Отв.:</b> Дронов Данила Евгеньевич<br><b>Контрагент:</b> Евроком ООО<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00011246743<br><b>Ответственный:</b> Дронов Данила Евгеньевич<br><b>Выполнить до:</b> 31.12.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b>  Выполнение ежеквартальных работ по ТО ХО малых форматов_4 квартал Выполнить ежеквартальные работы по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО ММ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов малых форматов. \nПри закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\nПри закрытии задачи в ТОИР обязательно вложить: \n1.  Полностью заполненный с обоих сторон акт сервисных работ.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа) в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\n <br><b>Осталось дней:</b> 75<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=43.214995,50.059174&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 75, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Дронов Данила Евгеньевич", "podrazdelenie": "Токаревщина", "address": ""}, {"coords": [50.529252, 42.669895], "balloonContent": "<b>Подразделение:</b> Траверз<br><b>Отв.:</b> Дронов Данила Евгеньевич<br><b>Контрагент:</b> Евроком ООО<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00011246858<br><b>Ответственный:</b> Дронов Данила Евгеньевич<br><b>Выполнить до:</b> 31.12.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b>  Выполнение ежеквартальных работ по ТО ХО малых форматов_4 квартал Выполнить ежеквартальные работы по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО ММ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов малых форматов. \nПри закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\nПри закрытии задачи в ТОИР обязательно вложить: \n1.  Полностью заполненный с обоих сторон акт сервисных работ.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа) в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\n <br><b>Осталось дней:</b> 75<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=42.669895,50.529252&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 75, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Дронов Данила Евгеньевич", "podrazdelenie": "Траверз", "address": ""}, {"coords": [50.532972, 42.673908], "balloonContent": "<b>Подразделение:</b> Филоновский<br><b>Отв.:</b> Дронов Данила Евгеньевич<br><b>Контрагент:</b> Евроком ООО<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00011247807<br><b>Ответственный:</b> Дронов Данила Евгеньевич<br><b>Выполнить до:</b> 31.12.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b>  Выполнение ежеквартальных работ по ТО ХО малых форматов_4 квартал Выполнить ежеквартальные работы по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО ММ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов малых форматов. \nПри закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\nПри закрытии задачи в ТОИР обязательно вложить: \n1.  Полностью заполненный с обоих сторон акт сервисных работ.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа) в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\n <br><b>Осталось дней:</b> 75<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=42.673908,50.532972&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 75, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Дронов Данила Евгеньевич", "podrazdelenie": "Филоновский", "address": ""}, {"coords": [50.125861, 45.410335], "balloonContent": "<b>Подразделение:</b> Циково<br><b>Отв.:</b> Трудов Алексей Владимирович<br><b>Контрагент:</b> Евроком ООО<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00011248710<br><b>Ответственный:</b> Трудов Алексей Владимирович<br><b>Выполнить до:</b> 31.12.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b>  Выполнение ежеквартальных работ по ТО ХО малых форматов_4 квартал Выполнить ежеквартальные работы по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО ММ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов малых форматов. \nПри закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\nПри закрытии задачи в ТОИР обязательно вложить: \n1.  Полностью заполненный с обоих сторон акт сервисных работ.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа) в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\n <br><b>Осталось дней:</b> 75<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=45.410335,50.125861&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 75, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Трудов Алексей Владимирович", "podrazdelenie": "Циково", "address": ""}, {"coords": [50.078565, 45.386802], "balloonContent": "<b>Подразделение:</b> Этажность<br><b>Отв.:</b> Трудов Алексей Владимирович<br><b>Контрагент:</b> Евроком ООО<br><b>Адрес:</b> Не указан<br><b>Филиал:</b> Волгоград Восток<br><b>Номер заявки:</b> SMT-в00011250070<br><b>Ответственный:</b> Трудов Алексей Владимирович<br><b>Выполнить до:</b> 31.12.2026<br><b>Направление:</b> Холодильное оборудование<br><b>Описание:</b>  Выполнение ежеквартальных работ по ТО ХО малых форматов_4 квартал Выполнить ежеквартальные работы по плановому техническому обслуживанию объектов, предусмотренных Приложением 2 «Перечень обязательных работ для ТО ХО ММ» к Договору на техническое обслуживание, текущий и капитальный ремонт оборудования объектов малых форматов. \nПри закрытии заявки в ТОиР прикрепить к ней заполненный и подписанный со стороны объекта Акт сервисных работ и фото с объекта.\nПри закрытии задачи в ТОИР обязательно вложить: \n1.  Полностью заполненный с обоих сторон акт сервисных работ.\nВсе разделы и поля должны быть заполнены, записи должны быть четкими и читаемыми. В обязательном порядке акт должен быть подписан администрацией объекта и проставлена печать объекта. Заявки с некорректно заполненными актами будут возвращаться обратно в работу.\n2.  Фото магазина (фасад со стороны главного входа) в котором проводилось обслуживание. На фото должны быть проставлены дата и время съемки (водяной знак). Дата на фото магазина должна соответствовать дате подписанного акта.\n <br><b>Осталось дней:</b> 75<br><hr>\n            <div style=\"text-align: center; margin-top: 10px;\">\n                <a href=\"https://yandex.ru/maps/?pt=45.386802,50.078565&z=15&l=map\" target=\"_blank\" \n                   style=\"display: inline-block; background: #2196F3; color: white; \n                          text-decoration: none; border: none; padding: 8px 16px; \n                          border-radius: 4px; cursor: pointer; font-size: 12px; margin: 5px;\">\n                    📍 Открыть в Яндекс.Картах\n                </a>\n            </div>\n            ", "color": "blue", "days_left": 75, "total_requests": 1, "red_count": 0, "yellow_count": 0, "blue_count": 1, "sector": "Трудов Алексей Владимирович", "podrazdelenie": "Этажность", "address": ""}];
+    var allPlacemarks = [];
+    var placemarksByColor = { 'red': [], 'yellow': [], 'blue': [] };
+    var placemarksBySector = {};
+    var placemarksByShop = {};
+    var placemarksByDirection = {};
+
+    // Инициализируем секторы
+    
+    placemarksBySector['Дронов Данила Евгеньевич'] = [];
+    
+    placemarksBySector['Трудов Алексей Владимирович'] = [];
+    
+
+    // Инициализируем магазины
+    placemarksByShop['all'] = [];
+    
+    placemarksByShop['11 Квартал'] = [];
+    
+    placemarksByShop['Бард'] = [];
+    
+    placemarksByShop['Блюз'] = [];
+    
+    placemarksByShop['Боннская'] = [];
+    
+    placemarksByShop['Бродовская'] = [];
+    
+    placemarksByShop['Бударинский'] = [];
+    
+    placemarksByShop['Бурлук'] = [];
+    
+    placemarksByShop['Бухта'] = [];
+    
+    placemarksByShop['Ватерпас'] = [];
+    
+    placemarksByShop['Вида'] = [];
+    
+    placemarksByShop['Генезис'] = [];
+    
+    placemarksByShop['Горошинка'] = [];
+    
+    placemarksByShop['Дженкс'] = [];
+    
+    placemarksByShop['Дмитриевский'] = [];
+    
+    placemarksByShop['Дорожное'] = [];
+    
+    placemarksByShop['Елань'] = [];
+    
+    placemarksByShop['Жирновский'] = [];
+    
+    placemarksByShop['Идея'] = [];
+    
+    placemarksByShop['Ильмень'] = [];
+    
+    placemarksByShop['Камыш'] = [];
+    
+    placemarksByShop['Камышин 1 5 микрорайон'] = [];
+    
+    placemarksByShop['Карбондал'] = [];
+    
+    placemarksByShop['Каршево'] = [];
+    
+    placemarksByShop['Каховский'] = [];
+    
+    placemarksByShop['Квэнди'] = [];
+    
+    placemarksByShop['Килакекуа'] = [];
+    
+    placemarksByShop['Кинстон'] = [];
+    
+    placemarksByShop['Кокон'] = [];
+    
+    placemarksByShop['Комета'] = [];
+    
+    placemarksByShop['Красновишерск'] = [];
+    
+    placemarksByShop['Лаймон'] = [];
+    
+    placemarksByShop['Лигатне'] = [];
+    
+    placemarksByShop['Лукьяненко'] = [];
+    
+    placemarksByShop['Майолика'] = [];
+    
+    placemarksByShop['Мерукан'] = [];
+    
+    placemarksByShop['Михайловка 1 Поперечная'] = [];
+    
+    placemarksByShop['Окраюшкин'] = [];
+    
+    placemarksByShop['Парадигма'] = [];
+    
+    placemarksByShop['Патагозавр'] = [];
+    
+    placemarksByShop['Петров Вал'] = [];
+    
+    placemarksByShop['Плавленый'] = [];
+    
+    placemarksByShop['Подвластный'] = [];
+    
+    placemarksByShop['Секачи'] = [];
+    
+    placemarksByShop['Солонский'] = [];
+    
+    placemarksByShop['Сорго'] = [];
+    
+    placemarksByShop['Стекольный'] = [];
+    
+    placemarksByShop['Терса'] = [];
+    
+    placemarksByShop['Титановый'] = [];
+    
+    placemarksByShop['Токаревщина'] = [];
+    
+    placemarksByShop['Траверз'] = [];
+    
+    placemarksByShop['Филоновский'] = [];
+    
+    placemarksByShop['Циково'] = [];
+    
+    placemarksByShop['Этажность'] = [];
+    
+
+    // Инициализируем направления
+    placemarksByDirection['all'] = [];
+    
+    placemarksByDirection['Автоматические двери'] = [];
+    
+    placemarksByDirection['Водоснабжение и водоотведение'] = [];
+    
+    placemarksByDirection['Ворота'] = [];
+    
+    placemarksByDirection['Грузовой подъемник'] = [];
+    
+    placemarksByDirection['Допуслуги по клинингу'] = [];
+    
+    placemarksByDirection['Здания и сооружения'] = [];
+    
+    placemarksByDirection['Касса'] = [];
+    
+    placemarksByDirection['Кофемашина'] = [];
+    
+    placemarksByDirection['Очистные сооружения'] = [];
+    
+    placemarksByDirection['Подъездные пути'] = [];
+    
+    placemarksByDirection['Пресс вторсырья'] = [];
+    
+    placemarksByDirection['РИМ'] = [];
+    
+    placemarksByDirection['Роллеты'] = [];
+    
+    placemarksByDirection['Самоходное и складское оборудование'] = [];
+    
+    placemarksByDirection['Система вентиляции'] = [];
+    
+    placemarksByDirection['Система кондиционирования'] = [];
+    
+    placemarksByDirection['Система теплоснабжения'] = [];
+    
+    placemarksByDirection['Стеллажное оборудование'] = [];
+    
+    placemarksByDirection['Табачное оборудование'] = [];
+    
+    placemarksByDirection['Тамбур-шлюз'] = [];
+    
+    placemarksByDirection['Технологическое оборудование'] = [];
+    
+    placemarksByDirection['Уравнительная платформа'] = [];
+    
+    placemarksByDirection['Холодильное оборудование'] = [];
+    
+    placemarksByDirection['Электроснабжение'] = [];
+    
+
+    // Создаем метки
+    placemarksData.forEach(function (placemarkData) {
+        var zIndex = 1;
+        if (placemarkData.color === 'yellow') {
+            zIndex = 2;
+        } else if (placemarkData.color === 'red') {
+            zIndex = 3;
+        }
+        
+        var newPlacemark = new ymaps.Placemark(placemarkData.coords, {
+            balloonContent: placemarkData.balloonContent,
+            iconCaption: placemarkData.total_requests.toString()
+        }, {
+            preset: 'islands#dotIcon',
+            iconColor: placemarkData.color,
+            zIndex: zIndex,
+            hideIconOnBalloonOpen: false
+        });
+        
+        newPlacemark.properties.set('color', placemarkData.color);
+        newPlacemark.properties.set('sector', placemarkData.sector);
+        newPlacemark.properties.set('shop', placemarkData.podrazdelenie);
+        newPlacemark.properties.set('zIndex', zIndex);
+        newPlacemark.properties.set('shopName', placemarkData.podrazdelenie);
+        
+        allPlacemarks.push(newPlacemark);
+        
+        // Группировка по цвету
+        placemarksByColor[placemarkData.color].push(newPlacemark);
+        
+        // Группировка по сектору (учитываем множественные секторы через запятую)
+        if (placemarkData.sector && placemarkData.sector !== "Не указан") {
+            var sectors = placemarkData.sector.split(',').map(function(s) { return s.trim(); });
+            sectors.forEach(function(sector) {
+                if (!placemarksBySector[sector]) {
+                    placemarksBySector[sector] = [];
+                }
+                placemarksBySector[sector].push(newPlacemark);
+            });
+        }
+        
+        // Группировка по магазину
+        var shop = placemarkData.podrazdelenie;
+        if (!placemarksByShop[shop]) {
+            placemarksByShop[shop] = [];
+        }
+        placemarksByShop[shop].push(newPlacemark);
+        placemarksByShop['all'].push(newPlacemark);
+        
+        // Группировка по направлению - анализируем содержимое балуна
+        var balloonContent = placemarkData.balloonContent;
+        // Извлекаем направление из HTML
+        var directionMatch = null;
+        if (balloonContent) {
+            var tempDiv = document.createElement('div');
+            tempDiv.innerHTML = balloonContent;
+            var directionElements = tempDiv.querySelectorAll('b');
+            for (var i = 0; i < directionElements.length; i++) {
+                if (directionElements[i].textContent === 'Направление:') {
+                    var nextElement = directionElements[i].nextSibling;
+                    while (nextElement && nextElement.nodeType !== 1) {
+                        nextElement = nextElement.nextSibling;
+                    }
+                    if (nextElement && nextElement.tagName === 'BR') {
+                        var textContent = '';
+                        var node = directionElements[i].nextSibling;
+                        while (node && node.nodeName !== 'BR') {
+                            if (node.nodeType === 3) {
+                                textContent += node.textContent;
+                            }
+                            node = node.nextSibling;
+                        }
+                        directionMatch = textContent.trim();
+                    }
+                    break;
+                }
+            }
+        }
+        
+        if (directionMatch) {
+            var direction = directionMatch;
+            if (!placemarksByDirection[direction]) {
+                placemarksByDirection[direction] = [];
+            }
+            placemarksByDirection[direction].push(newPlacemark);
+        }
+        placemarksByDirection['all'].push(newPlacemark);
+    });
+
+    var activeColors = { 'red': true, 'yellow': true, 'blue': true };
+    var activeSectors = {};
+    var activeShop = 'all';
+    
+    // Переменные для хранения активных направлений
+    var activeDirections = {};
+    
+    // Инициализируем активные направления - все выбраны по умолчанию
+    
+    activeDirections['Автоматические двери'] = true;
+    
+    activeDirections['Водоснабжение и водоотведение'] = true;
+    
+    activeDirections['Ворота'] = true;
+    
+    activeDirections['Грузовой подъемник'] = true;
+    
+    activeDirections['Допуслуги по клинингу'] = true;
+    
+    activeDirections['Здания и сооружения'] = true;
+    
+    activeDirections['Касса'] = true;
+    
+    activeDirections['Кофемашина'] = true;
+    
+    activeDirections['Очистные сооружения'] = true;
+    
+    activeDirections['Подъездные пути'] = true;
+    
+    activeDirections['Пресс вторсырья'] = true;
+    
+    activeDirections['РИМ'] = true;
+    
+    activeDirections['Роллеты'] = true;
+    
+    activeDirections['Самоходное и складское оборудование'] = true;
+    
+    activeDirections['Система вентиляции'] = true;
+    
+    activeDirections['Система кондиционирования'] = true;
+    
+    activeDirections['Система теплоснабжения'] = true;
+    
+    activeDirections['Стеллажное оборудование'] = true;
+    
+    activeDirections['Табачное оборудование'] = true;
+    
+    activeDirections['Тамбур-шлюз'] = true;
+    
+    activeDirections['Технологическое оборудование'] = true;
+    
+    activeDirections['Уравнительная платформа'] = true;
+    
+    activeDirections['Холодильное оборудование'] = true;
+    
+    activeDirections['Электроснабжение'] = true;
+    
+
+    // Инициализируем активные секторы
+    
+    activeSectors['Дронов Данила Евгеньевич'] = true;
+    
+    activeSectors['Трудов Алексей Владимирович'] = true;
+    
+    activeSectors['all'] = true;
+
+    // Функция для обновления текста на кнопке направлений
+    function updateDirectionButtonText() {
+        var selectedCount = Object.values(activeDirections).filter(v => v).length;
+        var totalCount = 24;
+        var buttonText = document.getElementById('selectedDirectionsCount');
+        
+        if (selectedCount === totalCount) {
+            buttonText.textContent = `Все (${totalCount})`;
+        } else if (selectedCount === 0) {
+            buttonText.textContent = 'Ничего не выбрано';
+        } else {
+            buttonText.textContent = `Выбрано: ${selectedCount}`;
+        }
+    }
+
+    // Функция для обновления классов опций
+    function updateDirectionOptions() {
+        var options = document.querySelectorAll('.direction-option');
+        options.forEach(function(option) {
+            var direction = option.getAttribute('data-direction');
+            if (activeDirections[direction]) {
+                option.classList.add('selected');
+            } else {
+                option.classList.remove('selected');
+            }
+        });
+    }
+
+    // Функция для фильтрации по направлениям
+    function filterByDirections() {
+        addPlacemarks();
+        updateDirectionButtonText();
+    }
+
+    // Функция для проверки, соответствует ли метка выбранным направлениям
+    function isDirectionActive(placemark) {
+        // Получаем направление из метки
+        var balloonContent = placemark.properties.get('balloonContent');
+        var tempDiv = document.createElement('div');
+        tempDiv.innerHTML = balloonContent;
+        var directionElements = tempDiv.querySelectorAll('b');
+        var foundDirection = null;
+        
+        for (var i = 0; i < directionElements.length; i++) {
+            if (directionElements[i].textContent === 'Направление:') {
+                var nextElement = directionElements[i].nextSibling;
+                while (nextElement && nextElement.nodeType !== 1) {
+                    nextElement = nextElement.nextSibling;
+                }
+                if (nextElement && nextElement.tagName === 'BR') {
+                    var textContent = '';
+                    var node = directionElements[i].nextSibling;
+                    while (node && node.nodeName !== 'BR') {
+                        if (node.nodeType === 3) {
+                            textContent += node.textContent;
+                        }
+                        node = node.nextSibling;
+                    }
+                    foundDirection = textContent.trim();
+                }
+                break;
+            }
+        }
+        
+        return foundDirection ? activeDirections[foundDirection] : false;
+    }
+
+    function addPlacemarks() {
+        myMap.geoObjects.removeAll();
+
+        var sortedPlacemarks = allPlacemarks.slice().sort(function(a, b) {
+            return b.properties.get('zIndex') - a.properties.get('zIndex');
+        });
+
+        sortedPlacemarks.forEach(function (placemark) {
+            var color = placemark.properties.get('color');
+            var sector = placemark.properties.get('sector');
+            var shop = placemark.properties.get('shop');
+            
+            // Проверяем активность цвета
+            var colorActive = activeColors[color];
+            
+            // Проверяем активность секторов (если есть несколько через запятую)
+            var sectorActive = activeSectors['all'];
+            if (sector && sector !== "Не указан" && !sectorActive) {
+                var sectors = sector.split(',').map(function(s) { return s.trim(); });
+                sectorActive = sectors.some(function(s) { return activeSectors[s]; });
+            }
+            
+            // Проверяем активность магазина
+            var shopActive = (activeShop === 'all' || activeShop === shop);
+            
+            // Проверяем активность направления
+            var directionActive = isDirectionActive(placemark);
+            
+            if (colorActive && sectorActive && shopActive && directionActive) {
+                myMap.geoObjects.add(placemark);
+            }
+        });
+
+        var bounds = myMap.geoObjects.getBounds();
+        if (bounds) {
+            myMap.setBounds(bounds, { checkZoomRange: true, zoomMargin: 20 });
+        }
+        
+        // Обновляем подписи в зависимости от зума
+        updateShopNamesVisibility();
+    }
+
+    // Функция для обновления видимости названий магазинов
+    function updateShopNamesVisibility() {
+        var currentZoom = myMap.getZoom();
+        var shouldShowNames = currentZoom >= 10; // ПОКАЗЫВАТЬ ПРИ ЗУМЕ ВЫШЕ 10
+        
+        myMap.geoObjects.each(function(geoObject) {
+            if (geoObject instanceof ymaps.Placemark) {
+                if (shouldShowNames) {
+                    // Показываем название магазина
+                    geoObject.properties.set('iconCaption', geoObject.properties.get('shopName'));
+                } else {
+                    // Показываем количество заявок
+                    geoObject.properties.set('iconCaption', geoObject.properties.get('balloonContent') 
+                        ? geoObject.properties.get('balloonContent').match(/Номер заявки:/g) 
+                          ? (geoObject.properties.get('balloonContent').match(/Номер заявки:/g).length.toString())
+                          : '1'
+                        : '1');
+                }
+            }
+        });
+    }
+
+    addPlacemarks();
+
+    // Функции для цветов
+    function toggleColor(color) {
+        activeColors[color] = !activeColors[color];
+        updateAllButtonState();
+        addPlacemarks();
+    }
+
+    function updateAllButtonState() {
+        var allActive = true;
+        
+        Object.keys(activeColors).forEach(function(color) {
+            if (!activeColors[color]) {
+                allActive = false;
+            }
+        });
+        
+        var allButton = document.querySelector('#all_button');
+        if (allActive) {
+            allButton.classList.add('active');
+        } else {
+            allButton.classList.remove('active');
+        }
+    }
+
+    function toggleAll() {
+        var allButton = document.querySelector('#all_button');
+        var isActive = allButton.classList.contains('active');
+        
+        if (isActive) {
+            // Выключаем все
+            Object.keys(activeColors).forEach(function(color) {
+                activeColors[color] = false;
+                var button = document.querySelector('#' + color + '_button');
+                if (button) button.classList.remove('active');
+            });
+            
+            allButton.classList.remove('active');
+        } else {
+            // Включаем все
+            Object.keys(activeColors).forEach(function(color) {
+                activeColors[color] = true;
+                var button = document.querySelector('#' + color + '_button');
+                if (button) button.classList.add('active');
+            });
+            
+            allButton.classList.add('active');
+        }
+        
+        addPlacemarks();
+    }
+
+    // Функция для фильтрации по магазину
+    function filterByShop(shop) {
+        activeShop = shop;
+        addPlacemarks();
+        
+        // Автоматически закрываем выпадающее меню на мобильных устройствах
+        if (window.innerWidth <= 768) {
+            document.activeElement.blur();
+        }
+    }
+
+    // Функция для фильтрации по ответственному
+    function filterBySector(sector) {
+        // Сбрасываем все секторы
+        Object.keys(activeSectors).forEach(function(sec) {
+            activeSectors[sec] = false;
+        });
+        
+        if (sector === 'all') {
+            // Включаем все секторы
+            Object.keys(activeSectors).forEach(function(sec) {
+                activeSectors[sec] = true;
+            });
+        } else {
+            // Включаем только выбранный сектор
+            activeSectors[sector] = true;
+        }
+        
+        addPlacemarks();
+        
+        // Автоматически закрываем выпадающее меню на мобильных устройствах
+        if (window.innerWidth <= 768) {
+            document.activeElement.blur();
+        }
+    }
+
+    // Кнопка сворачивания/разворачивания
+    var toggleControls = document.querySelector('#toggleControls');
+    var controls = document.querySelector('#controls');
+    
+    toggleControls.addEventListener('click', function() {
+        controls.classList.toggle('collapsed');
+        this.classList.toggle('collapsed');
+    });
+
+    // Обработчики для кнопок цветов
+    document.querySelector('#red_button').addEventListener('click', function () {
+        this.classList.toggle('active');
+        toggleColor('red');
+    });
+
+    document.querySelector('#yellow_button').addEventListener('click', function () {
+        this.classList.toggle('active');
+        toggleColor('yellow');
+    });
+
+    document.querySelector('#blue_button').addEventListener('click', function () {
+        this.classList.toggle('active');
+        toggleColor('blue');
+    });
+
+    document.querySelector('#all_button').addEventListener('click', function () {
+        toggleAll();
+    });
+
+    // Обработчик для выпадающего меню магазинов
+    document.querySelector('#shop_select').addEventListener('change', function () {
+        filterByShop(this.value);
+    });
+
+    // Обработчик для выпадающего меню ответственных
+    document.querySelector('#sector_select').addEventListener('change', function () {
+        filterBySector(this.value);
+    });
+
+    // Обработчики для кнопки направлений
+    var directionButton = document.getElementById('directionButton');
+    var directionDropdown = document.getElementById('directionDropdown');
+    var directionArrow = document.getElementById('directionArrow');
+
+    directionButton.addEventListener('click', function(e) {
+        e.stopPropagation();
+        directionDropdown.classList.toggle('show');
+        directionArrow.classList.toggle('open');
+    });
+
+    // Обработчики для опций направлений
+    document.querySelectorAll('.direction-option').forEach(function(option) {
+        option.addEventListener('click', function(e) {
+            e.stopPropagation();
+            var direction = this.getAttribute('data-direction');
+            activeDirections[direction] = !activeDirections[direction];
+            this.classList.toggle('selected');
+            filterByDirections();
+        });
+    });
+
+    // Обработчик для кнопки "Выбрать все"
+    document.getElementById('selectAllDirections').addEventListener('click', function(e) {
+        e.stopPropagation();
+        
+        activeDirections['Автоматические двери'] = true;
+        
+        activeDirections['Водоснабжение и водоотведение'] = true;
+        
+        activeDirections['Ворота'] = true;
+        
+        activeDirections['Грузовой подъемник'] = true;
+        
+        activeDirections['Допуслуги по клинингу'] = true;
+        
+        activeDirections['Здания и сооружения'] = true;
+        
+        activeDirections['Касса'] = true;
+        
+        activeDirections['Кофемашина'] = true;
+        
+        activeDirections['Очистные сооружения'] = true;
+        
+        activeDirections['Подъездные пути'] = true;
+        
+        activeDirections['Пресс вторсырья'] = true;
+        
+        activeDirections['РИМ'] = true;
+        
+        activeDirections['Роллеты'] = true;
+        
+        activeDirections['Самоходное и складское оборудование'] = true;
+        
+        activeDirections['Система вентиляции'] = true;
+        
+        activeDirections['Система кондиционирования'] = true;
+        
+        activeDirections['Система теплоснабжения'] = true;
+        
+        activeDirections['Стеллажное оборудование'] = true;
+        
+        activeDirections['Табачное оборудование'] = true;
+        
+        activeDirections['Тамбур-шлюз'] = true;
+        
+        activeDirections['Технологическое оборудование'] = true;
+        
+        activeDirections['Уравнительная платформа'] = true;
+        
+        activeDirections['Холодильное оборудование'] = true;
+        
+        activeDirections['Электроснабжение'] = true;
+        
+        updateDirectionOptions();
+        filterByDirections();
+    });
+
+    // Обработчик для кнопки "Сбросить все"
+    document.getElementById('deselectAllDirections').addEventListener('click', function(e) {
+        e.stopPropagation();
+        
+        activeDirections['Автоматические двери'] = false;
+        
+        activeDirections['Водоснабжение и водоотведение'] = false;
+        
+        activeDirections['Ворота'] = false;
+        
+        activeDirections['Грузовой подъемник'] = false;
+        
+        activeDirections['Допуслуги по клинингу'] = false;
+        
+        activeDirections['Здания и сооружения'] = false;
+        
+        activeDirections['Касса'] = false;
+        
+        activeDirections['Кофемашина'] = false;
+        
+        activeDirections['Очистные сооружения'] = false;
+        
+        activeDirections['Подъездные пути'] = false;
+        
+        activeDirections['Пресс вторсырья'] = false;
+        
+        activeDirections['РИМ'] = false;
+        
+        activeDirections['Роллеты'] = false;
+        
+        activeDirections['Самоходное и складское оборудование'] = false;
+        
+        activeDirections['Система вентиляции'] = false;
+        
+        activeDirections['Система кондиционирования'] = false;
+        
+        activeDirections['Система теплоснабжения'] = false;
+        
+        activeDirections['Стеллажное оборудование'] = false;
+        
+        activeDirections['Табачное оборудование'] = false;
+        
+        activeDirections['Тамбур-шлюз'] = false;
+        
+        activeDirections['Технологическое оборудование'] = false;
+        
+        activeDirections['Уравнительная платформа'] = false;
+        
+        activeDirections['Холодильное оборудование'] = false;
+        
+        activeDirections['Электроснабжение'] = false;
+        
+        updateDirectionOptions();
+        filterByDirections();
+    });
+
+    // Закрытие выпадающего меню при клике вне его
+    document.addEventListener('click', function(event) {
+        if (!directionButton.contains(event.target) && !directionDropdown.contains(event.target)) {
+            directionDropdown.classList.remove('show');
+            directionArrow.classList.remove('open');
+        }
+    });
+
+    // Обработчик для закрытия выпадающих меню при клике вне их
+    document.addEventListener('click', function(event) {
+        var shopSelect = document.querySelector('#shop_select');
+        var sectorSelect = document.querySelector('#sector_select');
+        
+        if (window.innerWidth <= 768) {
+            if (event.target !== shopSelect && !shopSelect.contains(event.target)) {
+                shopSelect.blur();
+            }
+            if (event.target !== sectorSelect && !sectorSelect.contains(event.target)) {
+                sectorSelect.blur();
+            }
+        }
+    });
+
+    // Инициализация состояния кнопок
+    updateAllButtonState();
+    updateDirectionButtonText();
+
+    // Адаптация карты при изменении размера окна
+    window.addEventListener('resize', function() {
+        myMap.container.fitToViewport();
+    });
+    
+    // Инициализируем видимость названий при загрузке
+    updateShopNamesVisibility();
+}
+ymaps.ready(init);
+</script>
